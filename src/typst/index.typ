@@ -1,7 +1,7 @@
 #import "_template.typ": conf
 
 #show: conf
-
+= /home
 == hi, i'm ada
 
 _software developer, parent, philosopher, artist._

@@ -1,5 +1,5 @@
-#import "_template.typ": conf
-
+// Bundle definition. Include your files here.
+// Blog posts are compiled separately!
 
 #document(
   "index.html",
@@ -11,13 +11,15 @@
 #document(
   "now.html",
   title: [Now],
+  description: "What I'm up to."
 )[
   #include("./now.typ")
 ]
 
 #document(
-  "/posts/post1.html",
-  title: [Post 1]
+  "blog.html",
+  title: [Blog],
+  description: "An index of blog posts."
 )[
-  #include("./posts/post1.typ")
+  #include("./blog/index.typ")
 ]
