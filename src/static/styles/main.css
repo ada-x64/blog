@@ -6,4 +6,16 @@ body {
   max-width: 720px;
   margin:auto;
   padding:1em 1em;
+  font-family: "Libertinus Sans", serif;
+}
+
+#header h1 {
+	display: flex;
+	align-content: center;
+	align-items: center;
+	gap: 0.5em;
+}
+
+#header h1 p {
+    margin: 0;
 }

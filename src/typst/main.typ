@@ -9,6 +9,13 @@
 ]
 
 #document(
+  "now.html",
+  title: [Now],
+)[
+  #include("./now.typ")
+]
+
+#document(
   "/posts/post1.html",
   title: [Post 1]
 )[

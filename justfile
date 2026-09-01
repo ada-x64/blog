@@ -4,7 +4,7 @@ TYPST_ROOT:="./src/typst"
 
 build:
     #!/bin/bash
-    cp -r ./src/static ./out/static
+    rsync -r ./src/static ./out/
     typst c ./src/typst/main.typ ./out/ --format=bundle
 
 dev:
