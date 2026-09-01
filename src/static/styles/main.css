@@ -1,0 +1,9 @@
+html {
+    width: 100%;
+}
+
+body {
+  max-width: 720px;
+  margin:auto;
+  padding:1em 1em;
+}
