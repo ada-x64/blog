@@ -3,8 +3,7 @@ TYPST_FEATURES:="bundle,html"
 TYPST_ROOT:="./src/typst"
 
 clean:
-    rm -rf ./out
-    rm -f ./src/typst/blog/{_posts.typ,index.typ,main.typ}
+    git clean -fdx
 
 build:
     #!/usr/bin/env bash
