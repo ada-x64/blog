@@ -4,10 +4,11 @@ TYPST_ROOT:="./src/typst"
 SHOW_DRAFTS := env_var_or_default("SHOW_DRAFTS", "false")
 
 check_deps +deps='typst rsync jq':
+    #!/bin/bash
     MISSING=()
     for DEP in {{deps}}; do
-        which $DEP 2>/dev/null 1>/dev/null;
-        if [ $? == 0 ]; then
+        which "$DEP" 2>/dev/null 1>/dev/null;
+        if [ $? != 0 ]; then
             MISSING+=($DEP)
         fi
     done
@@ -16,6 +17,7 @@ check_deps +deps='typst rsync jq':
         for item in "${MISSING[@]}"; do
             echo "- $item";
         done;
+        return 1
     fi
 
 clean:
@@ -39,8 +41,8 @@ build-resume:
     TYPST_ROOT=. typst c ./resume/resume/main.typ ./out/static/resume.pdf
 
 dev:
-    check_deps bun
-    bunx vite
+    just check_deps bun
+    bun run vite
 
 # With no argument, refresh every cached metadata record. Passing a changed
 # post path only evaluates and replaces that post's record.
