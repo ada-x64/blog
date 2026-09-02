@@ -40,7 +40,11 @@ dev:
     check_tool inotifywait
 
     # Build everything once, then only rebuild the output affected by a change.
-    SHOW_DRAFTS=true just build
+    # Keep the watcher available when the initial source contains an error so it
+    # can rebuild as soon as that error is fixed.
+    if ! SHOW_DRAFTS=true just build; then
+        echo "Initial build failed; watching for changes..." >&2
+    fi
 
     just serve &
     PID=$!
@@ -52,7 +56,7 @@ dev:
     trap cleanup EXIT SIGINT SIGTERM
 
     rebuild_blog_indexes() {
-        SHOW_DRAFTS=true just _generate_blog_idx "$1"
+        SHOW_DRAFTS=true just _generate_blog_idx "$1" || return 1
 
         # Rebuild the two blog indexes and the home page's recent-post list,
         # but leave unrelated pages and posts alone.
@@ -63,11 +67,9 @@ dev:
             | TYPST_ROOT=. typst c - ./out/ --format=bundle
     }
 
-    while true; do
-        changed=$(inotifywait -q -r \
-            -e close_write,moved_to,delete \
-            --format '%w%f' ./src)
-        changed=${changed#./}
+    handle_change() {
+        local changed=$1
+        local filename output
 
         case "$changed" in
             src/static/*)
@@ -84,7 +86,7 @@ dev:
                         SHOW_DRAFTS=true just build
                         ;;
                     *)
-                        rebuild_blog_indexes "$changed"
+                        rebuild_blog_indexes "$changed" || return 1
                         output="out/blog/${filename%.typ}.html"
                         if [[ -f "$changed" ]]; then
                             typst c "$changed" "$output" --format=html
@@ -100,6 +102,19 @@ dev:
                 SHOW_DRAFTS=true just build
                 ;;
         esac
+    }
+
+    while true; do
+        changed=$(inotifywait -q -r \
+            -e close_write,moved_to,delete \
+            --format '%w%f' ./src)
+        changed=${changed#./}
+
+        # Build errors are expected while editing. Report the failure, preserve
+        # the last successful output, and immediately resume watching.
+        if ! handle_change "$changed"; then
+            echo "Build failed for $changed; watching for changes..." >&2
+        fi
     done
 
 # With no argument, refresh every cached metadata record. Passing a changed
@@ -118,6 +133,12 @@ _generate_blog_idx changed="":
     HEADER="// This file is auto-generated. Do not modify!"
     changed='{{changed}}'
     mkdir -p "$CACHE"/{published,drafts}
+
+    # A failed clean metadata pass can leave a partial cache. Retry the clean
+    # pass before accepting incremental updates.
+    if [[ -n "$changed" && ! -f "$CACHE/.complete" ]]; then
+        changed=""
+    fi
 
     # Concatenate one kind of cached fragment into a generated Typst file.
     # `nullglob` above makes `fragments` empty when the cache has no matches.
@@ -211,6 +232,7 @@ _generate_blog_idx changed="":
                 -not -name '_*.typ' \
                 -print0 | sort -z
         )
+        touch "$CACHE/.complete"
     else
         filepath="./${changed#src/typst/blog/}"
         cache_post "$filepath"
