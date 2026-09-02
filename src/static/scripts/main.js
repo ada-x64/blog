@@ -15,18 +15,18 @@ function rearrange_notes() {
 
 const STORED_THEME = window.localStorage.getItem("theme");
 let isDark = STORED_THEME ? STORED_THEME == "dark" : window.matchMedia("(prefers-color-scheme: dark)").matches;
+if (isDark) {
+  document.querySelector("html").classList.add("dark");
+  window.localStorage.setItem("theme", "dark")
+} else {
+  window.localStorage.setItem("theme", "light")
+}
 
 document.addEventListener("DOMContentLoaded", () => {
   try {
     rearrange_notes()
   } catch {}
 
-  if (isDark) {
-    document.querySelector("html").classList.add("dark");
-    window.localStorage.setItem("theme", "dark")
-  } else {
-    window.localStorage.setItem("theme", "light")
-  }
   document.querySelector("#toggle-lights").addEventListener("click", (event) => {
     isDark = !isDark;
     document.querySelector("html").classList.toggle("dark")
