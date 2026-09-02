@@ -162,6 +162,4 @@ There has been
 #link("https://en.wikipedia.org/wiki/Arts_and_Crafts_movement")[movement in this
 direction before]
 
-hello
-
 #bibliography

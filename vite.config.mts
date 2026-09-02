@@ -1,12 +1,15 @@
 import { spawn } from "node:child_process";
 import { existsSync, mkdirSync, rmSync } from "node:fs";
+import { readFile } from "node:fs/promises";
 import { dirname, relative, resolve, sep } from "node:path";
 import { fileURLToPath } from "node:url";
 import { defineConfig, type Plugin, type ViteDevServer } from "vite";
 
 const projectRoot = dirname(fileURLToPath(import.meta.url));
 const sourceRoot = resolve(projectRoot, "src");
+const resumeRoot = resolve(projectRoot, "resume");
 const blogRoot = "src/typst/blog/";
+const postsIndex = resolve(projectRoot, blogRoot, "_posts.typ");
 const fullBuild = Symbol("full-build");
 
 type Change = string | typeof fullBuild;
@@ -57,6 +60,30 @@ function isStaticAsset(file: string): boolean {
   return file.startsWith("src/static/");
 }
 
+function isResumeSource(file: string): boolean {
+  return file.startsWith("resume/");
+}
+
+function isMainBundleSource(file: string): boolean {
+  return [
+    "src/typst/main.typ",
+    "src/typst/index.typ",
+    "src/typst/now.typ",
+  ].includes(file);
+}
+
+function isRootTemplate(file: string): boolean {
+  return file === "src/typst/_template.typ";
+}
+
+function isBlogTemplate(file: string): boolean {
+  return file === `${blogRoot}_template.typ`;
+}
+
+function isSharedTypstAsset(file: string): boolean {
+  return file.startsWith("src/typst/assets/");
+}
+
 function isBlogPost(file: string): boolean {
   if (!file.startsWith(blogRoot) || !file.endsWith(".typ")) {
     return false;
@@ -78,17 +105,23 @@ async function syncStaticAssets(): Promise<void> {
 }
 
 async function compileMainBundle(): Promise<void> {
-  // Keep page names and document metadata in their canonical Typst source.
-  await run("typst", ["c", "./src/typst/main.typ", "./out/", "--format=bundle"], {
-    env: { TYPST_FEATURES: "bundle,html" },
-  });
+  await run("just", ["_compile_main"]);
 }
 
-async function updateBlogPost(file: string): Promise<void> {
-  await run("just", ["_generate_blog_idx", file], {
-    env: { SHOW_DRAFTS: "true" },
-  });
+async function compileBlogBundle(): Promise<void> {
+  await run("just", ["_compile_blog"]);
+}
 
+async function compileResume(): Promise<void> {
+  await run("just", ["build-resume"]);
+}
+
+async function updateBlogMetadata(file?: string): Promise<void> {
+  const args = file ? ["_generate_blog_idx", file] : ["_generate_blog_idx"];
+  await run("just", args, { env: { SHOW_DRAFTS: "true" } });
+}
+
+async function compileBlogPost(file: string): Promise<void> {
   const relativePost = file.slice(blogRoot.length);
   const output = resolve(
     projectRoot,
@@ -113,30 +146,66 @@ async function updateBlogPost(file: string): Promise<void> {
 
 async function buildChanges(changes: Change[]): Promise<boolean> {
   const files = changes.filter((change): change is string => change !== fullBuild);
-  const needsFullBuild =
-    changes.includes(fullBuild) ||
-    files.some((file) => !isStaticAsset(file) && !isBlogPost(file));
+  const isKnownSource = (file: string) =>
+    isStaticAsset(file) ||
+    isResumeSource(file) ||
+    isMainBundleSource(file) ||
+    isRootTemplate(file) ||
+    isBlogTemplate(file) ||
+    isSharedTypstAsset(file) ||
+    isBlogPost(file);
 
-  if (needsFullBuild) {
+  if (changes.includes(fullBuild) || files.some((file) => !isKnownSource(file))) {
     await run("just", ["build"], { env: { SHOW_DRAFTS: "true" } });
     return true;
   }
 
-  if (files.some(isStaticAsset)) {
-    await syncStaticAssets();
-  }
-
   const posts = [...new Set(files.filter(isBlogPost))];
-  for (const post of posts) {
-    await updateBlogPost(post);
+  const blogTemplateChanged = files.some(isBlogTemplate);
+  const rootTemplateChanged = files.some(isRootTemplate);
+  const sharedAssetChanged = files.some(isSharedTypstAsset);
+  const mainSourceChanged = files.some(isMainBundleSource);
+  let metadataChanged = false;
+
+  if (posts.length > 0 || blogTemplateChanged) {
+    const before = await readFile(postsIndex, "utf8").catch(() => "");
+    if (blogTemplateChanged) {
+      // The blog template defines post metadata, so let the cache invalidate
+      // and refresh every post when that template changes.
+      await updateBlogMetadata();
+    } else {
+      for (const post of posts) {
+        await updateBlogMetadata(post);
+      }
+    }
+    const after = await readFile(postsIndex, "utf8").catch(() => "");
+    metadataChanged = before !== after;
   }
 
-  if (posts.length > 0) {
-    await compileMainBundle();
-    return true;
+  const rebuildAllBlogPosts =
+    blogTemplateChanged || rootTemplateChanged || sharedAssetChanged || metadataChanged;
+  const rebuildMain =
+    mainSourceChanged || rebuildAllBlogPosts;
+  const tasks: Promise<void>[] = [];
+
+  if (files.some(isStaticAsset)) tasks.push(syncStaticAssets());
+  if (files.some(isResumeSource)) tasks.push(compileResume());
+  if (rebuildMain) tasks.push(compileMainBundle());
+  if (rebuildAllBlogPosts) tasks.push(compileBlogBundle());
+
+  if (!rebuildAllBlogPosts) {
+    tasks.push(...posts.map(compileBlogPost));
+  } else {
+    // Bundle compilation cannot remove output for a deleted source document.
+    tasks.push(
+      ...posts
+        .filter((post) => !existsSync(resolve(projectRoot, post)))
+        .map(compileBlogPost),
+    );
   }
 
-  return false;
+  await Promise.all(tasks);
+  return rebuildMain || rebuildAllBlogPosts || posts.length > 0;
 }
 
 function typstDevelopmentPlugin(): Plugin {
@@ -188,14 +257,17 @@ function typstDevelopmentPlugin(): Plugin {
     apply: "serve",
     configureServer(viteServer) {
       server = viteServer;
-      server.watcher.add(sourceRoot);
+      server.watcher.add([sourceRoot, resumeRoot]);
 
       const sourceChanged = (absolutePath: string) => {
         const file = projectPath(absolutePath);
         // This watcher also receives changes under Vite's out/ root. Only
         // source changes should schedule builds; otherwise each generated file
         // starts another build and creates an infinite loop.
-        if (!file.startsWith("src/") || isGeneratedSource(file)) return;
+        if (
+          (!file.startsWith("src/") && !file.startsWith("resume/")) ||
+          isGeneratedSource(file)
+        ) return;
         enqueue(file);
       };
 

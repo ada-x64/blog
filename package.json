@@ -5,6 +5,7 @@
     "vite": "^8.2.2"
   },
   "scripts": {
-      "dev": "bun run vite"
+    "benchmark": "bun run scripts/benchmark.ts",
+    "dev": "bun run vite"
   }
 }
