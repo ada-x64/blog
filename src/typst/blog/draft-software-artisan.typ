@@ -38,4 +38,4 @@ In the dialectic of our collective Internet presence, AI slop represents the the
 
 There has been #link("https://en.wikipedia.org/wiki/Arts_and_Crafts_movement")[movement in this direction before]
 
-#bibliography("lib.bib", title: "Bibliography")
+#bibliography

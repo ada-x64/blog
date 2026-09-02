@@ -95,6 +95,8 @@
   ]
 }
 
+#let bibliography = bibliography("../assets/lib.bib",style:"chicago-author-date")
+
 #let index_list(posts) = {
   let entries = published_posts().map(post => {
     link("/blog/" + post.path)[

@@ -74,4 +74,4 @@ As development proceeds, I intend to upload builds that you can interact with. (
 
 Thanks for reading. *See you next time.*
 
-#bibliography("lib.bib", title: "Bibliography")
+#bibliography
