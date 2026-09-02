@@ -1,6 +1,7 @@
 set export
 TYPST_FEATURES:="bundle,html"
 TYPST_ROOT:="./src/typst"
+SHOW_DRAFTS := env_var_or_default("SHOW_DRAFTS", "false")
 
 clean:
     git clean -fdx
@@ -37,7 +38,7 @@ dev:
     }
     trap cleanup SIGINT SIGTERM
     while true; do
-        just build
+        SHOW_DRAFTS=true just build
         inotifywait -q -r -e modify,move,create,delete ./src
     done
 
@@ -88,6 +89,10 @@ _generate_blog_idx:
         description=$(parse_item "$json" '.description')
         date=$(jq -r '.date // "none"' <<< "$json")
         draft=$(jq -r '.draft // false' <<< "$json")
+
+        if [[ "$draft" == "true" && "$SHOW_DRAFTS" != "true" ]]; then
+            return
+        fi
 
         DOCUMENTS+=("\
         #document(

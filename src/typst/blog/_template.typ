@@ -3,9 +3,8 @@
 
 #let timestamp(date) = html.elem("time")[#date.display("/[day] [month repr:short], [year]/")]
 
-#let published_posts(posts: posts) = (
-  posts.filter(post => post.draft != true)
-  .map(post => {
+#let sorted_posts(posts: posts) = (
+  posts.map(post => {
     if post.date == none {
       post.date = datetime.today()
     }
@@ -21,7 +20,7 @@
 )
 
 #let post_navigation(title) = {
-  let ordered = published_posts()
+  let ordered = sorted_posts()
   let current = ordered.position(post => post.title == title)
 
   if current != none {
@@ -98,14 +97,20 @@
 #let bibliography = bibliography("../assets/lib.bib",style:"chicago-author-date")
 
 #let index_list(posts) = {
-  let entries = published_posts().map(post => {
-    link("/blog/" + post.path)[
-      #post.title
-    ]
-    [
-      #timestamp(post.date)
-      #post.description
-    ]
+  let entries = sorted_posts(posts: posts).map(post => {
+    if post.draft {
+        link("/blog/" + post.path)[(\*) #post.title]
+        [
+            #timestamp(post.date)
+            #post.description
+        ]
+    } else {
+        link("/blog/" + post.path)[#post.title]
+        [
+            #timestamp(post.date)
+            #post.description
+        ]
+    }
   })
   list(..entries)
 }

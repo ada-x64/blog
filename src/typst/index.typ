@@ -1,5 +1,5 @@
 #import "_template.typ": conf
-#import "blog/_template.typ": published_posts, timestamp
+#import "blog/_template.typ": sorted_posts, timestamp
 
 #show: conf
 = /home
@@ -27,7 +27,7 @@ semiotics.
 
 == recent posts
 #html.elem("nav", attrs: (id: "recent-posts"))[
-  #for post in published_posts().slice(0, 3) {
+  #for post in sorted_posts().slice(0, 3) {
       html.elem("section")[
         #heading(depth:3)[
           #link("/blog/" + post.path)[#post.title]
