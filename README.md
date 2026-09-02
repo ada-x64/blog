@@ -21,7 +21,7 @@ engineering blogs on [lobste.rs](https://lobste.rs)
 
 ## Development
 
-Read the justfile.
+Read the justfile. You'll need bun, typst, and inotify-tools.
 
 ## Feature list
 
