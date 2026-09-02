@@ -13,9 +13,13 @@ build:
     just _generate_blog_idx
     typst c ./src/typst/main.typ ./out/ --format=bundle
     typst c ./src/typst/blog/main.typ ./out/blog --format=bundle
+    just build-resume
 
 serve:
     bunx vite ./out --host localhost --open --port 3030
+
+build-resume:
+    TYPST_ROOT=. typst c ./resume/resume/main.typ ./out/static/resume.pdf
 
 dev:
     #!/bin/bash

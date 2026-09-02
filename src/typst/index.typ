@@ -25,7 +25,7 @@ I also like to read and write. I am ecclesiastically compelled to call this the
 aesthetics, phenomenology, media theory, critical theory, logic, semantics, and
 semiotics.
 
-== Recent posts
+== recent posts
 #html.elem("nav", attrs: (id: "recent-posts"))[
   #for post in published_posts().slice(0, 3) {
       html.elem("section")[
