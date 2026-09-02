@@ -19,103 +19,11 @@ build:
     typst c ./src/typst/blog/main.typ ./out/blog --format=bundle
     just build-resume
 
-serve:
-    bunx vite ./out --host localhost --open --port 3030
-
 build-resume:
     TYPST_ROOT=. typst c ./resume/resume/main.typ ./out/static/resume.pdf
 
 dev:
-    #!/usr/bin/env bash
-    set -Eeuo pipefail
-
-    check_tool() {
-        if ! command -v "$1" >/dev/null 2>&1; then
-            echo "Install $1 before running this script."
-            exit 1
-        fi
-    }
-    check_tool typst
-    check_tool bun
-    check_tool inotifywait
-
-    # Build everything once, then only rebuild the output affected by a change.
-    # Keep the watcher available when the initial source contains an error so it
-    # can rebuild as soon as that error is fixed.
-    if ! SHOW_DRAFTS=true just build; then
-        echo "Initial build failed; watching for changes..." >&2
-    fi
-
-    just serve &
-    PID=$!
-    cleanup() {
-        echo "Quitting..."
-        kill "$PID" 2>/dev/null || true
-        wait "$PID" 2>/dev/null || true
-    }
-    trap cleanup EXIT SIGINT SIGTERM
-
-    rebuild_blog_indexes() {
-        SHOW_DRAFTS=true just _generate_blog_idx "$1" || return 1
-
-        # Rebuild the two blog indexes and the home page's recent-post list,
-        # but leave unrelated pages and posts alone.
-        printf '%s\n' \
-            '#document("index.html", title: "Home", format: "html")[#include("src/typst/index.typ")]' \
-            '#document("blog.html", title: "Blog", description: "An index of blog posts.", format: "html")[#include("src/typst/blog/index.typ")]' \
-            '#document("blog/index.html", title: "Index", description: "A list of blog posts.", format: "html")[#include("src/typst/blog/index.typ")]' \
-            | TYPST_ROOT=. typst c - ./out/ --format=bundle
-    }
-
-    handle_change() {
-        local changed=$1
-        local filename output
-
-        case "$changed" in
-            src/static/*)
-                # Vite watches out/. Sync assets (including bursty moves/deletes)
-                # and let it reload; no Typst work is needed. Keep the generated
-                # résumé, which does not have a counterpart in src/static/.
-                rsync -r --delete --exclude resume.pdf ./src/static/ ./out/static/
-                ;;
-            src/typst/blog/*.typ)
-                filename=${changed##*/}
-                case "$filename" in
-                    main.typ|index.typ|_*.typ)
-                        # Shared and generated blog files can affect every post.
-                        SHOW_DRAFTS=true just build
-                        ;;
-                    *)
-                        rebuild_blog_indexes "$changed" || return 1
-                        output="out/blog/${filename%.typ}.html"
-                        if [[ -f "$changed" ]]; then
-                            typst c "$changed" "$output" --format=html
-                        else
-                            rm -f "$output"
-                        fi
-                        ;;
-                esac
-                ;;
-            *)
-                # Main pages, templates, and Typst assets have wider dependency
-                # graphs, so retain the safe full build for those changes.
-                SHOW_DRAFTS=true just build
-                ;;
-        esac
-    }
-
-    while true; do
-        changed=$(inotifywait -q -r \
-            -e close_write,moved_to,delete \
-            --format '%w%f' ./src)
-        changed=${changed#./}
-
-        # Build errors are expected while editing. Report the failure, preserve
-        # the last successful output, and immediately resume watching.
-        if ! handle_change "$changed"; then
-            echo "Build failed for $changed; watching for changes..." >&2
-        fi
-    done
+    bunx vite
 
 # With no argument, refresh every cached metadata record. Passing a changed
 # post path only evaluates and replaces that post's record.
@@ -239,16 +147,6 @@ _generate_blog_idx changed="":
     fi
 
     printf '%s\n' "$HEADER" > "$MAIN"
-    cat <<'EOF' >> "$MAIN"
-    #document(
-        "index.html",
-        title: "Index",
-        description: "A list of blog posts.",
-        format: "html",
-        )[
-        #include("./index.typ")
-    ]
-    EOF
     append_cached_fragments "$MAIN" published document
     if [[ "$SHOW_DRAFTS" == "true" ]]; then
         append_cached_fragments "$MAIN" drafts document

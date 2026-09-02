@@ -16,10 +16,20 @@
   #include("./now.typ")
 ]
 
+#let blog-description = "An index of blog posts."
+
 #document(
   "blog.html",
   title: [Blog],
-  description: "An index of blog posts."
+  description: blog-description,
+)[
+  #include("./blog/index.typ")
+]
+
+#document(
+  "blog/index.html",
+  title: [Blog],
+  description: blog-description,
 )[
   #include("./blog/index.typ")
 ]
