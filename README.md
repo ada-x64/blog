@@ -23,7 +23,30 @@ engineering blogs on [lobste.rs](https://lobste.rs)
 
 ## Development
 
-Read the justfile. 
+Read the justfile.
+
+## Build benchmarks
+
+**Disclaimer:** gpt-5.6-sol wrote the benchmarking code and helped optimize the
+build process. All code was strictly reviewed and modified by hand.
+
+Measured over five runs with Typst 0.15.0 under WSL2 on an Intel Core Ultra 9
+285H. Times are wall-clock medians; incremental builds use the development
+configuration, including draft posts.
+
+| Build | Median | Range |
+| --- | ---: | ---: |
+| Clean full build | 1.842 s | 1.827–1.881 s |
+| Cached full build | 0.570 s | 0.561–0.585 s |
+| Incremental blog post | 0.535 s | 0.529–0.545 s |
+| Change to `main.typ` | 0.069 s | 0.067–0.071 s |
+| Change to `_template.typ` | 1.681 s | 1.662–1.736 s |
+
+Run the benchmark suite locally with:
+
+```sh
+bun run benchmark --suite builds --runs 5
+```
 
 ## Feature list
 
