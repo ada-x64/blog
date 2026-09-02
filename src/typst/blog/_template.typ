@@ -1,9 +1,9 @@
 #import "../_template.typ": conf, footer
 #import "_posts.typ": posts
 
-#let timestamp(date) = html.elem("time")[#date.display("[day] [month repr:short], [year]")]
+#let timestamp(date) = html.elem("time")[#date.display("/[day] [month repr:short], [year]/")]
 
-#let published_posts(posts) = (
+#let published_posts(posts: posts) = (
   posts.filter(post => post.draft != true)
   .map(post => {
     if post.date == none {
@@ -21,7 +21,7 @@
 )
 
 #let post_navigation(title) = {
-  let ordered = published_posts(posts)
+  let ordered = published_posts()
   let current = ordered.position(post => post.title == title)
 
   if current != none {
@@ -96,7 +96,7 @@
 }
 
 #let index_list(posts) = {
-  let entries = published_posts(posts).map(post => {
+  let entries = published_posts().map(post => {
     link("/blog/" + post.path)[
       #post.title
     ]

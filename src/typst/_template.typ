@@ -1,5 +1,5 @@
 /// The main website template.
-#let icon = image("assets/cube.gif", alt: "A rotating cube", height: 1em, width: 1em)
+#let icon = image("assets/cube.gif", alt: "A rotating cube")
 
 #let nav = block[
   #link("/")[home] |

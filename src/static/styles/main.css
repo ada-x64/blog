@@ -1,5 +1,7 @@
 html {
     width: 100%;
+    background: linear-gradient(white, aliceblue 50%);
+    background-attachment: fixed;
 }
 
 body {
@@ -11,13 +13,6 @@ body {
 
 footer {
     margin-top: 1em;
-}
-
-#header h1 {
-	display: flex;
-	align-content: center;
-	align-items: center;
-	gap: 0.5em;
 }
 
 #header h1 p {
@@ -71,6 +66,20 @@ nav.post-navigation {
     nav.post-navigation div {
         text-align: center;
     }
+
+    nav#recent-posts {
+        display: flex;
+    }
+    nav#recent-posts section {
+        flex: 1;
+    }
+    nav#recent-posts h4 {
+        margin-top: 0;
+        margin-bottom: 1em;
+    }
+}
+nav#recent-posts h4 {
+    margin-bottom: 0;
 }
 
 section[role="doc-endnotes"] ol {
