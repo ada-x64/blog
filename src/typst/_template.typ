@@ -4,7 +4,9 @@
 #let nav = block[
   #link("/")[home] |
   #link("/now")[now] |
-  #link("/blog")[blog]
+  #link("/blog")[blog] |
+  #html.elem("a", attrs:(rel: "noopener noreferrer", target: "_blank", href: "https://github.com/ada-x64/blog"))[source] |
+  #link("#")[#html.elem("span", attrs:(id: "toggle-lights"))[toggle theme]]
 ]
 
 #let header = block[

@@ -89,3 +89,21 @@ section[role="doc-endnotes"] ol {
 section[role="doc-endnotes"] sup {
     padding-right: 1em;
 }
+
+html.dark {
+    background: linear-gradient(#000, #1d1e1f 50%);
+    color: white;
+    background-attachment: fixed;
+}
+html.dark a {
+    color:lightblue;
+}
+html.dark a:visited {
+    color:cornflowerblue;
+}
+a {
+    color:blueviolet;
+}
+a:visited {
+    color:darkslateblue;
+}

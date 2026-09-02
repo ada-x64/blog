@@ -25,28 +25,14 @@ I also like to read and write. I am ecclesiastically compelled to call this the
 aesthetics, phenomenology, media theory, critical theory, logic, semantics, and
 semiotics.
 
-#link("https://github.com/ada-x64/blog")[This website is OSS.]
-
-#let recent_posts() = {
-  [== Recent posts]
-  html.elem("nav", attrs: (id: "recent-posts"))[
-    #for post in published_posts().slice(0, 3) {
-      // path: "./ai-identity-crises.html",
-      // title: "AI Identity Crises",
-      // description: "On the death of the Californian Ideology",
-      // date: datetime(year: 2026, month: 2, day: 14),
-      // draft: false
-      [
-        #html.elem("section")[
-          #heading(depth:3)[
-            #link("/blog/" + post.path)[#post.title]
-          ]
-          #timestamp(post.date) #post.description
+== Recent posts
+#html.elem("nav", attrs: (id: "recent-posts"))[
+  #for post in published_posts().slice(0, 3) {
+      html.elem("section")[
+        #heading(depth:3)[
+          #link("/blog/" + post.path)[#post.title]
         ]
+        #timestamp(post.date) #post.description
       ]
-    }
-  ]
-}
-
-#divider()
-#recent_posts()
+  }
+]
