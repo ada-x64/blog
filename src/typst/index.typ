@@ -19,9 +19,9 @@ for #link("https://burnbryte.com")[an original tabletop roleplaying game.]
 
 For fun I like to build and contribute to #link("https://github.com/ada-x64/sundile_rs")[game engines] (#link("https://github.com/bevyengine/bevy")[2]). Currently I'm working on a #link("https://github.com/cubething-qproj")[Bevy-based game framework.] I blog about it regularly.
 
-I also like to read and write. My theological yearnings prefer to call this the
+I also like to read and write. I am ecclesiastically compelled to call this the
 "real work." My philosophical interests include Buddhist conceptions of mind,
 aesthetics, phenomenology, media theory, critical theory, logic, semantics, and
 semiotics.
 
-#link("https://github.com/ada-x64/cubething-quartz")[This website is OSS.]
+#link("https://github.com/ada-x64/blog")[This website is OSS.]

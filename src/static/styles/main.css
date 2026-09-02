@@ -50,6 +50,10 @@ h6 {
     align-items: center;
 }
 
+nav.post-navigation {
+    margin-top: 1em;
+}
+
 @media(width >= 40em) {
     nav.post-navigation {
         display: flex;

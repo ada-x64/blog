@@ -34,17 +34,17 @@
 
     if previous != none or next != none {
       html.elem("nav", attrs: (class: "post-navigation"))[
-        #if previous != none {
-          html.elem("div", attrs: (class: "previous"))[
-            #link(previous.path)[← Previous: #previous.title]
-          ]
-        }
-        #html.elem("div")[#link("/blog")[Index]]
-        #if next != none {
-          html.elem("div", attrs: (class: "next"))[
-            #link(next.path)[Next: #next.title →]
-          ]
-        }
+        #html.elem("div", attrs: (class: "previous"))[
+          #if previous != none {
+            link(previous.path)[← Previous: #previous.title]
+          }
+        ]
+        #html.elem("div")[#link("/blog")[≡ Index]]
+        #html.elem("div", attrs: (class: "next"))[
+          #if next != none {
+            link(next.path)[Next: #next.title →]
+          }
+        ]
       ]
     }
   }
