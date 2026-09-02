@@ -13,10 +13,6 @@ function rearrange_notes() {
   notes.querySelector("ol").before(child)
 }
 
-function toggle_mode() {
-
-}
-
 const STORED_THEME = window.localStorage.getItem("theme");
 let isDark = STORED_THEME ? STORED_THEME == "dark" : window.matchMedia("(prefers-color-scheme: dark)").matches;
 
