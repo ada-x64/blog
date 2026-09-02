@@ -3,6 +3,21 @@ TYPST_FEATURES:="bundle,html"
 TYPST_ROOT:="./src/typst"
 SHOW_DRAFTS := env_var_or_default("SHOW_DRAFTS", "false")
 
+check_deps +deps='typst rsync jq':
+    MISSING=()
+    for DEP in {{deps}}; do
+        which $DEP 2>/dev/null 1>/dev/null;
+        if [ $? == 0 ]; then
+            MISSING+=($DEP)
+        fi
+    done
+    if [ ${#MISSING[@]} != 0 ]; then
+        echo "Missing dependencies detected."
+        for item in "${MISSING[@]}"; do
+            echo "- $item";
+        done;
+    fi
+
 clean:
     #!/bin/bash
     rm -rf \
@@ -13,6 +28,7 @@ clean:
 build:
     #!/usr/bin/env bash
     set -Eeuo pipefail
+    just check_deps
     rsync -r ./src/static ./out/
     just _generate_blog_idx
     typst c ./src/typst/main.typ ./out/ --format=bundle
@@ -23,6 +39,7 @@ build-resume:
     TYPST_ROOT=. typst c ./resume/resume/main.typ ./out/static/resume.pdf
 
 dev:
+    check_deps bun
     bunx vite
 
 # With no argument, refresh every cached metadata record. Passing a changed
