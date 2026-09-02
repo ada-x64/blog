@@ -3,7 +3,3 @@ bin
 node_modules
 LICENSE
 NOTICE
-package.json
-bun.lock
-package-lock.json
-pnpm-lock.yaml
