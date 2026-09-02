@@ -26,10 +26,10 @@ Read the justfile.
 ## Feature list
 
 - [x] Typst bundle compilation
-- [ ] Blog posts with metadata
-- [ ] Blog post index page
-- [ ] Chronological footer navigation
-- [ ] Mobile-friendly styling
+- [x] Blog posts with metadata
+- [x] Blog post index page
+- [x] Chronological footer navigation
+- [x] Mobile-friendly styling
 - [ ] Portfolio page
 
 ### Stretch goals
