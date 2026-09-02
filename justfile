@@ -35,11 +35,14 @@ dev:
 
 _generate_blog_idx:
     #!/bin/bash
+    # set up
     cd ./src/typst/blog
     export MAIN="./main.typ"
     export IDX="./index.typ"
     TYPST_ROOT=../
     HEADER="// This file is auto-generated. Do not modify!"
+
+    # set up main.typ
     echo "$HEADER" > "$MAIN"
     echo "\
     #document(
@@ -50,6 +53,8 @@ _generate_blog_idx:
         )[
         #include(\"./index.typ\")
     ]" >> "$MAIN"
+
+    # set up index.typ
     echo "$HEADER" > "$IDX"
     cat <<EOF >> "$IDX"
         #import("_template.typ"): index_list
@@ -58,15 +63,26 @@ _generate_blog_idx:
         = /blog
         #let posts = (
     EOF
+
     function add_to_idx() {
+
+        function parse_item() {
+            local filter='
+                if . == null then "none"
+                elif type == "string" then @json
+                else tostring
+                end'
+            echo "$JSON" | jq -r "$1 | $filter"
+        }
+
         # Collect data
         FILEPATH=$1
         SLUG=$(echo $FILEPATH | sed -e "s/\.typ/\.html/gi")
         JSON=$(typst eval "query(metadata).first().value" --in "$FILEPATH" --target html)
-        TITLE=$(echo "$JSON" | jq ".title")
-        DESCRIPTION=$(echo "$JSON" | jq '.description')
+        TITLE=$(parse_item '.title')
+        DESCRIPTION=$(parse_item '.description')
         DATE=$(echo "$JSON" | jq -r '.date // "none"')
-        echo "$SLUG :: $JSON"
+        DRAFT=$(echo "$JSON" | jq -r '.draft // false')
 
         # Add to bundle
         echo "\
@@ -86,9 +102,12 @@ _generate_blog_idx:
             path: \"$SLUG\",
             title: $TITLE,
             description: $DESCRIPTION,
-            date: $DATE
+            date: $DATE,
+            draft: $DRAFT
         )," >> "$IDX"
     }
     export -f add_to_idx;
+
+    # main
     find . -type f -name '*.typ' -a -not -name 'main.typ' -a -not -name 'index.typ' -a -not -name '_template.typ' -exec bash -c 'add_to_idx "{}"' \;
     echo -e ")\n#index_list(posts)" >> "$IDX"

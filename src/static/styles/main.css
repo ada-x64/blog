@@ -19,3 +19,29 @@ body {
 #header h1 p {
     margin: 0;
 }
+
+img, video, iframe {
+    max-width: 100%;
+    border-radius: 0.5em;
+}
+
+iframe.youtube {
+    width: 100%;
+    aspect-ratio: 16/9;
+}
+
+figcaption {
+    text-align: center;
+    font-style: italic;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    display: flex;
+    gap: 0.5em;
+    align-items: center;
+}

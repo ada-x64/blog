@@ -22,6 +22,7 @@
   html.elem("head")[
     #html.elem("link", attrs: (rel: "stylesheet", href: "/static/styles/main.css"))
     #html.elem("link", attrs: (rel: "stylesheet", href: "/static/styles/fonts.css"))
+    #html.elem("script", attrs: (src: "/static/scripts/main.js"))
   ]
   html.elem("header", attrs: (id: "header"))[#header]
   html.elem("main", attrs: (id: "main"))[#content]
