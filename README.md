@@ -1,6 +1,6 @@
 # blog
 
-[![Netlify Status](https://api.netlify.com/api/v1/badges/d363270b-b84f-4eae-b971-043688e41a3d/deploy-status)](https://app.netlify.com/projects/beamish-syrniki-988edd/deploys)
+[build status](https://app.netlify.com/projects/cubething/deploys) | [live site](https://cubething.dev)
 
 This is a dead-simple typst-based static site for a blog and portfolio.
 
@@ -23,7 +23,7 @@ engineering blogs on [lobste.rs](https://lobste.rs)
 
 ## Development
 
-Read the justfile. You'll need typst, jq, and rsync.
+Read the justfile. 
 
 ## Feature list
 
@@ -33,8 +33,6 @@ Read the justfile. You'll need typst, jq, and rsync.
 - [x] Chronological footer navigation
 - [x] Mobile-friendly styling
 - [x] Dark mode
-- [x] Resume submodule
-
-### Stretch goals
-- [ ] Tagging and tag-based indexing
-- [ ] Search functionality
+- [x] Résumé submodule
+- [x] Subsecond recompilation time
+- [x] Live reload
