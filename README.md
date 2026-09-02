@@ -23,7 +23,7 @@ engineering blogs on [lobste.rs](https://lobste.rs)
 
 ## Development
 
-Read the justfile. You'll need bun, typst, and inotify-tools.
+Run `bun install`, then read the justfile. You'll also need Typst, jq, and rsync.
 
 ## Feature list
 

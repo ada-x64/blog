@@ -10,19 +10,19 @@
 #quote(block: true, attribution: [#cite(<benjaminOnewayStreetOther2021>, supplement: [58])])[#block[
 #set enum(numbering: "1.", start: 8)
 + Anyone who does not simply refuse to perceive decline will hasten to claim a
-special justification for his own continued presence, his activity and
-involvement in this chaos. As there are many insights into the general failure,
-so there are many exceptions for one's own sphere of action, place of residence,
-and moment of time. A blind determination to save the prestige of personal
-existence, rather than, through an impartial disdain for its impotence and
-entanglement, at least to detach it from the background of universal delusion,
-is triumphing almost everywhere. That is why the air is so thick with life
-theories and world views, and why in this country they cut so presumptuous a
-figure, for almost always they finally serve to sanction some wholly trivial
-private situation. For just the same reason the air is so full of phantoms,
-mirages of a glorious cultural future breaking upon us overnight in spite of
-all, for everyone is committed to the optical illusions of his isolated
-standpoint.
+    special justification for his own continued presence, his activity and
+    involvement in this chaos. As there are many insights into the general failure,
+    so there are many exceptions for one's own sphere of action, place of residence,
+    and moment of time. A blind determination to save the prestige of personal
+    existence, rather than, through an impartial disdain for its impotence and
+    entanglement, at least to detach it from the background of universal delusion,
+    is triumphing almost everywhere. That is why the air is so thick with life
+    theories and world views, and why in this country they cut so presumptuous a
+    figure, for almost always they finally serve to sanction some wholly trivial
+    private situation. For just the same reason the air is so full of phantoms,
+    mirages of a glorious cultural future breaking upon us overnight in spite of
+    all, for everyone is committed to the optical illusions of his isolated
+    standpoint.
 ]]
 
 Consider this my justification for the fact that I like to do things the way I
@@ -162,6 +162,5 @@ There has been
 #link("https://en.wikipedia.org/wiki/Arts_and_Crafts_movement")[movement in this
 direction before]
 
-This is a test edit. Another test edit. I should see it occur immediately.
 
 #bibliography
