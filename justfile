@@ -70,9 +70,11 @@ _sync_static:
     rsync -r ./src/static ./out/
 
 _compile_main:
+    echo "main.typ"
     typst c ./src/typst/main.typ ./out/ --format=bundle
 
 _compile_blog:
+    echo "blog/main.typ"
     typst c ./src/typst/blog/main.typ ./out/blog --format=bundle
 
 build-resume:
@@ -138,6 +140,7 @@ _generate_blog_idx changed="":
     }
 
     cache_post() {
+        echo "caching $1"
         local filepath=$1
         local slug="${filepath%.typ}.html"
         local key="${filepath#./}"

@@ -98,21 +98,14 @@
 
 #let index_list(posts) = {
   let entries = sorted_posts(posts: posts).map(post => {
-    if post.draft {
-        link("/blog/" + post.path)[(\*) #post.title]
-        [
-            #timestamp(post.date)
-            #post.description
-        ]
-    } else {
-        link("/blog/" + post.path)[#post.title]
-        [
-            #timestamp(post.date)
-            #post.description
-        ]
-    }
-  })
-  list(..entries)
+    let prefix = if post.draft {"(*) "} else {""}
+    (
+      html.elem("div")[#timestamp(post.date)],
+      html.elem("div")[#link("/blog/" + post.path)[#prefix#post.title]],
+      html.elem("div")[#post.description],
+    )
+  }).flatten().join()
+  html.elem("div", attrs: (class: "index"))[#entries]
 }
 
 #let media(url, caption: none, linked: false, alt: "", title: "") = {
