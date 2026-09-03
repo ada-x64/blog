@@ -107,3 +107,10 @@ a {
 a:visited {
     color:darkslateblue;
 }
+
+.index {
+    display: grid;
+    grid-template-areas: 'time name description';
+    gap: 1em;
+    grid-template-columns: max-content 1fr 1fr;
+}
