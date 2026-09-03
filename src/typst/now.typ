@@ -14,17 +14,21 @@
     - Alva Noë, _The Entanglement_ (2023)
   ]
 
+== ⚙️
+
+- Play and the Entanglement (essay)
+- Roach Hell (visual novel)
+
 == 🎮
+
+#link("https://steamcommunity.com/id/cubething/")[steam] | #link("https://cubething.itch.io")[itch] | #link("https://discord.com/users/159805063596998656")[discord]
 
 - Team Cherry, _Hollow Knight: Silksong_ (2025)
 - #html.elem("details")[
     #html.elem("summary")[Finished titles]
+    - Black Tabby Games, _Slay the Princess_ (2023)
     - snek et al., _#link("https://snekofspice.itch.io/loner-dog")[LONER_DOG:\/\/Snuff Puppy Carnage Society]_ (2025)
   ]
-
-== ✒️
-- Play and the Entanglement (essay)
-- Roach Hell (visual novel)
 
 == 🧑🏻‍💻
 - os dev + ci @ #link("https://github.com/nanvix")[nanvix] (\$)
