@@ -23,16 +23,20 @@ Heidegger and Carnap were both in agreement on one thing: Traditional metaphysic
 
 #figure(
   html.elem("center")[#table(
-    columns: (5.56%),
+    columns: 5.56%,
     align: (auto,),
     [outline thesis: video games can deterritorialize and reconstitute new planes of immanence (conceptual frameworks) by placing their players in a new experiential mode, thus modifying the non-/protolinguistic process of concept formation],
     [background],
     [- from Descartes to deleuze - history of 20th c Phil],
-    [- focus on h/c debate, bring in concepts from deleuze (deterritorialization, planes of immanence) - link to priest],
+    [
+      - focus on h/c debate, bring in concepts from deleuze (deterritorialization, planes of immanence) - link to priest
+    ],
     [- affect and design],
-    [- what is affect, how do we design for it - jagoda and deleuze - critical analysis and affect - art, philosophy, the infinite - sonntag on silence as the space between words which indicates a full emptiness ^ vague outline. need to finish "what is philosophy" et al],
-  )]
-  , kind: table
-  )
+    [
+      - what is affect, how do we design for it - jagoda and deleuze - critical analysis and affect - art, philosophy, the infinite - sonntag on silence as the space between words which indicates a full emptiness ^ vague outline. need to finish "what is philosophy" et al
+    ],
+  )],
+  kind: table,
+)
 
 The game director positions himself at the center of delueze's triplicate model of the human mind. The developers are the scientists, lending the directors vision into physicality. The artists are… artists, instantiating the aesthetics of the piece, creating the tangible assets. The designers are the philosophers, developing concepts and planes of immanence on which the overall message and intent of the game is placed. But the director is placed at the center, traversing these fields. He is in charge of the _affect,_ the movement between these modes of thinking, to create the overall impression of the piece. The director is the visionary; the good director understands the way in which every aspect of the game will affect the player, will _move_ them toward some action, feeling, thought - and more than this, how these three aspects influence the impact of the game on the player. In this way I find that the video game, more than any other medium, is a truly affective media, and one which can be used in ways heretofore unseen to move individuals to thought, back into engagement with the infinite.

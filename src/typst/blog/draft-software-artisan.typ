@@ -7,9 +7,12 @@
 
 == intro
 <intro>
-#quote(block: true, attribution: [#cite(<benjaminOnewayStreetOther2021>, supplement: [58])])[#block[
-#set enum(numbering: "1.", start: 8)
-+ Anyone who does not simply refuse to perceive decline will hasten to claim a
+#quote(block: true, attribution: [#cite(
+  <benjaminOnewayStreetOther2021>,
+  supplement: [58],
+)])[#block[
+  #set enum(numbering: "1.", start: 8)
+  + Anyone who does not simply refuse to perceive decline will hasten to claim a
     special justification for his own continued presence, his activity and
     involvement in this chaos. As there are many insights into the general failure,
     so there are many exceptions for one's own sphere of action, place of residence,
@@ -38,7 +41,9 @@ I want to explain to you what I mean when I say I am a software artisan. First
 we, should distinguish artisanship from similar ideas. Artisanship is not
 #link("https://manifesto.softwarecraftsmanship.org/#/en")[craftmanship.] It is
 not
-#link("https://thoughts.melonking.net/guides/introduction-to-the-web-revival-1-what-is-the-web-revival")[nostalgia.]
+#link(
+  "https://thoughts.melonking.net/guides/introduction-to-the-web-revival-1-what-is-the-web-revival",
+)[nostalgia.]
 It is not anti-AI, Web3, or anything else, so long as that anything can be put
 to good use. "Artisanship" is the process of creating something lovingly and by
 hand, for practical and artistic purposes. "Software artisanship" is just that -
@@ -49,7 +54,7 @@ make money. It knows nothing of capital.
 <critique-of-the-web-revival-movement>
 The
 #link("https://thoughts.melonking.net/guides/introduction-to-the-web-revival-1-what-is-the-web-revival")[web
-revival] is a counter-culture, mostly with leftist politics. It focuses on the
+  revival] is a counter-culture, mostly with leftist politics. It focuses on the
 handmade, the crafted, the messy. It is nostalgic (as all culture in the 21st
 century seems to be), pulling on oldweb aesthetics and striving to be as loud
 and unsellable as possible. The ethos is anticapitalist at heart. Advertisements
@@ -69,9 +74,9 @@ without corporations profiting off of them. I love exploring the pages on
 #link("webrings")[webrings] and listings, there is a genuine sense of discovery
 and play which has been desperately missing from the web for a few decades
 now.#footnote[I'm aware I'm coming at this a few years late - I've been
-following the movement for a while now but haven't participated or said much
-about it yet. Too sucked into my doomscrolling to see what's happening in front
-of me.] That being said, I have concerns about the decentralization of the
+  following the movement for a while now but haven't participated or said much
+  about it yet. Too sucked into my doomscrolling to see what's happening in front
+  of me.] That being said, I have concerns about the decentralization of the
 smallweb.
 
 The problem is with networking - how are we meant to find each other behind the
@@ -83,17 +88,17 @@ to keep up with blogs and other smallweb content, but this is still difficult
 for the non-technical person to use, yet alone deploy for their own sites. This
 is why I switched to bluesky and am enthusiastic about
 #link("https://atproto.com")[the ATProtocol] it's built on.#footnote[The primary
-problem with Mastodon as a service (at least when I last tried it a few years
-ago) was in its usability and general mood of exclusivity. I could never figure
-out how to make a proper account on half the damn sites; choosing a site to host
-my account on - yet alone _switching_ sites - and figuring out how to curate my
-feeds was a huge pain the ass. Practically speaking, if nobody _uses_ it then
-there's no chance it's going to be revolutionary. But, the idea of federation is
-deeply important and we are indebted to
-#link("https://activitypub.rocks")[activitypub] for it. Bluesky did it right
-with the invite-only beta and its general focus on polish and design. It's
-intended to replace old Twitter in look and feel, and it's done a damn fine job
-of it.] The project is young, but I see it solving many of these concerns.
+  problem with Mastodon as a service (at least when I last tried it a few years
+  ago) was in its usability and general mood of exclusivity. I could never figure
+  out how to make a proper account on half the damn sites; choosing a site to host
+  my account on - yet alone _switching_ sites - and figuring out how to curate my
+  feeds was a huge pain the ass. Practically speaking, if nobody _uses_ it then
+  there's no chance it's going to be revolutionary. But, the idea of federation is
+  deeply important and we are indebted to
+  #link("https://activitypub.rocks")[activitypub] for it. Bluesky did it right
+  with the invite-only beta and its general focus on polish and design. It's
+  intended to replace old Twitter in look and feel, and it's done a damn fine job
+  of it.] The project is young, but I see it solving many of these concerns.
 Bluesky is likely to continue as the primary ATProto implementor, but its
 open-source and fairly easy-to-use nature makes it a great candidate for future
 federated web frameworks. Sites like neocities could integrate --
@@ -122,7 +127,7 @@ inhabiting the outer lands are not accustomed to it. Speaking as a web
 developer, somebody who does this professionally and as a hobby: there's a
 reason geocities shut down. Servers cost money. Net art is famously volatile.
 Nothing lasts forever.#footnote[This is why we need
-#link("https://archive.org")[archives] (#link("https://annas-archive.org")[2]).]
+  #link("https://archive.org")[archives] (#link("https://annas-archive.org")[2]).]
 
 I don't want to make light of the travails of the modern internet user. I think
 the netizens have the right idea in spite of the flaws in their ethos, and I
@@ -139,9 +144,9 @@ Not to be a buzzkill, but it's not _practical._ It's brittle, arrogant, brash,
 sometimes annoying. This is why we love it, but as adults living in a society
 with our own children and the need to make money and live comfortably, the web
 revival is not enough.#footnote[Some would call this tendency of the reactionary
-left an
-#link("https://www.marxists.org/archive/lenin/works/1920/lwc/index.htm")["Infantile
-Disorder."] #cite(<leninLeftWingCommunismInfantile1920>)] Expressionism alone is
+  left an
+  #link("https://www.marxists.org/archive/lenin/works/1920/lwc/index.htm")["Infantile
+    Disorder."] #cite(<leninLeftWingCommunismInfantile1920>)] Expressionism alone is
 not enough, artistry is not enough - we need to act as artisans.
 
 *Artisans make practical goods. Chairs, lamps, tables, desks; they infuse their
@@ -160,6 +165,6 @@ Software artisanship is the synthesis, the only logical next step.
 
 There has been
 #link("https://en.wikipedia.org/wiki/Arts_and_Crafts_movement")[movement in this
-direction before]
+  direction before]
 
 #bibliography

@@ -15,7 +15,11 @@ Last week was the #link("https://itch.io/jam/bevy-jam-6")[sixth bevy game jam]ho
 
 == The Project
 <the-project>
-#html.elem("iframe", attrs: (src: "https://itch.io/embed/3629051?dark=true", width: "552", height: "167"))[MARKOFF (Bevy Jam 6) by cubething]
+#html.elem("iframe", attrs: (
+  src: "https://itch.io/embed/3629051?dark=true",
+  width: "552",
+  height: "167",
+))[MARKOFF (Bevy Jam 6) by cubething]
 
 _*MARKOFF*_ is a cellular automata sandbox and battleground. The idea is to have players take turns placing "stamps" on a board. Once the stamps are placed, a simulation runs, turning the stamp into a captured area. The goal, of course, is to capture as much territory as possible.
 
@@ -98,7 +102,10 @@ Styles were implemented manually, though I'm looking into #link("https://github.
 
 One more thing I've noticed: There seems to be a frame delay between creating the UI and rendering it properly. Not sure this is a bevy\_ui thing or if it's hui, but it is definitely noticable and unfortunate.
 
-#media("/media/markoff-ui-bug.gif", caption: [The rendering bug at about 4fps. Component nodes are improperly rendered for the first frame.])
+#media(
+  "/media/markoff-ui-bug.gif",
+  caption: [The rendering bug at about 4fps. Component nodes are improperly rendered for the first frame.],
+)
 
 == The Simulation
 <the-simulation>

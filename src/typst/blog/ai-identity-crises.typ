@@ -9,7 +9,12 @@
   cover: "/media/silicon-valley-from-above.jpeg",
 )
 
-#link("https://blog.apaonline.org/2025/11/12/the-problem-is-epistemic-the-solution-is-not/")[#media("/media/silicon-valley-from-above.jpeg", caption: "silicon valley from above")]
+#link(
+  "https://blog.apaonline.org/2025/11/12/the-problem-is-epistemic-the-solution-is-not/",
+)[#media(
+  "/media/silicon-valley-from-above.jpeg",
+  caption: "silicon valley from above",
+)]
 
 #link("https://blog.apaonline.org/2025/11/12/the-problem-is-epistemic-the-solution-is-not/")[The Problem is Epistemic. The Solution is Not.] Samuel Bagg for _APA Online_, 12 Nov.~2025.
 

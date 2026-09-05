@@ -10,11 +10,11 @@
 )
 
 #quote(block: true)[
-Now this moment of language use \[as uptaking the writerly attitude\] is, as we have already considered, _philosophical._ We are lost. We reflect so that we might be found. We seek to represent ourselves, but also, so that we may free ourselves from all the ways in which mere habit and automaticity hold sway over us. The writerly attitude \[…\] is a philosophical attitude.
+  Now this moment of language use \[as uptaking the writerly attitude\] is, as we have already considered, _philosophical._ We are lost. We reflect so that we might be found. We seek to represent ourselves, but also, so that we may free ourselves from all the ways in which mere habit and automaticity hold sway over us. The writerly attitude \[…\] is a philosophical attitude.
 ]
 
 #quote(block: true)[
-Philosophy \[…\] is quite literally bent on the invention of writing, that is, on finding ways to use marks and mark-making to represent us to ourselves with the end in view of clearing up our confusions, enabling a better self-understanding.
+  Philosophy \[…\] is quite literally bent on the invention of writing, that is, on finding ways to use marks and mark-making to represent us to ourselves with the end in view of clearing up our confusions, enabling a better self-understanding.
 ]
 
 From Alva Noë, _The Entanglement_ (Princeton University Press 2023) p92

@@ -1,22 +1,23 @@
 #import "../_template.typ": conf, footer
 #import "_posts.typ": posts
 
-#let timestamp(date) = html.elem("time")[#date.display("/[day] [month repr:short], [year]/")]
+#let timestamp(date) = html.elem("time")[#date.display(
+  "/[day] [month repr:short], [year]/",
+)]
 
 #let sorted_posts(posts: posts) = (
-  posts.map(post => {
-    if post.date == none {
-      post.date = datetime.today()
-    }
-    post
-  })
-  // Date-only and full datetime values cannot be compared directly.
-  .sorted(key: post => (
-    post.date.year() * 10000
-    + post.date.month() * 100
-    + post.date.day()
-  ))
-  .rev()
+  posts
+    .map(post => {
+      if post.date == none {
+        post.date = datetime.today()
+      }
+      post
+    })
+    // Date-only and full datetime values cannot be compared directly.
+    .sorted(key: post => (
+      post.date.year() * 10000 + post.date.month() * 100 + post.date.day()
+    ))
+    .rev()
 )
 
 #let post_navigation(title) = {
@@ -90,27 +91,33 @@
       #counter(heading).update(0)
 
       #content
-      #html.elem("div", attrs: (id: "bsky-comments"))[]
+      #html.elem("div", attrs: (class: "bsky-comments"))[]
     ]
   ]
 }
 
-#let bibliography = bibliography("../assets/lib.bib",style:"chicago-author-date")
+#let bibliography = bibliography(
+  "../assets/lib.bib",
+  style: "chicago-author-date",
+)
 
 #let index_list(posts) = {
-  let entries = sorted_posts(posts: posts).map(post => {
-    let prefix = if post.draft {"(*) "} else {""}
-    (
-      html.elem("div")[#timestamp(post.date)],
-      html.elem("div")[#link("/blog/" + post.path)[#prefix#post.title]],
-      html.elem("div")[#post.description],
-    )
-  }).flatten().join()
+  let entries = sorted_posts(posts: posts)
+    .map(post => {
+      let prefix = if post.draft { "(*) " } else { "" }
+      (
+        html.elem("div")[#timestamp(post.date)],
+        html.elem("div")[#link("/blog/" + post.path)[#prefix#post.title]],
+        html.elem("div")[#post.description],
+      )
+    })
+    .flatten()
+    .join()
   html.elem("div", attrs: (class: "index"))[#entries]
 }
 
 #let media(url, caption: none, linked: false, alt: "", title: "") = {
-  let img = html.elem("img", attrs: (src:url, alt: alt, title: title))
+  let img = html.elem("img", attrs: (src: url, alt: alt, title: title))
   if linked {
     img = link(url)[#img]
   }
@@ -118,25 +125,30 @@
 }
 
 #let video(url, caption: none) = {
-  figure(kind: "video", supplement: "Video", html.elem("video", attrs: (controls: "true"))[
-    #html.elem("source", attrs: (src: url))
-  ], caption:caption)
+  figure(
+    kind: "video",
+    supplement: "Video",
+    html.elem("video", attrs: (controls: "true"))[
+      #html.elem("source", attrs: (src: url))
+    ],
+    caption: caption,
+  )
 }
 
 #let youtube(url, title: "YouTube video player") = {
-  html.elem("iframe", attrs:(
+  html.elem("iframe", attrs: (
     class: "youtube",
     src: url,
     title: title,
     frameborder: "0",
     allow: "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share",
     referrerpolicy: "strict-origin-when-cross-origin",
-    allowfullscreen: "true"
+    allowfullscreen: "true",
   ))
 }
 
 #let callout(kind: "note", title: none, content) = {
-  html.elem("aside", attrs:(class: "callout " + kind))[
+  html.elem("aside", attrs: (class: "callout " + kind))[
     #if title != none {
       html.elem("summary")[#title]
     }
