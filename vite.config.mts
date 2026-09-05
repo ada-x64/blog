@@ -11,6 +11,7 @@ const resumeRoot = resolve(projectRoot, "resume");
 const blogRoot = "src/typst/blog/";
 const postsIndex = resolve(projectRoot, blogRoot, "_posts.typ");
 const fullBuild = Symbol("full-build");
+let didRunAtprotoSyncInDev = false;
 
 type Change = string | typeof fullBuild;
 
@@ -156,7 +157,14 @@ async function buildChanges(changes: Change[]): Promise<boolean> {
     isBlogPost(file);
 
   if (changes.includes(fullBuild) || files.some((file) => !isKnownSource(file))) {
-    await run("just", ["build"], { env: { SHOW_DRAFTS: "true" } });
+    const runAtprotoSync = !didRunAtprotoSyncInDev;
+    await run("just", ["build"], {
+      env: {
+        SHOW_DRAFTS: "true",
+        ATPROTO_SYNC: runAtprotoSync ? "true" : "false",
+      },
+    });
+    didRunAtprotoSyncInDev = true;
     return true;
   }
 

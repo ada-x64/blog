@@ -3,7 +3,8 @@
 curl --proto '=https' --tlsv1.2 -sSf https://just.systems/install.sh | bash -s -- --to ./bin/
 export TYPST_INSTALL="./"
 curl -fsSL https://install.typst.community/install.sh | sh
-export PATH="$(pwd)/bin/:$PATH"
+curl -fsSL https://bun.sh/install | bash
+export PATH="$(pwd)/bin/:$HOME/.bun/bin:$PATH"
 
 FONT_HOME="$HOME/.local/share/fonts"
 echo "Installing fonts to $FONT_HOME"
