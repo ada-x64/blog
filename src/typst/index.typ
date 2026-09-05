@@ -13,9 +13,9 @@ applications since 2016 and doing philosophy on the side.
 
 Professional accomplishments include development on an
 #link("https://github.com/nanvix/nanvix")[experimental operating system at
-Microsoft,] (#link("https://github.com/microsoft/mxc")[2]) a
+  Microsoft,] (#link("https://github.com/microsoft/mxc")[2]) a
 #link("https://github.com/perspective-dev/perspective")[real-time, browser-based
-database], the development of ESPN+ on the PS5, and the creation of front-ends
+  database], the development of ESPN+ on the PS5, and the creation of front-ends
 for #link("https://burnbryte.com")[an original tabletop roleplaying game.]
 
 For fun I like to build and contribute to #link("https://github.com/ada-x64/sundile_rs")[game engines] (#link("https://github.com/bevyengine/bevy")[2]). Currently I'm working on a #link("https://github.com/cubething-qproj")[Bevy-based game framework.] I blog about it regularly.
@@ -26,13 +26,13 @@ aesthetics, phenomenology, media theory, critical theory, logic, semantics, and
 semiotics.
 
 == recent posts
-#html.elem("nav", attrs: (id: "recent-posts"))[
+#html.elem("nav", attrs: (class: "recent-posts"))[
   #for post in sorted_posts().slice(0, 3) {
-      html.elem("section")[
-        #heading(depth:3)[
-          #link("/blog/" + post.path)[#post.title]
-        ]
-        #timestamp(post.date) #post.description
+    html.elem("section")[
+      #heading(depth: 3)[
+        #link("/blog/" + post.path)[#post.title]
       ]
+      #timestamp(post.date) #post.description
+    ]
   }
 ]

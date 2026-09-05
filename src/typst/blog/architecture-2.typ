@@ -31,7 +31,10 @@ While working on #link("https://github.com/ada-x64/qproj")[qproj] (which you can
 
 == #box[#image("../assets/lilguy/lilguy-question.gif")] What's a service?
 <whats-a-service>
-#media("/media/architecture-2/state-flow.png", caption: [A simple service state model. Nodes represent states. Red lines represent commands. Dotted lines are automatic state transitions based on hook results.])
+#media(
+  "/media/architecture-2/state-flow.png",
+  caption: [A simple service state model. Nodes represent states. Red lines represent commands. Dotted lines are automatic state transitions based on hook results.],
+)
 
 A service, in broad terms, is a simple state machine which encapsulates some data and functionality. They're designed to be modular, reproducible, and flexible. Of course, the term "service" is a bit broad. When I refer to services, I'm talking about OS services, specifically #link("https://systemd.io")[systemd's] #link("https://www.freedesktop.org/software/systemd/man/latest/systemd.service.html")[service model.] In systemd, a service is essentially a managed daemon, or background process. These form the core of modern Linux, and I think it could be the core of high level Bevy, too. To draw an analogy, what systems are to processes, entities and components are to files and data, and q\_service is to systemd.
 
@@ -103,19 +106,21 @@ As a small example, if you have an RPGMaker style game with a main gameplay loop
 
 Now you might argue that the whole point of ECS as an architecture is to keep everything as flat as possible. Entities, components, and systems are made to replicate the way computer hardware works, which is what makes them so efficient. I agree, and that's why I love the ECS framework. But, conceptually, we are mere humans and our minds do _not_ work with so many loose dependencies. We need to chunk behaviors into distinct concepts.
 
-#callout(kind: "aside")[*The Service Composition Pattern* Services can be composed in a manner similar to components. You can easily declare a service which is comprised entirely of more complicated dependency services. For example:
+#callout(
+  kind: "aside",
+)[*The Service Composition Pattern* Services can be composed in a manner similar to components. You can easily declare a service which is comprised entirely of more complicated dependency services. For example:
 
-```rust
-struct MyService;
-impl Service for MyService {
-    fn build(scope: &mut ServiceScope) {
-        scope.add_dep::\<ComplicatedServiceA>()
-            .add_dep::\<ComplicatedServiceB>();
-    }
-}
-```
+  ```rust
+  struct MyService;
+  impl Service for MyService {
+      fn build(scope: &mut ServiceScope) {
+          scope.add_dep::\<ComplicatedServiceA>()
+              .add_dep::\<ComplicatedServiceB>();
+      }
+  }
+  ```
 
-Dependency is _not_ inheritance.]
+  Dependency is _not_ inheritance.]
 
 === #box[#image("../assets/lilguy/lilguy-question.gif")] Aren't lifecycles and dependencies already covered by component hooks and required components?
 <arent-lifecycles-and-dependencies-already-covered-by-component-hooks-and-required-components>
@@ -137,7 +142,11 @@ Services definitely have some overhead; they're not a zero-cost abstraction. But
 
 == #box[#image("../assets/lilguy/lilguy-whatever.gif")] Enough theory egghead!! Give us an example.
 <enough-theory-egghead-give-us-an-example.>
-#media("/media/architecture-2/example-architecture.png", caption: [An example game architecture. Click to expand.], linked: true)
+#media(
+  "/media/architecture-2/example-architecture.png",
+  caption: [An example game architecture. Click to expand.],
+  linked: true,
+)
 
 Here's an example game architecture. It's a kind of layered architecture that you might see used in a Unity dev's MVC or MVP project, loosely based on chickensoft's #link("https://chickensoft.games/blog/game-architecture")[enjoyable Godot game architecture.]
 

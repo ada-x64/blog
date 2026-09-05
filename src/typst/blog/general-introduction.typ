@@ -8,11 +8,17 @@
   cover: "/media/field-sketch-4-26-25.jpg",
 )
 
-#callout(kind: "note")[links in this article may not yet be filled in. I hope to add more details as I continue development.]
+#callout(
+  kind: "note",
+)[links in this article may not yet be filled in. I hope to add more details as I continue development.]
 
 Hi. 🙋‍♀️ I'm #link("https://github.com/ada-x64/qproj")[making a game.]
 
-#media("/media/field-sketch-4-26-25.jpg", caption: [Sketch of a field with flowers and grass out to seed. Enframed in the center is the skyline of a small city beset by lightly forested mountains. Looming ominously over the city is a giant eye, fixed in the sky and looking down at the settlement. The palette is lilac and indigo over plain white paper.], linked: true)
+#media(
+  "/media/field-sketch-4-26-25.jpg",
+  caption: [Sketch of a field with flowers and grass out to seed. Enframed in the center is the skyline of a small city beset by lightly forested mountains. Looming ominously over the city is a giant eye, fixed in the sky and looking down at the settlement. The palette is lilac and indigo over plain white paper.],
+  linked: true,
+)
 
 == #box[#image("../assets/lilguy/lilguy-neutral.gif")] what's the concept bub??
 <whats-the-concept-bub>
@@ -34,7 +40,9 @@ Stick with me. Video games present a unique opportunity to explore philosophical
 <and-revolution-like-marx-and-shit>
 yes, like marx and shit. The main philosophical bent of this game is critical-theoretical, straddling the line between philosophy as abstract and philosophy as active.
 
-#quote(block: true, attribution: [#cite(<ThesesFeuerbachKarl>)])[Philosophers have hitherto only~_interpreted_~the world in various ways; the point is to~_change_~it.]
+#quote(block: true, attribution: [#cite(
+  <ThesesFeuerbachKarl>,
+)])[Philosophers have hitherto only~_interpreted_~the world in various ways; the point is to~_change_~it.]
 
 My focus in college was on early 20th century philosophy, when thinkers like Adorno and Horkheimer were creating the field. Of course, they have been dead for a while, so I'm pulling from contemporary queer theory, feminist thought, critical race theory, and the digital humanities.
 
@@ -62,7 +70,11 @@ Naturally, this has its risks. Every three months or so Bevy releases a breaking
 
 === #box[#image("../assets/lilguy/lilguy-smug.gif")] that sounds hard. i bet you haven't even started lol
 <that-sounds-hard.-i-bet-you-havent-even-started-lol>
-#media("/media/screenshot-4-25-25.png", caption: [A screenshot of a Windows application with three docked windows. In the center there is a window with a tab entitled "GameView" from which we can see a procedurally generated environment and a rainbow-colored sphere floating.], linked: true)
+#media(
+  "/media/screenshot-4-25-25.png",
+  caption: [A screenshot of a Windows application with three docked windows. In the center there is a window with a tab entitled "GameView" from which we can see a procedurally generated environment and a rainbow-colored sphere floating.],
+  linked: true,
+)
 
 No, #link("https://github.com/ada-x64/qproj")[I've been working on it for a while now.] In fact, this is attempt number… 3? or so to make this game. The past few attempts have been with my own engines. Just like #link("building this website")[building this website], I found that using #link("https://quartz.jzhao.xyz")[a flexible, pre-existing framework] allows me to focus on my creativity while giving me the room to customize.
 

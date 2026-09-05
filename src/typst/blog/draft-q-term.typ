@@ -78,7 +78,9 @@ As with everything, text rendering is handled through the ECS pattern. A `Text` 
 
 Rich text, i.e.~styling, is designed to work by adding child text spans to the primary `Text` component's entity. At render time, the `TextSpan` child entity's raw text is appended to the top-level `Text`'s inner value. So if you have "foo" in the top-level text, and "bar" in the child, you'd end up with "foobar." Each stylizable text element requires an accompanying `TextFont`, `TextColor`, and `LineHeight`, though these can be omitted as they'll automatically spawn through the `#[require]` marco. Finally, the top-level `Text` node requires a `TextLayout` component to tell the `ComputedTextNode` how to handle justification and wrapping. So, the requirement hierarchy looks like this (excluding some internal details):
 
-#mermaid("flowchart LR\n\tText[\"Text[2d]\"]\n    Text --> TextLayout --> ComputedTextBlock & TextLayoutInfo\n\t\n\tj1(( ))\n    Text --- j1\n    TextSpan --- j1\n    j1 --> TextFont & TextColor & LineHeight")
+#mermaid(
+  "flowchart LR\n\tText[\"Text[2d]\"]\n    Text --> TextLayout --> ComputedTextBlock & TextLayoutInfo\n\t\n\tj1(( ))\n    Text --- j1\n    TextSpan --- j1\n    j1 --> TextFont & TextColor & LineHeight",
+)
 
 A fully expanded entity hierarchy might look like this (simplified):
 
@@ -226,7 +228,9 @@ It's important to note that the `TerminalRows` are the _full buffer_. I was stuc
 
 And lastly, just for fun, have a little diagram :)
 
-#mermaid("flowchart TB\n\nsubgraph Terminal[Terminal Entity]\n\ttc[Terminal]\n\ttrows[TermHeight]\n\ttcols[TermWidth]\n\tlayout[TerminalLayout]\t\n\tlines[TerminalLines]\n\t\n\ttc --- j([requires])\n\tj ---> trows & tcols & layout & lines\nend\n\nsubgraph Rows\n\tdirection TB\n\tr1[TerminalRow]\n\tr2[TerminalRow]\nend\nsubgraph Lines\n\tt1[TerminalLine]\n\tt2[TerminalLine]\nend\n\nstyle Rows fill:none;\nstyle Lines fill:none;\n\nlayout --- j1([related])\nj1 --> r1 & r2\nlines --- j2([related])\nj2 --> t1 & t2")
+#mermaid(
+  "flowchart TB\n\nsubgraph Terminal[Terminal Entity]\n\ttc[Terminal]\n\ttrows[TermHeight]\n\ttcols[TermWidth]\n\tlayout[TerminalLayout]\t\n\tlines[TerminalLines]\n\t\n\ttc --- j([requires])\n\tj ---> trows & tcols & layout & lines\nend\n\nsubgraph Rows\n\tdirection TB\n\tr1[TerminalRow]\n\tr2[TerminalRow]\nend\nsubgraph Lines\n\tt1[TerminalLine]\n\tt2[TerminalLine]\nend\n\nstyle Rows fill:none;\nstyle Lines fill:none;\n\nlayout --- j1([related])\nj1 --> r1 & r2\nlines --- j2([related])\nj2 --> t1 & t2",
+)
 
 === Mutations
 <mutations>
@@ -269,7 +273,9 @@ In addition, each terminal could have multiple windows displaying its contents. 
 
 … resulting in a diagram like this:
 
-#mermaid("flowchart TB\n\nj1([relationship vec]) --> tw1 & tw2(...)\n\nsubgraph t1[Terminal entity]\n\tTerminal ~~~ TerminalWindowList\n\tTerminalWindowList --> j1\nend\n\nsubgraph tw1[Terminal Window entity]\n\tTerminalWindow ~~~ Children\n\tChildren --> j2\nend\n\nj2([childof vec]) --> child1 & child2\n\nsubgraph child1[Child entity]\n\tTextSpan\t\nend\t\nchild2(...)")
+#mermaid(
+  "flowchart TB\n\nj1([relationship vec]) --> tw1 & tw2(...)\n\nsubgraph t1[Terminal entity]\n\tTerminal ~~~ TerminalWindowList\n\tTerminalWindowList --> j1\nend\n\nsubgraph tw1[Terminal Window entity]\n\tTerminalWindow ~~~ Children\n\tChildren --> j2\nend\n\nj2([childof vec]) --> child1 & child2\n\nsubgraph child1[Child entity]\n\tTextSpan\t\nend\t\nchild2(...)",
+)
 
 But we've revealed an issue here. Each window should have its own representation, which means _they all must wrap the same buffer._ Was thinking maybe it would be better to have a single entity which stores all the rows? But that's not very bevyish (ecs maximalism). ECS paradigm means we can have parallel iteration over the TerminalRow entities whenever we need to update them.
 
@@ -279,7 +285,11 @@ Since we're now storing the `TerminalRow`s per window, we're going to have an ad
 
 Another way of putting this: Let the sets $R$, $L$, and $S$ be the domains of the row, line, and textspan entities, respectively. Then $\|L\|lt.eq\|R\|$ and $\|S\|lt.eq\|R\|$. We can think of line wrapping as a transformation, $upright("wrap")\(l\): L arrow.r R$ . Similarly, textspan layout could be $upright("layout")\(r\): R arrow.r S$. Note that $\|R\|prop upright("TermWidth")$ and $\|S\|prop upright("TermHeight")$.
 
-#media("/media/q_term/layout-sets-dark.png", caption: [From lines to rows to the view. Click to expand.], linked: true)
+#media(
+  "/media/q_term/layout-sets-dark.png",
+  caption: [From lines to rows to the view. Click to expand.],
+  linked: true,
+)
 
 Currently, the text spans have a 1:1 correspondence with the TerminalRows. This is fine for now, but the picture gets more complicated when we introduce rich text.
 
@@ -333,7 +343,11 @@ pub struct VirtualTextSpan {
 
 All in all, this isn't too different from what was done previously. The below schema demonstrates the text flow. `VirtualTextSpan`s reference the `TerminalLine` parent entity, which then is transformed into a series of `TextSpan`s and their respective styling information. `TextFont` info is propagated down the hierarchy.
 
-#media("/media/q_term/rich text flow-dark.png", caption: [A diagram of the rich text flow. Click to expand.], linked: true)
+#media(
+  "/media/q_term/rich text flow-dark.png",
+  caption: [A diagram of the rich text flow. Click to expand.],
+  linked: true,
+)
 
 At the moment, I don't want to allow setting the font, as this will undoubtedly mess up the character width calculation for those spans. There is no way to assure that users will properly set up font variations, so I'm leaving that for future work, if ever.
 
@@ -361,7 +375,11 @@ So how do other terminal emulators handle this? Well -- they don't! All they do 
 
 Separating the shell layer from the terminal layer requires us to implement some more complex behavior on the underlying "buffer." In particular, we're going to need to add a cursor. Any writes to the buffer will occur at the cursor location. Right now we're on a purely line-write based implementation. That's going to have to change. This will complicate the richtext implementation, but not too terribly much. And as an added bonus, we get ANSI-style cursor editing, enabling things like user prompts and #link("https://en.wikipedia.org/wiki/Curses_(programming_library)")[curses]-style TUIs. Not that we're going to implement any of that today 🙃
 
-#media("/media/q_term/pty-model-dark.png", caption: [The PTY model. Click to expand.], linked: true)
+#media(
+  "/media/q_term/pty-model-dark.png",
+  caption: [The PTY model. Click to expand.],
+  linked: true,
+)
 
 Everything on the `Terminal` entity relates directly to the underlying buffer. (Eventually, this may be split into its own PTY entity in order to support other backends, such as a real PTY.) `VirtualTextSpan`s are generated when the PTY is read. This requires reading the entire PTY buffer. From there, `TerminalLine`s are generated which reference 1 or more `VirtualTextSpan`, and, finally, a `TerminalRow` is generated for each `TerminalLine` currently in view. -- Note that $\|upright("VirtualTextSpans")\|gt.eq\|upright("TerminalLines")\|gt.eq\|upright("TerminalRows")\|$.
 

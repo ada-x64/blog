@@ -5,9 +5,9 @@
   #link("/")[home] |
   #link("/now")[now] |
   #link("/blog")[blog] |
-  #html.elem("a", attrs:(rel: "noopener noreferrer", target: "_blank", href: "https://github.com/ada-x64/blog"))[source] |
+  #html.elem("a", attrs: (rel: "noopener noreferrer", target: "_blank", href: "https://github.com/ada-x64/blog"))[source] |
   #link("/resume.pdf")[résumé] |
-  #link("#")[#html.elem("span", attrs:(id: "toggle-lights"))[toggle theme]]
+  #link("#")[#html.elem("span", attrs: (class: "toggle-lights"))[toggle theme]]
 ]
 
 #let header = block[
@@ -26,7 +26,7 @@
 ]
 
 #let conf(content, header: header, footer: footer()) = {
-  html.elem("header", attrs: (id: "header"))[#header]
-  html.elem("main", attrs: (id: "main"))[#content]
-  html.elem("footer", attrs: (id:"footer"))[#footer]
+  html.elem("header")[#header]
+  html.elem("main")[#content]
+  html.elem("footer")[#footer]
 }
