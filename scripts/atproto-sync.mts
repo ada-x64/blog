@@ -8,7 +8,6 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const cacheDir = path.join(root, "src", "typst", "blog", ".cache", "published");
 const bskyOutFile = path.join(root, "out", "bsky-posts.json");
 const standardOutFile = path.join(root, "out", "standard-docs.json");
-const atprotoDidOutFile = path.join(root, "out", ".well-known", "atproto-did");
 const publicationFile = path.join(
 	root,
 	"src",
@@ -303,11 +302,6 @@ async function writeMaps(
 	await fs.writeFile(standardOutFile, `${JSON.stringify(standard)}\n`, "utf8");
 }
 
-async function writeAtprotoDid(did: string): Promise<void> {
-	await fs.mkdir(path.dirname(atprotoDidOutFile), { recursive: true });
-	await fs.writeFile(atprotoDidOutFile, `${did}\n`, "utf8");
-}
-
 async function main(): Promise<void> {
 	await fs.mkdir(path.dirname(bskyOutFile), { recursive: true });
 
@@ -321,12 +315,6 @@ async function main(): Promise<void> {
 	}
 
 	if (!identifier || !appPassword) {
-		if (identifier.startsWith("did:")) {
-			await writeAtprotoDid(identifier);
-			console.log(
-				`Wrote DID to ${path.relative(root, atprotoDidOutFile)} from ATPROTO_DID`,
-			);
-		}
 		await writeMaps({}, {});
 		console.log(
 			"ATPROTO_DID and ATPROTO_APP_PASSWORD are required; wrote empty maps",
@@ -335,7 +323,6 @@ async function main(): Promise<void> {
 	}
 
 	const session = await openSession();
-	await writeAtprotoDid(session.did);
 	const publicationUri = await loadPublicationUri();
 	if (!publicationUri) {
 		console.log(
@@ -442,7 +429,6 @@ async function main(): Promise<void> {
 	console.log(
 		`Wrote ${Object.keys(standardMap).length} standard docs to ${path.relative(root, standardOutFile)}${createdStandard ? ` (created ${createdStandard})` : ""}`,
 	);
-	console.log(`Wrote DID to ${path.relative(root, atprotoDidOutFile)}`);
 }
 
 await main();
