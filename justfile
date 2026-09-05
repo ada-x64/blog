@@ -1,4 +1,5 @@
 set export
+set dotenv-load
 TYPST_FEATURES:="bundle,html"
 TYPST_ROOT:="./src/typst"
 SHOW_DRAFTS := env_var_or_default("SHOW_DRAFTS", "false")
@@ -70,7 +71,10 @@ build:
     exit "$status"
 
 _sync_static:
+    #!/bin/bash
     rsync --ignore-missing-args -r ./src/raw/{.*,*} ./out/
+    mkdir ./out/.well-known 2>/dev/null
+    echo -n $ATPROTO_DID > ./out/.well-known/atproto-did
 
 _compile_main:
     echo "main.typ"
