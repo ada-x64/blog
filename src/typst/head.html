@@ -1,3 +1,167 @@
+<style>
+    /* VARIABLES */
+
+    html {
+        --accent: darkslateblue;
+        --visited: blueviolet;
+        --background: linear-gradient(white, aliceblue 50%);
+        --text: #000;
+    }
+    html.dark {
+        --accent: lightblue;
+    	--visited: cornflowerblue;
+    	--background: linear-gradient(#000, #1d1e1f 50%);
+    	--text: #fff;
+    }
+
+    /* BASE ELEMENTS */
+    html {
+    	width: 100%;
+    	background: var(--background);
+    	background-attachment: fixed;
+    	color: var(--text);
+    }
+
+    body {
+    	max-width: 720px;
+    	margin: auto;
+    	padding: 1em 1em;
+    	font-family: "Libertinus Sans", serif;
+    }
+
+    footer {
+    	margin-top: 1em;
+    }
+
+    img,
+    video,
+    iframe {
+    	max-width: 100%;
+    	border-radius: 0.5em;
+    }
+
+
+    figcaption {
+    	text-align: center;
+    	font-style: italic;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+    	display: flex;
+    	gap: 0.5em;
+    	align-items: center;
+    }
+
+    /* TYPST */
+
+    section[role="doc-endnotes"] ol {
+    	padding-left: 0;
+    }
+
+    section[role="doc-endnotes"] sup {
+    	padding-right: 1em;
+    }
+
+    a:visited {
+    	color: var(--visited);
+    }
+    a {
+    	color: var(--accent);
+    }
+
+    /* CLASSES */
+
+
+    .post-navigation {
+    	margin-top: 1em;
+    }
+
+    .recent-posts h4 {
+    	margin-bottom: 0;
+    }
+
+    .youtube {
+    	width: 100%;
+    	aspect-ratio: 16 / 9;
+    }
+
+    .index {
+    	display: grid;
+    	grid-template-areas: "time name description";
+    	gap: 1em;
+    	grid-template-columns: max-content 1fr 1fr;
+    }
+
+    .bsky-comments ul {
+    	padding-left: 0.5rem;
+    	border-left: 1px solid;
+    }
+
+    .bsky-comments li {
+    	margin: 0.75rem 0;
+    }
+
+    .bsky-comments li::marker {
+    	content: none;
+    }
+
+    .bsky-comments p {
+    	margin: 0;
+    }
+
+    .bsky-comments .reply-row {
+    	display: flex;
+    	align-items: flex-start;
+    	gap: 0.6rem;
+    }
+
+    .bsky-comments .reply-avatar {
+    	width: 2.5rem;
+    	height: 2.5rem;
+    }
+
+    .header h1 p {
+    	margin: 0;
+    }
+
+
+    /* SIZE DEPENDENT */
+
+    @media (width >= 40em) {
+    	nav.post-navigation {
+    		display: flex;
+    		justify-content: space-between;
+    	}
+    	nav.post-navigation * {
+    		flex: 1;
+    	}
+    	nav.post-navigation .previous {
+    		text-align: left;
+    	}
+    	nav.post-navigation .next {
+    		text-align: right;
+    	}
+    	nav.post-navigation div {
+    		text-align: center;
+    	}
+
+    	nav.recent-posts {
+    		display: flex;
+    	}
+    	nav.recent-posts section {
+    		flex: 1;
+    	}
+    	nav.recent-posts h4 {
+    		margin-top: 0;
+    		margin-bottom: 1em;
+    	}
+    }
+</style>
 <script>
 (() => {
   try {
@@ -9,7 +173,6 @@
   } catch {}
 })();
 </script>
-<link rel="stylesheet" href="/styles/main.css" />
 <link rel="stylesheet" href="/styles/fonts.css" />
 <script src="/scripts/main.js" defer></script>
 <script src="/scripts/bsky-comments.js" defer></script>
