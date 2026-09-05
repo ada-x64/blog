@@ -17,10 +17,13 @@ const searchBases = process.env.ATPROTO_APPVIEW_URL
   ? [process.env.ATPROTO_APPVIEW_URL]
   : ["https://bsky.social", "https://api.bsky.app"];
 
+const autoPostEnabled = (process.env.ATPROTO_AUTOPOST ?? "false") === "true";
+const deployContext = process.env.CONTEXT ?? process.env.NETLIFY_CONTEXT ?? "";
+const deployBranch = process.env.BRANCH ?? "";
 const canCreate =
-  process.env.ATPROTO_AUTOPOST === "true" &&
-  process.env.NETLIFY_CONTEXT === "production" &&
-  process.env.BRANCH === "main";
+  autoPostEnabled &&
+  deployContext === "production" &&
+  deployBranch === "main";
 
 type Entry = { slug: string; title: string; description: string; canonicalUrl: string; atprotoId: string };
 type Session = { did: string; jwt: string };
@@ -146,6 +149,15 @@ async function createPost(entry: Entry, session: Session): Promise<string> {
 async function main(): Promise<void> {
   await fs.mkdir(path.dirname(outFile), { recursive: true });
 
+  console.log(
+    `ATProto sync: autoPost=${autoPostEnabled} context=${deployContext || "unknown"} branch=${deployBranch || "unknown"} canCreate=${canCreate}`,
+  );
+  if (autoPostEnabled && !canCreate) {
+    console.log(
+      `::notice title=ATProto sync::autopost is only enabled for context=production and branch=main (got context=${deployContext || "unknown"}, branch=${deployBranch || "unknown"})`,
+    );
+  }
+
   if (!identifier || !appPassword) {
     await fs.writeFile(outFile, "{}\n", "utf8");
     console.log("ATPROTO_DID and ATPROTO_APP_PASSWORD are required; wrote empty bsky-posts.json");
@@ -177,6 +189,7 @@ async function main(): Promise<void> {
       try {
         uri = await createPost(entry, session);
         created += 1;
+        console.log(`::notice title=ATProto sync::created post for ${entry.canonicalUrl}`);
       } catch (error) {
         const message = error instanceof Error ? error.message : String(error);
         console.log(`::warning title=ATProto sync::create failed for ${entry.canonicalUrl}: ${message}`);
