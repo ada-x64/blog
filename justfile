@@ -67,7 +67,7 @@ build:
     exit "$status"
 
 _sync_static:
-    rsync -r ./src/static ./out/
+    rsync -r ./src/raw/{.*,*} ./out/
 
 _compile_main:
     echo "main.typ"

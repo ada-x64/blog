@@ -114,3 +114,15 @@ a:visited {
     gap: 1em;
     grid-template-columns: max-content 1fr 1fr;
 }
+
+#bsky-comments ul {
+    padding-left: 1rem;
+}
+
+#bsky-comments li {
+    margin: 0.75rem 0;
+}
+
+#bsky-comments p {
+    margin: 0.25rem 0;
+}
