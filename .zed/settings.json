@@ -1,15 +1,26 @@
 {
-  "show_edit_predictions": false,
-  "lsp": {
-    "tinymist": {
-      "settings": {
-        "formatterMode": "typstyle",
-        "font-paths": "${workspaceFolder}/src/public/fonts/,${workspaceFolder}/resume/fonts",
-        "lint": {
-          "enabled": true
-        },
-        "rootPath": "${workspaceFolder}"
-      }
-    }
-  }
+	"show_edit_predictions": false,
+	"lsp": {
+		"tinymist": {
+			"settings": {
+				"formatterMode": "typstyle",
+				"font-paths": "${workspaceFolder}/src/public/fonts/,${workspaceFolder}/resume/fonts",
+				"lint": {
+					"enabled": true
+				},
+				"rootPath": "${workspaceFolder}"
+			}
+		}
+	},
+	"languages": {
+		"JavaScript": {
+			"language_servers": ["biome", "!eslint"]
+		},
+		"CSS": {
+			"language_servers": ["biome", "!tailwindcss-language-server"]
+		},
+		"JSON": {
+			"language_servers": ["biome", "!json-language-server"]
+		}
+	}
 }
