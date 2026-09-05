@@ -2,7 +2,7 @@ set export
 set dotenv-load
 TYPST_FEATURES:="bundle,html"
 TYPST_ROOT:="./src/typst"
-SHOW_DRAFTS := env_var_or_default("SHOW_DRAFTS", "false")
+SHOW_DRAFTS := env("SHOW_DRAFTS", "false")
 
 check_deps +deps='typst rsync jq xargs nproc':
     #!/bin/bash
@@ -68,16 +68,15 @@ build:
     done
     pids=()
     trap - EXIT INT TERM
-    if (( status == 0 )); then
-        just _inject_head
+    if (( status == 0 )) && [[ "${INJECT_HEAD:-true}" == "true" ]]; then
+        command -v bun;
+        bun run ./scripts/inject-head.mts
     fi
     exit "$status"
 
 _sync_static:
     #!/bin/bash
     rsync --ignore-missing-args -r ./src/public/{.*,*} ./out/
-    mkdir ./out/.well-known 2>/dev/null
-    echo -n $ATPROTO_DID > ./out/.well-known/atproto-did
 
 _compile_main:
     echo "main.typ"
@@ -88,12 +87,29 @@ _compile_blog:
     typst c ./src/typst/blog/main.typ ./out/blog --format=bundle
 
 build-resume:
-    mkdir -p ./out/
-    TYPST_ROOT=. typst c ./resume/resume/main.typ ./out//resume.pdf
+    #!/bin/bash
+    mkdir out 2>/dev/null
+    cd ./resume
+    RESUME_ONLY=true OUT_DIR=../out RESUME_NAME=resume.pdf just c
 
 dev:
     just check_deps bun
     bun run vite
+
+check:
+    #!/usr/bin/env bash
+    set -Eeuo pipefail
+    just check_deps bun typstyle
+    bunx biome check ./scripts ./src/public/scripts ./vite.config.mts ./package.json
+    typstyle --check ./src/typst ./resume
+
+format:
+    #!/usr/bin/env bash
+    set -Eeuo pipefail
+    just check_deps bun typstyle
+    bunx biome format --write
+    bunx biome lint --write
+    typstyle --inplace ./src/typst ./resume
 
 # With no argument, refresh missing or stale metadata records. Passing a
 # changed post path always evaluates and replaces that post's record.
@@ -337,10 +353,4 @@ atproto-sync:
     set -Eeuo pipefail
     mkdir -p ./out/
     command -v bun;
-    bun run ./scripts/atproto-sync.ts
-
-_inject_head:
-    #!/usr/bin/env bash
-    set -Eeuo pipefail
-    command -v bun;
-    bun run ./scripts/inject-head.ts
+    bun run ./scripts/atproto-sync.mts

@@ -46,6 +46,10 @@ type Session = { did: string; jwt: string };
 type SearchPostsResponse = {
 	posts?: Array<{ uri?: string; author?: { did?: string } }>;
 };
+type ListRecordsResponse = {
+	records?: Array<{ uri?: string; value?: { path?: string } }>;
+	cursor?: string;
+};
 
 function parseTypstString(value: string | null): string {
 	if (!value) return "";
@@ -111,7 +115,12 @@ function parseEntry(text: string): Entry | null {
 
 async function fetchJson<T>(url: URL | string, init?: RequestInit): Promise<T> {
 	const res = await fetch(url, init);
-	if (!res.ok) throw new Error(`HTTP ${res.status}: ${res.url}`);
+	if (!res.ok) {
+		const body = (await res.text().catch(() => "")).trim();
+		throw new Error(
+			`HTTP ${res.status}: ${res.url}${body ? ` :: ${body}` : ""}`,
+		);
+	}
 	return (await res.json()) as T;
 }
 
@@ -156,25 +165,43 @@ async function searchPostUri(
 	return null;
 }
 
-async function getRecordUri(
+function normalizePath(pathValue: string | null | undefined): string {
+	if (!pathValue) return "";
+	const withLeading = pathValue.trim().startsWith("/")
+		? pathValue.trim()
+		: `/${pathValue.trim()}`;
+	return withLeading.replace(/\/+$/, "");
+}
+
+function standardPathFor(entry: Entry): string {
+	return `/blog/${entry.slug}`;
+}
+
+async function listStandardDocuments(
 	session: Session,
-	collection: string,
-	rkey: string,
-): Promise<string | null> {
-	const url = new URL("/xrpc/com.atproto.repo.getRecord", pds);
-	url.searchParams.set("repo", session.did);
-	url.searchParams.set("collection", collection);
-	url.searchParams.set("rkey", rkey);
+): Promise<Record<string, string>> {
+	const out: Record<string, string> = {};
+	let cursor: string | null = null;
 
-	const res = await fetch(url, {
-		headers: { authorization: `Bearer ${session.jwt}` },
-	});
+	do {
+		const url = new URL("/xrpc/com.atproto.repo.listRecords", pds);
+		url.searchParams.set("repo", session.did);
+		url.searchParams.set("collection", "site.standard.document");
+		url.searchParams.set("limit", "100");
+		if (cursor) url.searchParams.set("cursor", cursor);
 
-	if (res.status === 400 || res.status === 404) return null;
-	if (!res.ok) throw new Error(`HTTP ${res.status}: ${res.url}`);
+		const data = await fetchJson<ListRecordsResponse>(url, {
+			headers: { authorization: `Bearer ${session.jwt}` },
+		});
 
-	const data = (await res.json()) as { uri?: string };
-	return data.uri ?? null;
+		for (const record of data.records ?? []) {
+			const recordPath = normalizePath(record.value?.path);
+			if (recordPath && record.uri) out[recordPath] = record.uri;
+		}
+		cursor = data.cursor ?? null;
+	} while (cursor);
+
+	return out;
 }
 
 function makeText(entry: Entry): string {
@@ -242,12 +269,11 @@ async function createStandardDocument(
 		body: JSON.stringify({
 			repo: session.did,
 			collection: "site.standard.document",
-			rkey: entry.slug,
 			record: {
 				$type: "site.standard.document",
 				site: publicationUri,
 				title: entry.title || entry.slug,
-				path: `/${entry.slug}`,
+				path: standardPathFor(entry),
 				description: entry.description || undefined,
 				publishedAt: entry.publishedAt,
 			},
@@ -326,6 +352,17 @@ async function main(): Promise<void> {
 
 	const bskyMap: Record<string, string> = {};
 	const standardMap: Record<string, string> = {};
+	let knownStandardDocs: Record<string, string> = {};
+	if (publicationUri) {
+		try {
+			knownStandardDocs = await listStandardDocuments(session);
+		} catch (error) {
+			const message = error instanceof Error ? error.message : String(error);
+			console.log(
+				`::warning title=ATProto sync::standard list failed: ${message}`,
+			);
+		}
+	}
 	let createdPosts = 0;
 	let createdStandard = 0;
 
@@ -370,19 +407,8 @@ async function main(): Promise<void> {
 			);
 		}
 
-		let standardUri: string | null = null;
-		try {
-			standardUri = await getRecordUri(
-				session,
-				"site.standard.document",
-				entry.slug,
-			);
-		} catch (error) {
-			const message = error instanceof Error ? error.message : String(error);
-			console.log(
-				`::warning title=ATProto sync::standard lookup failed for ${entry.slug}: ${message}`,
-			);
-		}
+		const standardPath = standardPathFor(entry);
+		let standardUri: string | null = knownStandardDocs[standardPath] ?? null;
 
 		if (!standardUri && canCreate && publicationUri) {
 			try {
@@ -405,6 +431,7 @@ async function main(): Promise<void> {
 
 		if (standardUri) {
 			standardMap[entry.slug] = standardUri;
+			knownStandardDocs[standardPath] = standardUri;
 		}
 	}
 
