@@ -1,0 +1,15 @@
+<script>
+(() => {
+  try {
+    const stored = window.localStorage.getItem("theme");
+    const isDark = stored
+      ? stored === "dark"
+      : window.matchMedia("(prefers-color-scheme: dark)").matches;
+    if (isDark) document.documentElement.classList.add("dark");
+  } catch {}
+})();
+</script>
+<link rel="stylesheet" href="/static/styles/main.css" />
+<link rel="stylesheet" href="/static/styles/fonts.css" />
+<script src="/static/scripts/main.js" defer></script>
+<script src="/static/scripts/bsky-comments.js" defer></script>

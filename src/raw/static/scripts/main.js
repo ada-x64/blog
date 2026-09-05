@@ -13,14 +13,7 @@ function rearrange_notes() {
   notes.querySelector("ol").before(child)
 }
 
-const STORED_THEME = window.localStorage.getItem("theme");
-let isDark = STORED_THEME ? STORED_THEME == "dark" : window.matchMedia("(prefers-color-scheme: dark)").matches;
-if (isDark) {
-  document.querySelector("html").classList.add("dark");
-  window.localStorage.setItem("theme", "dark")
-} else {
-  window.localStorage.setItem("theme", "light")
-}
+let isDark = document.documentElement.classList.contains("dark");
 
 document.addEventListener("DOMContentLoaded", () => {
   try {

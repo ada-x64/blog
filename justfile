@@ -68,6 +68,9 @@ build:
     done
     pids=()
     trap - EXIT INT TERM
+    if (( status == 0 )); then
+        just _inject_head
+    fi
     exit "$status"
 
 _sync_static:
@@ -335,3 +338,9 @@ atproto-sync:
     mkdir -p ./out/static
     command -v bun;
     bun run ./scripts/atproto-sync.ts
+
+_inject_head:
+    #!/usr/bin/env bash
+    set -Eeuo pipefail
+    command -v bun;
+    bun run ./scripts/inject-head.ts
