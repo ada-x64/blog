@@ -132,7 +132,7 @@ async function buildSuite(runs: number): Promise<void> {
 
 async function profileSuite(runs: number): Promise<void> {
   const phases: Array<[string, Command]> = [
-    ["static rsync", command("rsync", "-r", "./src/static", "./out/")],
+    ["public rsync", command("rsync", "-r", "./src/public", "./out/")],
     ["metadata generation", command("just", "_generate_blog_idx")],
     [
       "main bundle",
@@ -155,7 +155,7 @@ async function profileSuite(runs: number): Promise<void> {
           "typst",
           "c",
           "./resume/resume/main.typ",
-          "./out/static/resume.pdf",
+          "./out/resume.pdf",
         ),
         env: { TYPST_ROOT: "." },
       },

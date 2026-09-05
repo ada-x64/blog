@@ -9,7 +9,7 @@ export PATH="$(pwd)/bin/:$HOME/.bun/bin:$PATH"
 FONT_HOME="$HOME/.local/share/fonts"
 echo "Installing fonts to $FONT_HOME"
 mkdir -p "$FONT_HOME"
-find ./resume/ ./src/static/fonts -type f \
+find ./resume/ ./src/public/fonts -type f \
   \( -name '*.ttf' -o -name '*.otf' \) \
   -exec cp -t "$FONT_HOME" {} +
 ls -l "$FONT_HOME"

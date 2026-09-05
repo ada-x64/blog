@@ -57,7 +57,7 @@ function isGeneratedSource(file: string): boolean {
 }
 
 function isStaticAsset(file: string): boolean {
-  return file.startsWith("src/static/");
+  return file.startsWith("src/public/");
 }
 
 function isResumeSource(file: string): boolean {
@@ -99,8 +99,8 @@ async function syncStaticAssets(): Promise<void> {
     "--delete",
     "--exclude",
     "resume.pdf",
-    "./src/static/",
-    "./out/static/",
+    "./src/public/",
+    "./out/",
   ]);
 }
 

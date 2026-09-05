@@ -6,7 +6,7 @@
   tags: ("bevy", "qproj", "architecture"),
   aliases: ("posts/plugin-hierarchies",),
   draft: false,
-  cover: "/static/media/architecture-1/plugin-hierarchy-bsd1-dark.png",
+  cover: "/media/architecture-1/plugin-hierarchy-bsd1-dark.png",
 )
 
 As you know, #link("/blog/general-introduction.html")[I'm making a game] using the #link("https://bevyengine.org")[bevy game engine].
@@ -61,13 +61,13 @@ Bevy has two main ways of lumping code into units: #link("https://bevy-cheatbook
 
 == Crate dependencies
 <crate-dependencies>
-#media("/static/media/architecture-1/crate-deps-bsd1.png", caption: [A schematic of the dependencies hierarchy.], linked: true)
+#media("/media/architecture-1/crate-deps-bsd1.png", caption: [A schematic of the dependencies hierarchy.], linked: true)
 
 The crate dependency structure is pretty straight-forward. The more general-purpose crates are higher on the tree, including bevy and general libraries, while the inspector (being essentially an integration library) is placed right below the main application. I had gone back and forth on this structure, sometimes adding feature flags to higher-level plugin crates for inspector features, but this is generally unnecessary and clutters up the build process.#footnote[] The plugin hierarchy is more interesting, and plays into the overall project structure.
 
 == Plugin hierarchy
 <plugin-hierarchy>
-#media("/static/media/architecture-1/plugin-hierarchy-bsd1.png", caption: [A schematic of the plugin hierarchy.], linked: true)
+#media("/media/architecture-1/plugin-hierarchy-bsd1.png", caption: [A schematic of the plugin hierarchy.], linked: true)
 
 It's pretty clear that every file should hold only one "thing" in it, but with a flat hierarchy like we have with components that's a bit hard to accomplish! We need some way to understand how to group things together. That's where bundles come in. They're just collections of components. We can create a "prefab" by creating a function that returns `impl Bundle`, typically with a unique marker component for easy access. This is exactly what I did. I'm using a full struct instead of a free function for better encapsulation, in case I need to define systems that relate to the specific bundle.
 

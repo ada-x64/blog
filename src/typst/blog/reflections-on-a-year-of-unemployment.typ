@@ -6,14 +6,14 @@
   tags: ("personal",),
   aliases: none,
   draft: false,
-  cover: "/static/media/12-30-reflections/cover.jpeg",
+  cover: "/media/12-30-reflections/cover.jpeg",
 )
 
 It has not been the best year for me.
 
 February will mark a full year of unemployment. This time last year I was happily coasting off of savings from my posh startup job, figuring I could make ends meet while contracting. I chose a very bad time to make that bet. Now, 11 months later, I am jobless, penniless, and living off of charity and my boyfriend's meager income. Nonetheless, I persevere.
 
-#media("/static/media/12-30-reflections/clinton-lake-1.webp")
+#media("/media/12-30-reflections/clinton-lake-1.webp")
 
 == Work sucks
 <work-sucks>
@@ -23,7 +23,7 @@ Now, the AI bubble is not the _only_ reason I am unemployed, although it plays a
 
 I don't mean to make excuses. But when I go to work and my body refuses to let me leave my car - something is wrong.
 
-#media("/static/media/12-30-reflections/clinton-lake-2.webp")
+#media("/media/12-30-reflections/clinton-lake-2.webp")
 
 == Good things are still possible
 <good-things-are-still-possible>
@@ -35,7 +35,7 @@ Speaking of free time, I've been putting in some effort to take breaks from mani
 
 I've been thinking about studying up to write another admission essay - this time perhaps on the importance of non-linguistic reasoning and how it can be used to explore philosophical problems. My prior research was on Heidegger, and I do believe this is there under the surface. The same is true for Wittgenstein, especially the latter Wittgenstein when he continues his investigations _despite_ knowing that he cannot articulate himself adequately in logical-empirical terms. Perhaps this sort of spiritual draw to reason and truth - this subterranean pull to something higher - brought him back. Or perhaps it was because he threw away his inheritance and got kicked out of Austria for #link("https://en.wikipedia.org/wiki/Haidbauer_incident")[beating the schoolchildren,] who knows.
 
-#media("/static/media/12-30-reflections/clinton-lake-3.webp")
+#media("/media/12-30-reflections/clinton-lake-3.webp")
 
 == The trans experience
 <the-trans-experience>
@@ -47,7 +47,7 @@ Local life has been fairly normal. My daughter is in first grade now, finally mo
 
 I don't go out much. When I do, it's mostly to take my boyfriend to work, to bug my friends about activism, or to take my daughter somewhere. Being openly trans is scary, even if my town is supportive, even if I sometimes pass. I don't doubt that it's a factor in the interview process. But aside from that, there's really not a whole lot to _do_ out here if you're not a student. I used to visit the university libraries but I don't do this much anymore, and I certainly can't afford to frequent the yuppie crunchy coffee shop I love. That's just another side-effect of being poor, I suppose.
 
-#media("/static/media/12-30-reflections/clinton-lake-4.webp")
+#media("/media/12-30-reflections/clinton-lake-4.webp")
 
 == What's next?
 <whats-next>

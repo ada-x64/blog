@@ -15,7 +15,7 @@ So in an ECS you have state (components, entities) and you have actions (systems
 
 Instead of saying "entities with xyz components have this happen _to_ them," I want a way to say "this command _does_ this." The flip from passive to active comes from _commands._ And there is some movement (albeit subterranean) towards command-prompt interfaces in Bevy, but nothing that generalizes to the degree I would like.
 
-Truthfully, this all began when I decided to make a 'terminal emulator' which faithfully recreated ANSI escape codes, implemented in bevy\_ui. I didn't realize that, if I wanted to implement a proper shell with piping, job control, and blocking input, that I would need an entire _process_ abstraction. But that is what I landed on. And truth be told, #link("/static/media/logos/q_service.png")[I was always heading that way anyways.]
+Truthfully, this all began when I decided to make a 'terminal emulator' which faithfully recreated ANSI escape codes, implemented in bevy\_ui. I didn't realize that, if I wanted to implement a proper shell with piping, job control, and blocking input, that I would need an entire _process_ abstraction. But that is what I landed on. And truth be told, #link("/media/logos/q_service.png")[I was always heading that way anyways.]
 
 == A terminal emulator?
 <a-terminal-emulator>

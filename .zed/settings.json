@@ -1,3 +1,15 @@
 {
-  "show_edit_predictions": false
+  "show_edit_predictions": false,
+  "lsp": {
+    "tinymist": {
+      "settings": {
+        "formatterMode": "typstyle",
+        "font-paths": "${workspaceFolder}/src/public/fonts/,${workspaceFolder}/resume/fonts",
+        "lint": {
+          "enabled": true
+        },
+        "rootPath": "${workspaceFolder}"
+      }
+    }
+  }
 }

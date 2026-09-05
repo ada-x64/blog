@@ -6,7 +6,7 @@
   tags: ("videos", "politics", "identity"),
   aliases: none,
   draft: false,
-  cover: "/static/media/cctv.png",
+  cover: "/media/cctv.png",
 )
 
 === Trans Day of Vanishing
@@ -26,7 +26,7 @@ She concludes with ambivalence, though there is good evidence to support the ide
 
 == _We're All Going to the World's Fair_
 <were-all-going-to-the-worlds-fair>
-#media("/static/media/casey.webp", caption: [Casey])
+#media("/media/casey.webp", caption: [Casey])
 
 Before we dive into this, I want to acknowledge that the things I am about to say are informed by my own experiences and research into childhood sexual abuse and power dynamics generally. I don't expect everyone to agree with me.
 
@@ -54,7 +54,7 @@ Now, let's turn from the personal to the political.
 
 == The Consolidation of Power in Panoptic Surveillance and the Politics of Visibility
 <the-consolidation-of-power-in-panoptic-surveillance-and-the-politics-of-visibility>
-#media("/static/media/cctv.png", caption: [Lily stands in the street. (45:27)])
+#media("/media/cctv.png", caption: [Lily stands in the street. (45:27)])
 
 #quote(block: true, attribution: [#cite(<alexandreTransDayVanishing2025>, supplement: [44:30])])[Why bother to pump light into this utter blackness?
 
@@ -76,7 +76,7 @@ With the recent backlash to trans-affirming politics, including #link("https://w
 
 We live in an era of panoptic surveillance. Cameras are everywhere, identities #link("https://web.dev/learn/privacy/fingerprinting/")[fingerprinted] (#link("https://www.amiunique.org/fingerprint")[2]), our data scraped, conglomerated, and sold for a profit. The existence of #link("https://en.wikipedia.org/wiki/Palantir_Technologies")[Palantir] and the excesses of the AI hype machine ought to be enough evidence that visibility is a problem for everybody, not just the queer community. But this same weaponized visibility can be a tool for good.
 
-#media("/static/media/we-can-see-you.jpg", caption: link("https://bsky.app/profile/bensears.bsky.social/post/3lr5lfarsts2r")[We Can See You - Ben Sears 2025])
+#media("/media/we-can-see-you.jpg", caption: link("https://bsky.app/profile/bensears.bsky.social/post/3lr5lfarsts2r")[We Can See You - Ben Sears 2025])
 
 In light of #link("https://www.npr.org/2025/06/09/nx-s1-5427215/what-to-know-los-angeles-protests-ice-trump")[the atrocities happening in LA,] the general response has been to use social media to blatantly shame the invading federal agents. Perhaps this is only a desperate claw for power against a military incursion - but it is clear that Angelenos are spreading the word loud and clear. There is no fear here, only blatant resentment and strong resistance. While the LA incursion is about Latino immigrants, it is essential that we provide a unified front. Their struggle against the rising tides of fascism are the same as ours.
 
@@ -86,7 +86,7 @@ How we decide to use our visibility - how we decide to show ourselves - is of in
 
 She's talking about a kind of public code speak. As an example she talks about the "shrieks" of trans music (I can only guess she's referring to #link("https://blackdresses.bandcamp.com")[Black Dresses] or #link("https://femtanyl.bandcamp.com")[femtanyl], both of whom, I am learning, happen be from Lily's native Toronto) as a sort of poison-dart frog coloration: both a warning and a symbol for others of our ilk to lean in and discover ourselves. This one-inch barrier, whether it is cringe or a whisper network, works well to carve out a space for the community, but it will not work against infiltration from those who truly want to see us disappear. Again, it's the trade-off of high visibility.
 
-#media("/static/media/glowie.png", caption: link("https://x.com/polyfraggrenade/status/1893369669668556955")[A good post from a likely fake thread.])
+#media("/media/glowie.png", caption: link("https://x.com/polyfraggrenade/status/1893369669668556955")[A good post from a likely fake thread.])
 
 In the end, the ability to truly disappear from public view is fading. Queers in this world - _every_ minority identity - have been presented a binary choice: pretend we aren't who we are and try to be normal, or stand out loud and proud in bright bold colors. Neither of these can be the long-term answer; it certainly cannot be the answer for all of us. Instead, we should strive for longer-lasting, quieter communities, global networks of people connected by identity, irrespective of age, class, or nationality. These communities last longer and affect more change in the long run than any short-lived flame or dispute. While we must keep fighting, for the majority of us the answer is not to join the front lines, but merely to continue living, to raise our children and love each other to the best of our ability in a world not meant for us.
 
