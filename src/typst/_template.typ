@@ -26,14 +26,7 @@
 ]
 
 #let conf(content, header: header, footer: footer()) = {
-  html.elem("head")[
-    #html.elem("link", attrs: (rel: "stylesheet", href: "/static/styles/main.css"))
-    #html.elem("link", attrs: (rel: "stylesheet", href: "/static/styles/fonts.css"))
-    #html.elem("script", attrs: (src: "/static/scripts/main.js"))
-    #html.elem("script", attrs: (src: "/static/scripts/bsky-comments.js", defer: "true"))
-  ]
   html.elem("header", attrs: (id: "header"))[#header]
   html.elem("main", attrs: (id: "main"))[#content]
   html.elem("footer", attrs: (id:"footer"))[#footer]
-
 }

@@ -11,7 +11,6 @@ const resumeRoot = resolve(projectRoot, "resume");
 const blogRoot = "src/typst/blog/";
 const postsIndex = resolve(projectRoot, blogRoot, "_posts.typ");
 const fullBuild = Symbol("full-build");
-let didRunAtprotoSyncInDev = false;
 
 type Change = string | typeof fullBuild;
 
@@ -157,14 +156,12 @@ async function buildChanges(changes: Change[]): Promise<boolean> {
     isBlogPost(file);
 
   if (changes.includes(fullBuild) || files.some((file) => !isKnownSource(file))) {
-    const runAtprotoSync = !didRunAtprotoSyncInDev;
     await run("just", ["build"], {
       env: {
         SHOW_DRAFTS: "true",
-        ATPROTO_SYNC: runAtprotoSync ? "true" : "false",
+        ATPROTO_SYNC: "false",
       },
     });
-    didRunAtprotoSyncInDev = true;
     return true;
   }
 
@@ -213,7 +210,11 @@ async function buildChanges(changes: Change[]): Promise<boolean> {
   }
 
   await Promise.all(tasks);
-  return rebuildMain || rebuildAllBlogPosts || posts.length > 0;
+  const touchedHtml = rebuildMain || rebuildAllBlogPosts || posts.length > 0;
+  if (touchedHtml) {
+    await run("just", ["_inject_head"]);
+  }
+  return touchedHtml;
 }
 
 function typstDevelopmentPlugin(): Plugin {
