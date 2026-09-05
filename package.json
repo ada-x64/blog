@@ -1,12 +1,13 @@
 {
-  "devDependencies": {
-    "@types/node": "^26.4.1",
-    "typescript": "^7.0.2",
-    "vite": "^8.2.2"
-  },
-  "scripts": {
-    "atproto-sync": "bun run scripts/atproto-sync.ts",
-    "benchmark": "bun run scripts/benchmark.ts",
-    "dev": "bun run vite"
-  }
+	"devDependencies": {
+		"@biomejs/biome": "^2.5.12",
+		"@types/node": "^26.4.1",
+		"typescript": "^7.0.2",
+		"vite": "^8.2.2"
+	},
+	"scripts": {
+		"atproto-sync": "bun run scripts/atproto-sync.mts",
+		"benchmark": "bun run scripts/benchmark.mts",
+		"dev": "bun run vite"
+	}
 }

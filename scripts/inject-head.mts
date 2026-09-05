@@ -4,11 +4,6 @@ import { promises as fs } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const outDir = path.join(root, "out");
-const headFile = path.join(root, "src", "typst", "head.html");
-const standardMapFile = path.join(root, "out", "standard-docs.json");
-
 const HEAD_START = "<!-- injected-head:start -->";
 const HEAD_END = "<!-- injected-head:end -->";
 const DOC_START = "<!-- injected-standard-doc:start -->";
@@ -18,11 +13,16 @@ function escapeRegex(value: string): string {
 	return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 
-function parseHeadFragment(raw: string): string {
+function parseHeadFragment(
+	raw: string,
+	headFile: string,
+	root: string,
+): string {
 	const headMatch = raw.match(/<head\b[^>]*>([\s\S]*?)<\/head>/i);
 	const fragment = (headMatch ? headMatch[1] : raw).trim();
-	if (!fragment)
+	if (!fragment) {
 		throw new Error(`empty head fragment in ${path.relative(root, headFile)}`);
+	}
 	return fragment;
 }
 
@@ -42,7 +42,7 @@ function upsertHeadBlock(
 	return cleaned.replace(/<\/head>/i, `${block}</head>`);
 }
 
-function slugFromOutFile(filePath: string): string | null {
+function slugFromOutFile(filePath: string, outDir: string): string | null {
 	const rel = path.relative(outDir, filePath).split(path.sep).join("/");
 	const match = rel.match(/^blog\/(.+)\.html$/);
 	if (!match || match[1] === "index") return null;
@@ -63,7 +63,9 @@ async function listHtml(dir: string): Promise<string[]> {
 	return children.flat();
 }
 
-async function loadStandardMap(): Promise<Record<string, string>> {
+async function loadStandardMap(
+	standardMapFile: string,
+): Promise<Record<string, string>> {
 	try {
 		const raw = await fs.readFile(standardMapFile, "utf8");
 		return JSON.parse(raw) as Record<string, string>;
@@ -72,34 +74,49 @@ async function loadStandardMap(): Promise<Record<string, string>> {
 	}
 }
 
-async function main(): Promise<void> {
+export async function injectHead(options?: {
+	projectRoot?: string;
+	files?: string[];
+}): Promise<{ updated: number; total: number }> {
+	const root = options?.projectRoot ?? process.cwd();
+	const outDir = path.join(root, "out");
+	const headFile = path.join(root, "src", "typst", "head.html");
+	const standardMapFile = path.join(root, "out", "standard-docs.json");
+
 	const rawHead = await fs.readFile(headFile, "utf8");
-	const headFragment = parseHeadFragment(rawHead);
-	const standardMap = await loadStandardMap();
+	const headFragment = parseHeadFragment(rawHead, headFile, root);
+	const standardMap = await loadStandardMap(standardMapFile);
 
-	const files = await listHtml(outDir);
+	const allFiles = options?.files?.length
+		? options.files
+		: await listHtml(outDir);
+	const files = [...new Set(allFiles)];
+
 	let updated = 0;
+	await Promise.all(
+		files.map(async (file) => {
+			const html = await fs.readFile(file, "utf8");
+			let next = upsertHeadBlock(html, HEAD_START, HEAD_END, headFragment);
 
-	for (const file of files) {
-		const html = await fs.readFile(file, "utf8");
-		let next = upsertHeadBlock(html, HEAD_START, HEAD_END, headFragment);
+			const slug = slugFromOutFile(file, outDir);
+			const standardUri = slug ? standardMap[slug] : "";
+			const docLink = standardUri
+				? `<link rel="site.standard.document" href="${standardUri}">`
+				: "";
+			next = upsertHeadBlock(next, DOC_START, DOC_END, docLink);
 
-		const slug = slugFromOutFile(file);
-		const standardUri = slug ? standardMap[slug] : "";
-		const docLink = standardUri
-			? `<link rel="site.standard.document" href="${standardUri}">`
-			: "";
-		next = upsertHeadBlock(next, DOC_START, DOC_END, docLink);
-
-		if (next !== html) {
-			await fs.writeFile(file, next, "utf8");
-			updated += 1;
-		}
-	}
-
-	console.log(
-		`Injected head fragments into ${updated}/${files.length} HTML file(s)`,
+			if (next !== html) {
+				await fs.writeFile(file, next, "utf8");
+				updated += 1;
+			}
+		}),
 	);
+
+	return { updated, total: files.length };
 }
 
-await main();
+if (import.meta.main) {
+	const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
+	const { updated, total } = await injectHead({ projectRoot: root });
+	console.log(`Injected head fragments into ${updated}/${total} HTML file(s)`);
+}
