@@ -90,6 +90,7 @@
       #counter(heading).update(0)
 
       #content
+      #html.elem("div", attrs: (id: "bsky-comments"))[]
     ]
   ]
 }

@@ -59,3 +59,4 @@ bun run benchmark --suite builds --runs 5
 - [x] Résumé submodule
 - [x] Subsecond recompilation time
 - [x] Live reload
+- [x] Bsky comment renderer

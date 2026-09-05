@@ -48,6 +48,9 @@ build:
     pids+=("$!")
 
     just _generate_blog_idx
+    if [[ "${ATPROTO_SYNC:-true}" == "true" ]]; then
+        just atproto-sync
+    fi
 
     # Both bundles consume the generated metadata, but are independent of one
     # another once it is ready.
@@ -67,7 +70,7 @@ build:
     exit "$status"
 
 _sync_static:
-    rsync -r ./src/raw/{.*,*} ./out/
+    rsync --ignore-missing-args -r ./src/raw/{.*,*} ./out/
 
 _compile_main:
     echo "main.typ"
@@ -144,7 +147,7 @@ _generate_blog_idx changed="":
         local filepath=$1
         local slug="${filepath%.typ}.html"
         local key="${filepath#./}"
-        local json title description date draft destination
+        local json title description date draft destination cached_atproto existing_record
         key="${key//\//__}"
         key="${key%.typ}"
 
@@ -170,6 +173,19 @@ _generate_blog_idx changed="":
         draft=$(jq -r '.draft // false' <<< "$json")
         destination="$CACHE/$([[ "$draft" == "true" ]] && echo drafts || echo published)"
 
+        cached_atproto=""
+        for existing_record in "$CACHE"/{published,drafts}/"$key".post.typ; do
+            if [[ -f "$existing_record" ]]; then
+                cached_atproto=$(sed -nE 's/^[[:space:]]*atproto_id:[[:space:]]*(.+),[[:space:]]*$/\1/p' "$existing_record" | head -n1)
+                if [[ -n "$cached_atproto" ]]; then
+                    break
+                fi
+            fi
+        done
+        if [[ -z "$cached_atproto" ]]; then
+            cached_atproto="none"
+        fi
+
         rm -f "$CACHE"/{published,drafts}/"$key".{document,post}.typ
 
         printf "%s\n
@@ -189,6 +205,7 @@ _generate_blog_idx changed="":
                 title: $title,
                 description: $description,
                 date: $date,
+                atproto_id: $cached_atproto,
                 draft: $draft
             )," > "$destination/$key.post.typ"
 
@@ -307,3 +324,10 @@ _generate_blog_idx changed="":
     mv "$index_tmp" "$IDX"
     touch "$CACHE/.complete"
     trap - EXIT
+
+atproto-sync:
+    #!/usr/bin/env bash
+    set -Eeuo pipefail
+    mkdir -p ./out/static
+    command -v bun;
+    bun run ./scripts/atproto-sync.ts
