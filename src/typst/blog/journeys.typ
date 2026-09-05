@@ -6,7 +6,7 @@
   tags: ("links", "narrative", "politics"),
   aliases: none,
   draft: false,
-  cover: "/static/media/navichet.png",
+  cover: "/media/navichet.png",
 )
 
 == "Why does every film and TV series seem to have the same plot?"
@@ -45,7 +45,7 @@ Discovered 3:05PM 5/13/2025
 
 #divider()
 
-#media("/static/media/navichet.png", caption: [Navichet, from the 3rd Voice], linked: true)
+#media("/media/navichet.png", caption: [Navichet, from the 3rd Voice], linked: true)
 
 To a certain extent it feels like the world-building in riceboy's #link("https://rice-boy.com/vattu/")[Vaatu] and #link("https://rice-boy.com/3rdvoice/")[3rd Voice] achieve the synthesis of carrier-bag and hero's journey theories of narrative. They're not decentralized narratives per se; they follow the growth and development of a hero, but this hero is surrounded and shaped by a changing world. The world of the 3rd Voice is the "womb of things to be and tomb of things that were"
 

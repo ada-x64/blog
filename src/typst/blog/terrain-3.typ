@@ -10,7 +10,7 @@
 
 #link("https://bsky.app/profile/cubething.dev/post/3lk5e7uibh22k")[Bluesky]
 
-#video("/static/media/Screen Recording 2025-03-11 194250.mp4") aw hell yeah next steps: center chunks around player entity and add LOD for distant chunks. then integrate noise\_gui into #link("https://bsky.app/hashtag/bevy")[\#bevy].
+#video("/media/Screen Recording 2025-03-11 194250.mp4") aw hell yeah next steps: center chunks around player entity and add LOD for distant chunks. then integrate noise\_gui into #link("https://bsky.app/hashtag/bevy")[\#bevy].
 
 this is integrated as a crate feature btw, so for production build it's stripped from the binary. i plan on adding unity-style controls flycam controls (minus the gizmos since this is a pcg project) and the ability to "drop in" and explore the game as the player character.
 

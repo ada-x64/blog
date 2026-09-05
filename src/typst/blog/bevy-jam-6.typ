@@ -6,10 +6,10 @@
   tags: ("devlog", "markoff", "bevy"),
   aliases: ("posts/markoff",),
   draft: false,
-  cover: "/static/media/bj6.png",
+  cover: "/media/bj6.png",
 )
 
-#media("/static/media/bj6.png", caption: "Bevy jam logo")
+#media("/media/bj6.png", caption: "Bevy jam logo")
 
 Last week was the #link("https://itch.io/jam/bevy-jam-6")[sixth bevy game jam]hosted on itch.io. The theme this time was "Chain Reaction." I decided to do something of an ambitious project based around cellular automata, and didn't quite have the time to finish it up. You can see the final project #link("https://cubething.itch.io/markoff")[here] or in the widget below. Voting is #link("https://itch.io/jam/bevy-jam-6/entries")[currently happening], so go check that out!
 
@@ -98,7 +98,7 @@ Styles were implemented manually, though I'm looking into #link("https://github.
 
 One more thing I've noticed: There seems to be a frame delay between creating the UI and rendering it properly. Not sure this is a bevy\_ui thing or if it's hui, but it is definitely noticable and unfortunate.
 
-#media("/static/media/markoff-ui-bug.gif", caption: [The rendering bug at about 4fps. Component nodes are improperly rendered for the first frame.])
+#media("/media/markoff-ui-bug.gif", caption: [The rendering bug at about 4fps. Component nodes are improperly rendered for the first frame.])
 
 == The Simulation
 <the-simulation>

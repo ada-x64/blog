@@ -32,7 +32,7 @@ build:
     #!/usr/bin/env bash
     set -Eeuo pipefail
     just check_deps
-    mkdir -p ./out/static ./out/blog
+    mkdir -p ./out/blog
 
     pids=()
     cleanup() {
@@ -75,7 +75,7 @@ build:
 
 _sync_static:
     #!/bin/bash
-    rsync --ignore-missing-args -r ./src/raw/{.*,*} ./out/
+    rsync --ignore-missing-args -r ./src/public/{.*,*} ./out/
     mkdir ./out/.well-known 2>/dev/null
     echo -n $ATPROTO_DID > ./out/.well-known/atproto-did
 
@@ -88,8 +88,8 @@ _compile_blog:
     typst c ./src/typst/blog/main.typ ./out/blog --format=bundle
 
 build-resume:
-    mkdir -p ./out/static
-    TYPST_ROOT=. typst c ./resume/resume/main.typ ./out/static/resume.pdf
+    mkdir -p ./out/
+    TYPST_ROOT=. typst c ./resume/resume/main.typ ./out//resume.pdf
 
 dev:
     just check_deps bun
@@ -335,7 +335,7 @@ _generate_blog_idx changed="":
 atproto-sync:
     #!/usr/bin/env bash
     set -Eeuo pipefail
-    mkdir -p ./out/static
+    mkdir -p ./out/
     command -v bun;
     bun run ./scripts/atproto-sync.ts
 

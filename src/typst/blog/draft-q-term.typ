@@ -68,7 +68,7 @@ That being said, we'll need to manually keep track of resizing and reflowing the
 <what-does-a-command-prompt-need>
 At its core, a command prompt is a program that takes in some text, executes a command, and spits out the results. A proper terminal emulator that interfaces with the operating system certainly meets these requirements, but adds a whole lot more. File descriptors, pipes, ANSI escapes, program execution and forking, etc.#footnote[Technically, most of this is stuff handled by the shell or the OS itself via the scheduler, with the terminal layer interacting only with the PTY. But I digress.] Most of these are things we won't need. For our purposes it's enough to have an input buffer, an output buffer, and a way to execute commands. Then, we'll need a way to render all of that to the screen.
 
-The console is split into three main parts. There's the UI representation, which consists of the `Console` component and its corresponding functions. Then there are _actions_ and _commands_. Console _actions_ are events that affect the console. Examples include moving the buffer view, moving the input cursor, clearing the buffer, etc. Console _commands_ are user-defined commands which execute bevy systems to update the world. Essentially, the actions act as a shell, while the commands act as programs. The UI ties it all together, acting as the terminal emulator. #media("/static/media/q_term/comparison-dark.png", caption: [A comparison of a true terminal emulator and our command prompt. The TE corresponds to the console UI, the shell corresponds to the action handler, and programs in the OS correspond to events in the world.])
+The console is split into three main parts. There's the UI representation, which consists of the `Console` component and its corresponding functions. Then there are _actions_ and _commands_. Console _actions_ are events that affect the console. Examples include moving the buffer view, moving the input cursor, clearing the buffer, etc. Console _commands_ are user-defined commands which execute bevy systems to update the world. Essentially, the actions act as a shell, while the commands act as programs. The UI ties it all together, acting as the terminal emulator. #media("/media/q_term/comparison-dark.png", caption: [A comparison of a true terminal emulator and our command prompt. The TE corresponds to the console UI, the shell corresponds to the action handler, and programs in the OS correspond to events in the world.])
 
 === What does Bevy already do?
 <what-does-bevy-already-do>
@@ -207,8 +207,8 @@ Great! So as a start, let's write some types. I've removed some extraneous detai
     TerminaLines(...),
     related!(TerminalLine[
             // entity 1
-            TerminalLine("foo"), 
-            // entity 2         
+            TerminalLine("foo"),
+            // entity 2
             TerminalLine("pretend this one is really long"),
     ]),
     TerminalLayout(...),
@@ -279,7 +279,7 @@ Since we're now storing the `TerminalRow`s per window, we're going to have an ad
 
 Another way of putting this: Let the sets $R$, $L$, and $S$ be the domains of the row, line, and textspan entities, respectively. Then $\|L\|lt.eq\|R\|$ and $\|S\|lt.eq\|R\|$. We can think of line wrapping as a transformation, $upright("wrap")\(l\): L arrow.r R$ . Similarly, textspan layout could be $upright("layout")\(r\): R arrow.r S$. Note that $\|R\|prop upright("TermWidth")$ and $\|S\|prop upright("TermHeight")$.
 
-#media("/static/media/q_term/layout-sets-dark.png", caption: [From lines to rows to the view. Click to expand.], linked: true)
+#media("/media/q_term/layout-sets-dark.png", caption: [From lines to rows to the view. Click to expand.], linked: true)
 
 Currently, the text spans have a 1:1 correspondence with the TerminalRows. This is fine for now, but the picture gets more complicated when we introduce rich text.
 
@@ -287,7 +287,7 @@ I'll leave the details of how the TextSpans are spawned and updated to the reade
 
 There are some simple additions to this, such as scroll position and the measurement of character width which I'll leave as exercises. Or you can #link("https://github.com/ada-x64/qproj")[go see the repository.] For now, let's end this subsection with a video of our progress so far!
 
-#video("/static/media/q_term/2026-03-04 13-12-41 (trimmed).mp4")
+#video("/media/q_term/2026-03-04 13-12-41 (trimmed).mp4")
 
 The video demonstrates multiple windows for the same underlying buffer, as well as text wrapping based on window and font size, and scrolling behavior. There is some flashing when resizing the windows with white backgrounds, which I'm unhappy with, but this seems to be an issue with the bevy text renderer, which goes beyond the scope of this crate.
 
@@ -333,13 +333,13 @@ pub struct VirtualTextSpan {
 
 All in all, this isn't too different from what was done previously. The below schema demonstrates the text flow. `VirtualTextSpan`s reference the `TerminalLine` parent entity, which then is transformed into a series of `TextSpan`s and their respective styling information. `TextFont` info is propagated down the hierarchy.
 
-#media("/static/media/q_term/rich text flow-dark.png", caption: [A diagram of the rich text flow. Click to expand.], linked: true)
+#media("/media/q_term/rich text flow-dark.png", caption: [A diagram of the rich text flow. Click to expand.], linked: true)
 
 At the moment, I don't want to allow setting the font, as this will undoubtedly mess up the character width calculation for those spans. There is no way to assure that users will properly set up font variations, so I'm leaving that for future work, if ever.
 
 Let's leave behind the display concerns with this final screenshot, showing off some rich text! This should set us up nicely for whenever we want to go back and add text highlighting and clipboard support.
 
-#media("/static/media/q_term/Pasted image 20260304222607.png")
+#media("/media/q_term/Pasted image 20260304222607.png")
 
 == Writing a simple shell
 <writing-a-simple-shell>
@@ -361,7 +361,7 @@ So how do other terminal emulators handle this? Well -- they don't! All they do 
 
 Separating the shell layer from the terminal layer requires us to implement some more complex behavior on the underlying "buffer." In particular, we're going to need to add a cursor. Any writes to the buffer will occur at the cursor location. Right now we're on a purely line-write based implementation. That's going to have to change. This will complicate the richtext implementation, but not too terribly much. And as an added bonus, we get ANSI-style cursor editing, enabling things like user prompts and #link("https://en.wikipedia.org/wiki/Curses_(programming_library)")[curses]-style TUIs. Not that we're going to implement any of that today 🙃
 
-#media("/static/media/q_term/pty-model-dark.png", caption: [The PTY model. Click to expand.], linked: true)
+#media("/media/q_term/pty-model-dark.png", caption: [The PTY model. Click to expand.], linked: true)
 
 Everything on the `Terminal` entity relates directly to the underlying buffer. (Eventually, this may be split into its own PTY entity in order to support other backends, such as a real PTY.) `VirtualTextSpan`s are generated when the PTY is read. This requires reading the entire PTY buffer. From there, `TerminalLine`s are generated which reference 1 or more `VirtualTextSpan`, and, finally, a `TerminalRow` is generated for each `TerminalLine` currently in view. -- Note that $\|upright("VirtualTextSpans")\|gt.eq\|upright("TerminalLines")\|gt.eq\|upright("TerminalRows")\|$.
 

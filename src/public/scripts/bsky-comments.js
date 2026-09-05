@@ -79,7 +79,7 @@
       </li>`;
   };
 
-  fetch("/static/bsky-posts.json")
+  fetch("/bsky-posts.json")
     .then((res) => (res.ok ? res.json() : Promise.resolve({})))
     .then(
       /** @param {BskyPostMap} map */

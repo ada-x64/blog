@@ -12,6 +12,6 @@
 
 Spent the last two days setting up SSH support for my \#bevy build system. Now I can build with my Ryzen 9 PC anywhere over a WAN. This was quite a challenge and I learned a lot along the way!
 
-#media("/static/media/ssh-server-excalidraw.png", caption: [Excalidraw image detailing the SSH server I built. See the PR linked above for more details.], linked: true)
+#media("/media/ssh-server-excalidraw.png", caption: [Excalidraw image detailing the SSH server I built. See the PR linked above for more details.], linked: true)
 
 This PR doesn't explain all the stuff I had to learn about systemd, WSL2 networking, wake-on-LAN, and SSH/D configuration in order to make this work. Although I spent the last two days making this, it was the culmination of a lot of time spent messing around, including a Minecraft server at one point.

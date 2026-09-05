@@ -5,12 +5,12 @@
   tags: ("qproj", "inspector", "devlog"),
   aliases: none,
   draft: false,
-  cover: "/static/media/inspector-1/editor.png",
+  cover: "/media/inspector-1/editor.png",
 )
 
 == intro
 <intro>
-#media("/static/media/inspector-1/editor.png", alt: "Editor.", caption: [Screenshot of the editor. The game view is in the center, featuring a capsule and a red wireframe of a sphere with an arrow pointing toward the capsule. In the upper-right corner there is a gizmo showing the XYZ axes in worldspace. Framing the game view are three docked panels: the hierarchy with all the entities in the scene, the inspector with details of the highlighted entity (Player), and the bottom tray with tabs for Resources, Assets, and States.], linked: true)
+#media("/media/inspector-1/editor.png", alt: "Editor.", caption: [Screenshot of the editor. The game view is in the center, featuring a capsule and a red wireframe of a sphere with an arrow pointing toward the capsule. In the upper-right corner there is a gizmo showing the XYZ axes in worldspace. Framing the game view are three docked panels: the hierarchy with all the entities in the scene, the inspector with details of the highlighted entity (Player), and the bottom tray with tabs for Resources, Assets, and States.], linked: true)
 
 #link("https://github.com/ada-x64/qproj/pull/2")[I _finally_ got player interactions working.]
 
@@ -20,7 +20,7 @@ Well, kinda.
 <why-is-that-pr-so-big>
 This has been a _big_ learning process.
 
-In order to understand what's happening in the game, I need a way to inspect the world. Thankfully, there are #link("https://github.com/rewin123/space_editor")[plenty] #link("https://github.com/jakobhellermann/bevy_editor_pls")[of] #link("https://github.com/databasedav/aalo")[crates] in this space. I decided to use the well-supported #link("https://github.com/jakobhellermann/bevy-inspector-egui")[bevy\_inspector\_egui] as the basis of my inspector because of its integrations with the general egui ecosystem. That being said, I'm keeping an eye on #link("https://github.com/databasedav/haalka")[haalka], #link("https://github.com/dekirisu/mevy")[mevy], and #link("https://github.com/Leafwing-Studios/i-cant-believe-its-not-bsn")[dairy-free BSN] as bevy-native alternatives. I have #link("/static/media/inspector-1/ari-reading.webp")[a life outside of gamedev,] otherwise I'd already be trying them out and contributing back.
+In order to understand what's happening in the game, I need a way to inspect the world. Thankfully, there are #link("https://github.com/rewin123/space_editor")[plenty] #link("https://github.com/jakobhellermann/bevy_editor_pls")[of] #link("https://github.com/databasedav/aalo")[crates] in this space. I decided to use the well-supported #link("https://github.com/jakobhellermann/bevy-inspector-egui")[bevy\_inspector\_egui] as the basis of my inspector because of its integrations with the general egui ecosystem. That being said, I'm keeping an eye on #link("https://github.com/databasedav/haalka")[haalka], #link("https://github.com/dekirisu/mevy")[mevy], and #link("https://github.com/Leafwing-Studios/i-cant-believe-its-not-bsn")[dairy-free BSN] as bevy-native alternatives. I have #link("/media/inspector-1/ari-reading.webp")[a life outside of gamedev,] otherwise I'd already be trying them out and contributing back.
 
 #callout(kind: "note", title: [General codebase architecture])[In addition to building out a UI, I've been playing around trying to figure out the best way to organize my code. Games are big projects and I have _got_ to be clear about what I'm doing, especially given time and attention constraints. I've settled on #link("/blog/architecture-1.html")[a fairly simple architecture.] Click on that link to learn more, it's got a tl;dr and everything :)]
 
