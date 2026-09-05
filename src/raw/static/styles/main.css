@@ -116,13 +116,29 @@ a:visited {
 }
 
 #bsky-comments ul {
-    padding-left: 1rem;
+    padding-left: 0.5rem;
+    border-left: 1px solid;
 }
 
 #bsky-comments li {
     margin: 0.75rem 0;
 }
 
+#bsky-comments li::marker {
+    content: none;
+}
+
 #bsky-comments p {
-    margin: 0.25rem 0;
+    margin: 0;
+}
+
+#bsky-comments .reply-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+}
+
+#bsky-comments .reply-avatar {
+    width: 2.5rem;
+    height: 2.5rem;
 }
