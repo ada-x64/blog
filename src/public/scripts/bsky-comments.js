@@ -1,5 +1,5 @@
 (() => {
-	const container = document.getElementById("bsky-comments");
+	const container = document.querySelector(".bsky-comments");
 	if (!container) return;
 
 	const match = window.location.pathname.match(
