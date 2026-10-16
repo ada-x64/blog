@@ -2,9 +2,9 @@
 #show: post.with(
   title: "nanvix ci: working across a dozen repos without going insane",
   description: "how I keep a fleet of downstreams building while the kernel underneath them moves",
-  tags: ("nanvix", "ci", "devtools", "ai"),
+  tags: ("ci", "devtools", "ai"),
   aliases: none,
-  draft: true,
+  draft: false,
   cover: none,
   date: datetime(year: 2026, month: 9, day: 23, hour: 17, minute: 0, second: 0),
 )
