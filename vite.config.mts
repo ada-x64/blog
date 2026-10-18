@@ -61,6 +61,11 @@ function isStaticAsset(file: string): boolean {
 	return file.startsWith("src/public/");
 }
 
+// Inlined into every page's <head> by inject-head.mts.
+function isInlinedStylesheet(file: string): boolean {
+	return file.startsWith("src/public/") && file.endsWith(".css");
+}
+
 function isResumeSource(file: string): boolean {
 	return file.startsWith("resume/resume/");
 }
@@ -221,10 +226,12 @@ async function buildChanges(changes: Change[]): Promise<boolean> {
 	}
 
 	await Promise.all(tasks);
-	const touchedHtml = rebuildMain || rebuildAllBlogPosts || posts.length > 0;
+	const stylesChanged = files.some(isInlinedStylesheet);
+	const touchedHtml =
+		rebuildMain || rebuildAllBlogPosts || posts.length > 0 || stylesChanged;
 	if (touchedHtml) {
 		const files =
-			rebuildMain || rebuildAllBlogPosts
+			rebuildMain || rebuildAllBlogPosts || stylesChanged
 				? undefined
 				: posts
 						.map((post) =>

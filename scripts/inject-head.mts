@@ -26,6 +26,28 @@ function parseHeadFragment(
 	return fragment;
 }
 
+// Replace `<link rel="stylesheet" href="/x.css" inline />` with the contents of
+// src/public/x.css, so styles live in a real CSS file but ship inline.
+async function inlineStylesheets(
+	fragment: string,
+	root: string,
+): Promise<string> {
+	const pattern = /<link\b[^>]*\bhref="([^"]+\.css)"[^>]*\binline\b[^>]*>/gi;
+	const sheets = await Promise.all(
+		[...fragment.matchAll(pattern)].map(async ([tag, href]) => {
+			const css = await fs.readFile(
+				path.join(root, "src", "public", href),
+				"utf8",
+			);
+			return [tag, `<style>\n${css.trim()}\n</style>`] as const;
+		}),
+	);
+	return sheets.reduce(
+		(acc, [tag, style]) => acc.replace(tag, style),
+		fragment,
+	);
+}
+
 function upsertHeadBlock(
 	html: string,
 	start: string,
@@ -84,7 +106,10 @@ export async function injectHead(options?: {
 	const standardMapFile = path.join(root, "out", "standard-docs.json");
 
 	const rawHead = await fs.readFile(headFile, "utf8");
-	const headFragment = parseHeadFragment(rawHead, headFile, root);
+	const headFragment = await inlineStylesheets(
+		parseHeadFragment(rawHead, headFile, root),
+		root,
+	);
 	const standardMap = await loadStandardMap(standardMapFile);
 
 	const allFiles = options?.files?.length

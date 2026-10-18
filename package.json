@@ -8,6 +8,7 @@
 	"scripts": {
 		"atproto-sync": "bun run scripts/atproto-sync.mts",
 		"benchmark": "bun run scripts/benchmark.mts",
-		"dev": "bun run vite"
+		"dev": "bun run vite",
+		"tmtheme": "bun run scripts/zed-to-tmtheme.mts"
 	}
 }

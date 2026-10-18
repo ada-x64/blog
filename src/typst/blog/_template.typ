@@ -69,7 +69,7 @@
   cover: none,
   content,
 ) = {
-  set raw(theme: "../assets/everforest-dark-hard.tmTheme")
+  set raw(theme: "../assets/madoromi-natsu-yoru.tmTheme")
   set document(
     title: title,
     author: "Phoenix Ada Rose Mandala",
