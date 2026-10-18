@@ -1,6 +1,15 @@
 #import "../_template.typ": conf, footer
 #import "_posts.typ": posts
 
+#let definition(math, ..rest) = [
+  #figure(
+    math,
+    kind: "definition",
+    supplement: "Definition",
+    ..rest
+  )
+]
+
 #let timestamp(date) = html.elem("time")[#date.display(
   "/[day] [month repr:short], [year]/",
 )]

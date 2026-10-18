@@ -6,7 +6,7 @@
   tags: ("devlog", "qproj", "ai"),
   aliases: none,
   draft: true,
-  cover: "TODO" // should be one of the hex grid outputs
+  cover: "TODO", // should be one of the hex grid outputs
 )
 
 // PICTURE: finalized output
@@ -50,7 +50,8 @@ the end-result would be on the computer, it helped me think through the
 constraints I wanted for the paths and the various gameplay mechanics
 surrounding the nodes. Plus it was cool and fun to have physical artifacts.
 
-#carousel(caption: "Design documents carousel. Click to view.",
+#carousel(
+  caption: "Design documents carousel. Click to view.",
   media("/media/terrain-4/27-sept-26c.jpg", linked: true),
   media("/media/terrain-4/7-oct-26a.jpg", linked: true),
   media("/media/terrain-4/7-oct-26b.jpg", linked: true),
@@ -71,50 +72,50 @@ create asset collections and block on the load, and
 RON serialization.
 
 #figure(caption: "A snippet from " + `qproj/AGENTS.md`)[
-    ```md
-    ## Workflows
+  ```md
+  ## Workflows
 
-    ### Design
+  ### Design
 
-    When I ask you for a _design,_ create a document in `.docs/`. I will review the
-    document and provide you commentary. This is likely to have several rounds of
-    discussion.
+  When I ask you for a _design,_ create a document in `.docs/`. I will review the
+  document and provide you commentary. This is likely to have several rounds of
+  discussion.
 
-    ### Delegate
+  ### Delegate
 
-    Lay out a plan for implementation. Create a step-by-step implementation plan,
-    where each step is a commit. For each, determine risk factors and likely outcomes.
+  Lay out a plan for implementation. Create a step-by-step implementation plan,
+  where each step is a commit. For each, determine risk factors and likely outcomes.
 
 
-    ### Develop
+  ### Develop
 
-    Being building out a specified design, one step at a time. After the initial
-    pass, stop for manual review. Summarize your work with a story, similar to crit
-    story mode. (See the crit skill -- but do not open a crit server.) Once that is
-    approved, stage your changes and proceed to an automated subagent review
-    focusing on correctness and maintainability. (Your call on what exactly it
-    focuses.) The subagent should leave comments in the modified, unstaged code.
-    Once automated review changes are approved, then we commit and move on to the
-    next step. After all steps are completed, we push a PR.
+  Being building out a specified design, one step at a time. After the initial
+  pass, stop for manual review. Summarize your work with a story, similar to crit
+  story mode. (See the crit skill -- but do not open a crit server.) Once that is
+  approved, stage your changes and proceed to an automated subagent review
+  focusing on correctness and maintainability. (Your call on what exactly it
+  focuses.) The subagent should leave comments in the modified, unstaged code.
+  Once automated review changes are approved, then we commit and move on to the
+  next step. After all steps are completed, we push a PR.
 
-    A plan or a github issue is _not_ required for work to begin. I will give you
-    ad-hoc instructions if necessary. That being said, always scan for existing
-    issues and PRs when we're ready to push. It's important to keep all that clean.
+  A plan or a github issue is _not_ required for work to begin. I will give you
+  ad-hoc instructions if necessary. That being said, always scan for existing
+  issues and PRs when we're ready to push. It's important to keep all that clean.
 
-    When building out a feature for a binary package, we are most likely going to
-    need manual review and playtesting to ensure that the code is correct. I will
-    mostly prompt you for architectural implementations and will tweak the code
-    myself to suit the feel of the game. Do not modify existing constant values,
-    those are essential to game feel.
+  When building out a feature for a binary package, we are most likely going to
+  need manual review and playtesting to ensure that the code is correct. I will
+  mostly prompt you for architectural implementations and will tweak the code
+  myself to suit the feel of the game. Do not modify existing constant values,
+  those are essential to game feel.
 
-    When writing tests, avoid tests which are fragile or redundant. Keep the testing
-    surface minimal -- check for edge cases and correctness. Avoid change-detector
-    tests, i.e., tests which rely on highly specific facets of the code, e.g.
-    constant values, or things which _happen_ to be true, such as screen order. Avoid
-    writing tests which would be better off as unit tests for an upstream crate. If
-    you find such scenarios, report them and suggest writing an issue in the
-    upstream crate's repo.
-    ```
+  When writing tests, avoid tests which are fragile or redundant. Keep the testing
+  surface minimal -- check for edge cases and correctness. Avoid change-detector
+  tests, i.e., tests which rely on highly specific facets of the code, e.g.
+  constant values, or things which _happen_ to be true, such as screen order. Avoid
+  writing tests which would be better off as unit tests for an upstream crate. If
+  you find such scenarios, report them and suggest writing an issue in the
+  upstream crate's repo.
+  ```
 ]
 
 I started off just replicating the 2d board. It was a flat, gizmo-based hex grid
@@ -130,7 +131,8 @@ large sample sizes for the different path algorithms. We were trying to restrict
 the number of path tiles, loops, and other such path properties directly as a
 factor of the algorithm. Here are some of the visuals we got out of it.
 
-#carousel(caption: "Initial 2d experiment results. 'Current' means A* + noise.",
+#carousel(
+  caption: "Initial 2d experiment results. 'Current' means A* + noise.",
   media("/media/terrain-4/2d/gallery.png", linked: true),
   media("/media/terrain-4/2d/distributions.png", linked: true),
   media("/media/terrain-4/2d/character.png", linked: true),
@@ -151,7 +153,7 @@ In order to make a path, we need to rank how easy it is to hike around. So we us
   media("/media/terrain-4/2d/02-cost.png", caption: "Path cost"),
   media("/media/terrain-4/2d/03-node-sites.png", caption: "Node placement"),
   media("/media/terrain-4/2d/05-graph.png", caption: "Connected node network, ranked by cost"),
-  media("/media/terrain-4/2d/06-trails.png", caption: "Node placement")
+  media("/media/terrain-4/2d/06-trails.png", caption: "Node placement"),
 )
 
 Paths are limited by a maximum budget. In the figure above on the connected node network, note that nodes 0 and 2 do not even have a candidate connection as the cost between them would be too high. The 10 cheapest paths are chosen. Extra pathing
@@ -205,10 +207,15 @@ so a tile right beside a creek gets up to $1 + beta$ times the weight, fading
 over a couple of hexes. Nothing but a crossing may sit on a creek, so the final
 placement weight is
 
-$ w(T) = cases(
-  omega(T) s(T)^sigma & T in.not C,
-  0 & T in C,
-) $
+#definition(
+  $
+    w_p (T) = cases(
+      omega(T) s(T)^sigma & T in.not C,
+      0 & T in C,
+    )
+  $,
+  caption: "POI weight"
+)
 
 Placement doesn't sample tiles in proportion to $w$. Instead, each POI goes on
 the tile that best balances weight against distance from everything already
@@ -229,7 +236,12 @@ fn place_poi(board: &Board, placed: &[Tile], rng: &mut Rng) -> Tile {
 }
 ```
 
-#media("/media/terrain-4/suitability3d.png", title: "Suitability on the 3D heightmap", caption: "Suitability on the 3D heightmap. More blue is more suitable.", linked: true)
+#media(
+  "/media/terrain-4/suitability3d.png",
+  title: "Suitability on the 3D heightmap",
+  caption: "Suitability on the 3D heightmap. More blue is more suitable.",
+  linked: true,
+)
 
 
 == Benches
@@ -274,8 +286,10 @@ cap, so dramatic cliffs and deep gullies win.
 Let $Delta(T, U) = h(T) - h(U)$, positive when $U$ is below us. With
 $theta in [0, 1]$ weighting upward views against downward ones,
 
-$ "relief"(T) = 1 / (|R(T)|) sum_(U in S(T))
-  min(1, ((1 - theta) max(Delta, 0) + theta max(-Delta, 0)) / D) $
+$
+  "relief"(T) = 1 / (|R(T)|) sum_(U in S(T))
+  min(1, ((1 - theta) max(Delta, 0) + theta max(-Delta, 0)) / D)
+$
 
 The $min$ caps each tile's contribution at 1, so relief stays in $[0, 1]$.
 Note that we divide by $|R(T)|$, not $|S(T)|$: hidden tiles count as zero, so
@@ -288,7 +302,7 @@ score $f : B -> RR$, let $"rank"(f) : B -> [0, 1]$ be
 
 $ "rank"(f)(T) = (|{ U in B : f(U) < f(T) }|) / (|B| - 1) $
 
-so that $q = "rank"("quiet")$ and $o = "rank"("relief")$ are both
+so that $r_q : B -> RR = "rank"("quiet")$ and $r_r : B -> RR = "rank"("relief")$ are both
 functions from tiles to $[0, 1]$. Ranks only care about order, so a board with
 a few dramatic cliffs and a board with gentle hills both get their best spots
 ranked at the top.
@@ -298,14 +312,17 @@ everything except the very top, so only the most enclosed spots and the best
 views score well. Ground that's middling at both doesn't win. Finally,
 $nu$ is our view preference, from 0 (quiet benches) to 1 (view benches):
 
-$ b(T) = (1 - nu) q(T)^k + nu o(T)^k $
+#definition(
+  $ w_b (T) = (1 - nu) r_q (T)^k + nu r_r (T)^k $,
+  caption: "Bench weight",
+)
 
 Benches are placed the same way as POIs, using $b$ instead of $w$. Like POIs,
 they stay off creeks, and they try to keep a minimum distance from one another.
 
 #carousel(
   media("/media/terrain-4/dramatic-bench.png", caption: "A dramatic bench", linked: true),
-  media("/media/terrain-4/quiet-bench.png", caption: "A (relatively) quiet bench", linked: true)
+  media("/media/terrain-4/quiet-bench.png", caption: "A (relatively) quiet bench", linked: true),
 )
 
 The quiet benches don't look so quiet here, but you have to imagine them
@@ -316,34 +333,49 @@ goes a long way :)
 
 === Cost
 
-With the nodes placed, we need to join them. Trails run along the edges of
+Now that we've placed the nodes, we need to join them. Trails run along the edges of
 the honeycomb, so our graph $G = (V, E)$ has every hex corner as a vertex and
-every hex edge as an edge. Each node $K$ sits on a pad: its tile is levelled,
+every hex edge as an edge. Each node $N$ sits on a pad: its tile is levelled,
 and the ground around it graded to match, so we can easily fit pre-authored
-scenes onto it. Let $hat(h)(v)$ be the height of vertex $v$ after levelling.
+scenes onto it. Let $h'(v)$ be the height of vertex $v$ after levelling.
 
 Walking uphill or downhill is harder than walking on the flat, so the cost of
 an edge $epsilon = {u, v}$ grows exponentially with how much it climbs. Let
 $alpha$ be our aversion to slopes:
 
-$ c(epsilon) = cases(
-  exp(alpha |hat(h)(u) - hat(h)(v)|) & epsilon "is on the board and doesn't cross a creek",
-  infinity & "otherwise",
-) $
+#definition(
+  $
+    c(epsilon) = cases(
+      exp(alpha |h'(u) - h'(v)|) & epsilon "is on the board and doesn't cross a creek",
+      infinity & "otherwise",
+    )
+  $,
+  caption: "Path traversal cost"
+)
 
-For any edge weighting $w$, let $d(w, K, K')$ be the cheapest way between two
-nodes: the minimum over paths $pi$ from any vertex of $V(K)$ to any vertex of
-$V(K')$ of $sum_(epsilon in pi) w(epsilon)$. So $d(c, K, K')$ is the cost of
-walking cross-country, ignoring trails.
+For two nodes $N$ and $M$, let $Pi(N,M)$ be the set of paths that start at
+a corner of $N$'s tile and end at a corner of $M$'s. A path $pi in Pi$ is just a collection of edges; $pi = { epsilon_1, ..., epsilon_n : epsilon in E}$. Given a price for each
+edge, $w : E -> RR$, the distance between them is the cheapest such path:
+
+$ d(w, N,M ) = min_(pi in Pi(N,M)) sum_(epsilon in pi) w(epsilon) $
+
+So $d(c, K, K')$ is the cost of walking cross-country, ignoring trails.
+Let $Pi$ denote the set of all paths. For any edge weighting $w$, let $d(w, (N,
+M)): (RR, Pi^2) -> RR$ be the cheapest way between two nodes: the minimum over
+paths $Pi$ from any vertex of $v in V(N)$ to any vertex $u in V(M)$ of $sum_(v in
+Pi) w(v)$. So $d(c, (N,M))$ is the cost of walking cross-country, ignoring
+trails.
 
 As we lay trails, let $L subset.eq E$ be the set of laid edges. Walking the
 network means staying on $L$, but crossing a node is free:
 
-$ n(epsilon) = cases(
-  0 & epsilon "is on a node's perimeter",
-  c(epsilon) & epsilon in L,
-  infinity & "otherwise",
-) $
+$
+  n(epsilon) = cases(
+    0 & epsilon "is on a node's perimeter",
+    c(epsilon) & epsilon in L,
+    infinity & "otherwise",
+  )
+$
 
 === The spanner
 
@@ -488,8 +520,10 @@ $ "detour"(K_v, K_t) = eta(K_v, K_t) / (max(||x(K_v) - x(K_t)|| - 2, 1)) $
 A tease is broken if the detour is too short, or if the player could reach
 the target before the viewpoint:
 
-$ "broken"(K_v, K_t) <==> "detour"(K_v, K_t) < tau
-  or "walked"(K_t) <= "walked"(K_v) $
+$
+  "broken"(K_v, K_t) <==> "detour"(K_v, K_t) < tau
+  or "walked"(K_t) <= "walked"(K_v)
+$
 
 Let $X(L)$ be the set of broken teases for trail network $L$. Every trail we
 lay, from the spanner onwards, goes through a guard. A new route $pi$ is only
@@ -535,12 +569,12 @@ fn build(seed: u64, teases: &[(Node, Node)]) -> Layout {
 
 ---
 
-  - how it works: heightmap terrain generation on top of a hex-based grid
-  - paths go on the hex grid, terrain is constrained to the vertices
-  - nodes with points of interest exist scattered throughout the map, filling a tile
-  - a large map is generated with creeks starting at high points and eroding the land
-  - a window over the overall terrain is picked based on suitability factors: node placement suitability (flatness), nice view calcuation for rest spots (e.g. overhangs, nooks, near water), crossings for creeks placed at most twice, path constraints to reduce spurs and ensure loops, recalcuation of paths given node and path constraints for the surrealist 'getting lost' vibe
-  - all of this is configurable and asset-based. what we've made is a tool for level generation.
+- how it works: heightmap terrain generation on top of a hex-based grid
+- paths go on the hex grid, terrain is constrained to the vertices
+- nodes with points of interest exist scattered throughout the map, filling a tile
+- a large map is generated with creeks starting at high points and eroding the land
+- a window over the overall terrain is picked based on suitability factors: node placement suitability (flatness), nice view calcuation for rest spots (e.g. overhangs, nooks, near water), crossings for creeks placed at most twice, path constraints to reduce spurs and ensure loops, recalcuation of paths given node and path constraints for the surrealist 'getting lost' vibe
+- all of this is configurable and asset-based. what we've made is a tool for level generation.
 
 - ai has made me orders of magnitude more productive
 - i can focus more on design in all aspects
@@ -570,3 +604,71 @@ job and I will probably kill myself if I don't make this game _soon,_ I am going
 to be using the bots. I would prefer to be doing it locally. Let's hope I get a
 job soon so I can get a GPU and stop relying on massive amounts of cloud
 compute.
+
+= Appendix - Function types and Notation
+
+== Notation
+
+- $H$ is the set of all hex tiles in the grid. $B subset.eq H$ the
+  playable board. $C subset.eq H$ is the set of creek tiles.
+- Each tile $T$ has a centre $x(T) in RR^2$ and six corners. For a set of
+  tiles $A subset.eq H$, $V(A) subset RR^2$ is the set of all their corners,
+  and $V(T)$ is short for $V({T})$.
+- The honeycomb graph is $G = (V(H), E)$: corners joined by hex edges.
+- $cal(N) subset.eq B$ is the set of nodes, written $N$, with spawn $N_0$.
+- $cal(P)(X)$ is the power set of $X$, and $hat(RR) = RR union {infinity}$.
+
+== Terrain
+// this works because text and math are different elements.
+// not a stable feature, keep an eye on this
+#html.div(class: "columns")[
+  Ground height at a point $p$
+  $ h(p) : RR^2 -> RR $
+
+  Tile center
+  $ x(T) : H -> RR^2 $
+
+  Corners of a set of tiles
+  $ V(T): cal(P)(H) -> cal(P)(RR^2) $
+
+  Adjacent tiles
+  $ N(T) : H -> cal(P)(H) $
+]
+== Points of interest
+#html.div(class: "columns")[
+  Height range around a tile
+  $ r(T) : H -> RR_(>= 0) $
+
+  Suitability for node placement of a tile $T in H$
+  $ s(T) : H -> (0, 1] $
+
+  Distance to the nearest tile in a set, in hexes
+  $ d() : H times cal(P)(H) -> [0, infinity) $
+
+  Water pull  $ omega : H -> [1, 1 + beta] $           // water pull
+  POI placement weight  $ w : H -> [0, infinity) $                   // POI placement weight
+]
+
+== Benches
+
+#html.div(class: "columns")[
+
+  Tiles in range, tiles visible $ R, S : B -> cal(P)(H) $                // tiles in range, tiles visible
+  Visibility scores $ "open", "quiet" : B -> [0, 1] $
+  Height difference $ Delta : H times H -> RR $              // height difference
+  Relief $ "relief" : B -> [0, 1] $
+  Rank $ "rank" : (B -> RR) -> (B -> [0, 1]) $
+  Applied ranks $ r_q, r_r, b : B -> [0, 1] $
+]
+
+== Trails
+  Leveled height $ h' : V(H) -> RR $                      // levelled height
+  Step cost $ c : E -> hat(RR)_(> 0) $          // step cost
+  Paths between nodes $ Pi : cal(K) times cal(K) -> cal(P)(E^*) $  // paths between two pads
+   $ d : (E -> hat(RR)_(>= 0)) times cal(K) times cal(K) -> hat(RR)_(>= 0) $
+  $ c_L : E -> hat(RR)_(>= 0) $       // cost on trails L (your n)
+  $ eta : cal(K) times cal(K) -> NN union {infinity} $  // trail hops
+  $ "walked" : cal(K) -> NN union {infinity} $
+  $ "detour" : cal(K) times cal(K) -> RR_(>= 0) $
+  $ "broken" : cal(K) times cal(K) -> {"true", "false"} $
+  $ X : cal(P)(E) -> cal(P)(cal(K) times cal(K)) $   // broken teases, given trails
