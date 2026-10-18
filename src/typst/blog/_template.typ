@@ -60,6 +60,7 @@
   cover: none,
   content,
 ) = {
+  set raw(theme: "../assets/everforest-dark-hard.tmTheme")
   set document(
     title: title,
     author: "Phoenix Ada Rose Mandala",
@@ -130,6 +131,21 @@
     supplement: "Video",
     html.elem("video", attrs: (controls: "true"))[
       #html.elem("source", attrs: (src: url))
+    ],
+    caption: caption,
+  )
+}
+
+#let carousel(caption: none, ..items) = {
+  figure(
+    html.elem("div", attrs: (class: "carousel-wrap"))[
+      #html.elem("button", attrs: (class: "prev", aria-label: "Previous"))[‹]
+      #html.elem("ul", attrs: (class: "carousel"))[
+        #for item in items.pos() {
+          html.elem("li")[#item]
+        }
+      ]
+      #html.elem("button", attrs: (class: "next", aria-label: "Next"))[›]
     ],
     caption: caption,
   )

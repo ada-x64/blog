@@ -18,6 +18,16 @@ document.addEventListener("DOMContentLoaded", () => {
 		rearrange_notes();
 	} catch {}
 
+	for (const wrap of document.querySelectorAll(".carousel-wrap")) {
+		const list = wrap.querySelector(".carousel");
+		wrap.querySelector(".prev").addEventListener("click", () => {
+			list.scrollBy({ left: -list.clientWidth, behavior: "smooth" });
+		});
+		wrap.querySelector(".next").addEventListener("click", () => {
+			list.scrollBy({ left: list.clientWidth, behavior: "smooth" });
+		});
+	}
+
 	document
 		.querySelector(".toggle-lights")
 		.addEventListener("click", (_event) => {

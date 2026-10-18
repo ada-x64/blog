@@ -6,12 +6,14 @@
         --visited: blueviolet;
         --background: linear-gradient(white, aliceblue 50%);
         --text: #000;
+        --code-bg: #000b;
     }
     html.dark {
         --accent: lightblue;
     	--visited: cornflowerblue;
     	--background: linear-gradient(#000, #1d1e1f 50%);
     	--text: #fff;
+        --code-bg: #fff1;
     }
 
     /* BASE ELEMENTS */
@@ -57,6 +59,20 @@
     	align-items: center;
     }
 
+    code {
+        background-color: color-mix(var(--accent), var(--code-bg) 90%);
+        border-radius: 0.25em;
+        padding: 0.125em 0.5em;
+        color: #fff;
+    }
+    pre code {
+        padding: 1em;
+        max-width: 100%;
+        display: inline-block;
+        overflow: scroll;
+        border-radius: 1em;
+    }
+
     /* TYPST */
 
     section[role="doc-endnotes"] ol {
@@ -94,6 +110,64 @@
     .youtube {
     	width: 100%;
     	aspect-ratio: 16 / 9;
+    }
+
+    .carousel-wrap {
+    	display: grid;
+    	grid-template-columns: auto 1fr auto;
+    	align-items: center;
+    }
+
+    .carousel-wrap button {
+    	border: none;
+    	font-size: 2em;
+    	background: none;
+    	cursor: pointer;
+        color: var(--text);
+    }
+
+    .carousel {
+    	grid-column: 2;
+    	grid-row: 1;
+    	display: flex;
+    	gap: 1em;
+    	padding: 0;
+    	margin: 0;
+    	overflow-x: auto;
+    	scroll-snap-type: x mandatory;
+    	scroll-marker-group: after;
+    }
+
+    .carousel li {
+    	flex: 0 0 100%;
+    	list-style: none;
+    	scroll-snap-align: center;
+    }
+
+    .carousel li img {
+    	width: 100%;
+    }
+
+    /* Progressive enhancement: dots where supported. */
+    .carousel::scroll-marker-group {
+    	grid-column: 2;
+    	grid-row: 2;
+    	display: flex;
+    	justify-content: center;
+    	gap: 0.5em;
+    	margin: 0.5em 0;
+    }
+
+    .carousel li::scroll-marker {
+    	content: "";
+    	width: 0.6em;
+    	height: 0.6em;
+    	border: 1px solid var(--accent);
+    	border-radius: 50%;
+    }
+
+    .carousel li::scroll-marker:target-current {
+    	background: var(--accent);
     }
 
     .index {
