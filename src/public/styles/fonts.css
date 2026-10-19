@@ -1,6 +1,6 @@
 @font-face {
 	font-family: "EB Garamond";
-	src: url("../fonts/EB_Garamond/EBGaramond-VariableFont_wght.ttf");
+	src: url("/fonts/EB_Garamond/EBGaramond-VariableFont_wght.woff2") format("woff2");
 	font-weight: 400 800;
 	font-style: normal;
 	font-display: swap;
@@ -8,7 +8,7 @@
 
 @font-face {
 	font-family: "EB Garamond";
-	src: url("../fonts/EB_Garamond/EBGaramond-Italic-VariableFont_wght.ttf");
+	src: url("/fonts/EB_Garamond/EBGaramond-Italic-VariableFont_wght.woff2") format("woff2");
 	font-weight: 400 800;
 	font-style: italic;
 	font-display: swap;
@@ -16,7 +16,7 @@
 
 @font-face {
 	font-family: "Faustina";
-	src: url("../fonts/Faustina/Faustina-VariableFont_wght.ttf");
+	src: url("/fonts/Faustina/Faustina-VariableFont_wght.woff2") format("woff2");
 	font-weight: 300 800;
 	font-style: normal;
 	font-display: swap;
@@ -24,7 +24,7 @@
 
 @font-face {
 	font-family: "Faustina";
-	src: url("../fonts/Faustina/Faustina-Italic-VariableFont_wght.ttf");
+	src: url("/fonts/Faustina/Faustina-Italic-VariableFont_wght.woff2") format("woff2");
 	font-weight: 300 800;
 	font-style: italic;
 	font-display: swap;
@@ -32,7 +32,7 @@
 
 @font-face {
 	font-family: "Libertinus Sans";
-	src: url("../fonts/Libertinus_Sans/LibertinusSans-Regular.ttf");
+	src: url("/fonts/Libertinus_Sans/LibertinusSans-Regular.woff2") format("woff2");
 	font-weight: 400;
 	font-style: normal;
 	font-display: swap;
@@ -40,7 +40,7 @@
 
 @font-face {
 	font-family: "Libertinus Sans";
-	src: url("../fonts/Libertinus_Sans/LibertinusSans-Italic.ttf");
+	src: url("/fonts/Libertinus_Sans/LibertinusSans-Italic.woff2") format("woff2");
 	font-weight: 400;
 	font-style: italic;
 	font-display: swap;
@@ -48,7 +48,7 @@
 
 @font-face {
 	font-family: "Libertinus Sans";
-	src: url("../fonts/Libertinus_Sans/LibertinusSans-Bold.ttf");
+	src: url("/fonts/Libertinus_Sans/LibertinusSans-Bold.woff2") format("woff2");
 	font-weight: 700;
 	font-style: normal;
 	font-display: swap;
@@ -56,7 +56,7 @@
 
 @font-face {
 	font-family: "Libertinus Serif";
-	src: url("../fonts/Libertinus_Serif/LibertinusSerif-Regular.ttf");
+	src: url("/fonts/Libertinus_Serif/LibertinusSerif-Regular.woff2") format("woff2");
 	font-weight: 400;
 	font-style: normal;
 	font-display: swap;
@@ -64,7 +64,7 @@
 
 @font-face {
 	font-family: "Libertinus Serif";
-	src: url("../fonts/Libertinus_Serif/LibertinusSerif-Italic.ttf");
+	src: url("/fonts/Libertinus_Serif/LibertinusSerif-Italic.woff2") format("woff2");
 	font-weight: 400;
 	font-style: italic;
 	font-display: swap;
@@ -72,7 +72,7 @@
 
 @font-face {
 	font-family: "Libertinus Serif";
-	src: url("../fonts/Libertinus_Serif/LibertinusSerif-BoldItalic.ttf");
+	src: url("/fonts/Libertinus_Serif/LibertinusSerif-BoldItalic.woff2") format("woff2");
 	font-weight: 700;
 	font-style: italic;
 	font-display: swap;
@@ -80,7 +80,7 @@
 
 @font-face {
 	font-family: "Libertinus Serif";
-	src: url("../fonts/Libertinus_Serif/LibertinusSerif-Bold.ttf");
+	src: url("/fonts/Libertinus_Serif/LibertinusSerif-Bold.woff2") format("woff2");
 	font-weight: 700;
 	font-style: normal;
 	font-display: swap;
@@ -88,7 +88,7 @@
 
 @font-face {
 	font-family: "Libertinus Serif";
-	src: url("../fonts/Libertinus_Serif/LibertinusSerif-SemiBoldItalic.ttf");
+	src: url("/fonts/Libertinus_Serif/LibertinusSerif-SemiBoldItalic.woff2") format("woff2");
 	font-weight: 600;
 	font-style: italic;
 	font-display: swap;
@@ -96,7 +96,7 @@
 
 @font-face {
 	font-family: "Libertinus Serif";
-	src: url("../fonts/Libertinus_Serif/LibertinusSerif-SemiBold.ttf");
+	src: url("/fonts/Libertinus_Serif/LibertinusSerif-SemiBold.woff2") format("woff2");
 	font-weight: 600;
 	font-style: normal;
 	font-display: swap;
