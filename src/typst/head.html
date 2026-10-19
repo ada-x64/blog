@@ -1,16 +1,17 @@
-<link rel="stylesheet" href="/styles/main.css" inline />
 <script>
 (() => {
-  try {
-    const stored = window.localStorage.getItem("theme");
-    const isDark = stored
-      ? stored === "dark"
-      : window.matchMedia("(prefers-color-scheme: dark)").matches;
-    if (isDark) document.documentElement.classList.add("dark");
-  } catch {}
+    const theme = window.localStorage.getItem("theme") ?? "system";
+    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    const isDark = theme === "dark" || theme === "system" && prefersDark;
+    const className = `${theme} ${isDark && theme === "system" ? "dark" : ""}`;
+    const html = document.documentElement;
+	html.className = className;
+    html.setAttribute("data-madoromi", `natsu-${isDark ? "yoru" : "hiru"}`)
 })();
 </script>
 <link rel="preload" href="/fonts/Libertinus_Sans/LibertinusSans-Regular.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="stylesheet" href="/styles/main.css" inline />
 <link rel="stylesheet" href="/styles/fonts.css" inline />
+<link rel="stylesheet" href="/styles/madoromi.css" inline />
 <script src="/scripts/main.js" defer></script>
 <script src="/scripts/bsky-comments.js" defer></script>

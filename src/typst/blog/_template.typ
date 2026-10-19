@@ -18,7 +18,7 @@
   posts
     .map(post => {
       if post.date == none {
-        post.date = datetime.today()
+        post.date = datetime(year: 0, month: 1, day: 1)
       }
       post
     })

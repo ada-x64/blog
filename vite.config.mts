@@ -101,9 +101,10 @@ function isBlogPost(file: string): boolean {
 }
 
 async function syncStaticAssets(): Promise<void> {
+	// No --delete: out/ also holds compiled HTML and generated JSON, which
+	// aren't in src/public and would be wiped.
 	await run("rsync", [
 		"-r",
-		"--delete",
 		"--exclude",
 		"resume.pdf",
 		"./src/public/",
