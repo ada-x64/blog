@@ -6,7 +6,7 @@
     math,
     kind: "definition",
     supplement: "Definition",
-    ..rest
+    ..rest,
   )
 ]
 

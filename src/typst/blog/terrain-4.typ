@@ -28,7 +28,11 @@ I've written on terrain generation in the past (#link("/blog/terrain-1")[1],
 same algorithm but I'm glad I had those initial experiments, because it made
 figuring out how to do this a lot easier.
 
-#media("/media/terrain-4/physical.jpg", linked: true, caption: "The physical prototype")
+#media(
+  "/media/terrain-4/physical.jpg",
+  linked: true,
+  caption: "The physical prototype",
+)
 
 I started with an IRL prototype. My focus was on path routing and an abstract
 sense of exploration much more than terrain generation, so I used a simple hex
@@ -152,7 +156,10 @@ In order to make a path, we need to rank how easy it is to hike around. So we us
   media("/media/terrain-4/2d/01-heightmap.png", caption: "Terrain"),
   media("/media/terrain-4/2d/02-cost.png", caption: "Path cost"),
   media("/media/terrain-4/2d/03-node-sites.png", caption: "Node placement"),
-  media("/media/terrain-4/2d/05-graph.png", caption: "Connected node network, ranked by cost"),
+  media(
+    "/media/terrain-4/2d/05-graph.png",
+    caption: "Connected node network, ranked by cost",
+  ),
   media("/media/terrain-4/2d/06-trails.png", caption: "Node placement"),
 )
 
@@ -214,7 +221,7 @@ placement weight is
       0 & T in C,
     )
   $,
-  caption: "POI weight"
+  caption: "POI weight",
 )
 
 Placement doesn't sample tiles in proportion to $w$. Instead, each POI goes on
@@ -321,8 +328,16 @@ Benches are placed the same way as POIs, using $b$ instead of $w$. Like POIs,
 they stay off creeks, and they try to keep a minimum distance from one another.
 
 #carousel(
-  media("/media/terrain-4/dramatic-bench.png", caption: "A dramatic bench", linked: true),
-  media("/media/terrain-4/quiet-bench.png", caption: "A (relatively) quiet bench", linked: true),
+  media(
+    "/media/terrain-4/dramatic-bench.png",
+    caption: "A dramatic bench",
+    linked: true,
+  ),
+  media(
+    "/media/terrain-4/quiet-bench.png",
+    caption: "A (relatively) quiet bench",
+    linked: true,
+  ),
 )
 
 The quiet benches don't look so quiet here, but you have to imagine them
@@ -350,18 +365,18 @@ $alpha$ be our aversion to slopes:
       infinity & "otherwise",
     )
   $,
-  caption: "Path traversal cost"
+  caption: "Path traversal cost",
 )
 
-For two nodes $N$ and $M$, let $Pi(N,M)$ be the set of paths that start at
+For two nodes $N$ and $M$, let $Pi(N, M)$ be the set of paths that start at
 a corner of $N$'s tile and end at a corner of $M$'s. A path $pi in Pi$ is just a collection of edges; $pi = { epsilon_1, ..., epsilon_n : epsilon in E}$. Given a price for each
 edge, $w : E -> RR$, the distance between them is the cheapest such path:
 
-$ d(w, N,M ) = min_(pi in Pi(N,M)) sum_(epsilon in pi) w(epsilon) $
+$ d(w, N,M ) = min_(pi in Pi(N, M)) sum_(epsilon in pi) w(epsilon) $
 
 So $d(c, K, K')$ is the cost of walking cross-country, ignoring trails.
 Let $Pi$ denote the set of all paths. For any edge weighting $w$, let $d(w, (N,
-M)): (RR, Pi^2) -> RR$ be the cheapest way between two nodes: the minimum over
+    M)): (RR, Pi^2) -> RR$ be the cheapest way between two nodes: the minimum over
 paths $Pi$ from any vertex of $v in V(N)$ to any vertex $u in V(M)$ of $sum_(v in
 Pi) w(v)$. So $d(c, (N,M))$ is the cost of walking cross-country, ignoring
 trails.
@@ -662,13 +677,13 @@ compute.
 ]
 
 == Trails
-  Leveled height $ h' : V(H) -> RR $                      // levelled height
-  Step cost $ c : E -> hat(RR)_(> 0) $          // step cost
-  Paths between nodes $ Pi : cal(K) times cal(K) -> cal(P)(E^*) $  // paths between two pads
-   $ d : (E -> hat(RR)_(>= 0)) times cal(K) times cal(K) -> hat(RR)_(>= 0) $
-  $ c_L : E -> hat(RR)_(>= 0) $       // cost on trails L (your n)
-  $ eta : cal(K) times cal(K) -> NN union {infinity} $  // trail hops
-  $ "walked" : cal(K) -> NN union {infinity} $
-  $ "detour" : cal(K) times cal(K) -> RR_(>= 0) $
-  $ "broken" : cal(K) times cal(K) -> {"true", "false"} $
-  $ X : cal(P)(E) -> cal(P)(cal(K) times cal(K)) $   // broken teases, given trails
+Leveled height $ h' : V(H) -> RR $                      // levelled height
+Step cost $ c : E -> hat(RR)_(> 0) $          // step cost
+Paths between nodes $ Pi : cal(K) times cal(K) -> cal(P)(E^*) $  // paths between two pads
+$ d : (E -> hat(RR)_(>= 0)) times cal(K) times cal(K) -> hat(RR)_(>= 0) $
+$ c_L : E -> hat(RR)_(>= 0) $       // cost on trails L (your n)
+$ eta : cal(K) times cal(K) -> NN union {infinity} $  // trail hops
+$ "walked" : cal(K) -> NN union {infinity} $
+$ "detour" : cal(K) times cal(K) -> RR_(>= 0) $
+$ "broken" : cal(K) times cal(K) -> {"true", "false"} $
+$ X : cal(P)(E) -> cal(P)(cal(K) times cal(K)) $   // broken teases, given trails

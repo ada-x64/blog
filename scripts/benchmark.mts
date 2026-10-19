@@ -1,3 +1,4 @@
+/** biome-ignore-all lint/style/noNonNullAssertion: whatever*/
 import { availableParallelism } from "node:os";
 import { readdir } from "node:fs/promises";
 

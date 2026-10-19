@@ -100,15 +100,15 @@ check:
     #!/usr/bin/env bash
     set -Eeuo pipefail
     just check_deps bun typstyle
-    bunx biome check ./scripts ./src/public/scripts ./vite.config.mts ./package.json
+    bunx biome check ./scripts ./src/ ./vite.config.mts ./package.json
     typstyle --check ./src/typst ./resume
 
 format:
     #!/usr/bin/env bash
     set -Eeuo pipefail
     just check_deps bun typstyle
-    bunx biome format --write
-    bunx biome lint --write
+    bunx biome format --write ./src ./scripts
+    bunx biome lint --write ./src ./scripts
     typstyle --inplace ./src/typst ./resume
 
 # With no argument, refresh missing or stale metadata records. Passing a

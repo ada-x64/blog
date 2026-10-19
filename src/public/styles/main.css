@@ -1,27 +1,26 @@
 /* VARIABLES */
 
 html {
-    --accent: var(--madoromi-sora);
-    --visited: var(--madoromi-fuji);
-    --background: linear-gradient(#fff, var(--madoromi-kami) 50%);
-    --text: #000;
-    --code-bg: #132227ee;  /* natsu-yoru --madoromi-kami: #132227; */
-
+	--accent: var(--madoromi-sora);
+	--visited: var(--madoromi-fuji);
+	--background: linear-gradient(#fff, var(--madoromi-kami) 50%);
+	--text: #000;
+	--code-bg: #132227ee; /* natsu-yoru --madoromi-kami: #132227; */
 }
 html.dark {
 	--background: linear-gradient(#000, var(--madoromi-kami) 50%);
 	--text: #fff;
-    --code-bg: #fff1;
+	--code-bg: #fff1;
 }
 
 html.light .toggle-lights::after {
-    content: " (current: light)"
+	content: " (current: light)";
 }
 html.dark .toggle-lights::after {
-    content: " (current: dark)"
+	content: " (current: dark)";
 }
 html.system .toggle-lights::after {
-    content: " (current: system)"
+	content: " (current: system)";
 }
 
 /* BASE ELEMENTS */
@@ -50,7 +49,6 @@ iframe {
 	border-radius: 0.5em;
 }
 
-
 figcaption {
 	text-align: center;
 	font-style: italic;
@@ -68,21 +66,21 @@ h6 {
 }
 
 code {
-    background-color: var(--code-bg);
-    border-radius: 0.25em;
-    padding: 0.125em 0.5em;
-    color: #fff;
+	background-color: var(--code-bg);
+	border-radius: 0.25em;
+	padding: 0.125em 0.5em;
+	color: #fff;
 }
 pre code {
-    padding: 1em;
-    max-width: 100%;
-    display: inline-block;
-    overflow: scroll;
-    border-radius: 1em;
+	padding: 1em;
+	max-width: 100%;
+	display: inline-block;
+	overflow: scroll;
+	border-radius: 1em;
 }
 pre {
-    display: flex;
-    justify-content: center;
+	display: flex;
+	justify-content: center;
 }
 
 /* TYPST */
@@ -102,24 +100,24 @@ a {
 	color: var(--accent);
 }
 
-math[display=block] {
-    margin: 1.5em;
+math[display="block"] {
+	margin: 1.5em;
 }
 
 /* CLASSES */
 
 .columns {
-    display: grid;
-    grid-template-columns: 50% 50%;
-    align-items: center;
-    padding: 0 2em;
+	display: grid;
+	grid-template-columns: 50% 50%;
+	align-items: center;
+	padding: 0 2em;
 }
 
 details.finished ::marker {
-    content: "⏹ "
+	content: "⏹ ";
 }
 details.queue ::marker {
-    content: "⏭ "
+	content: "⏭ ";
 }
 
 .post-navigation {
@@ -146,7 +144,7 @@ details.queue ::marker {
 	font-size: 2em;
 	background: none;
 	cursor: pointer;
-    color: var(--text);
+	color: var(--text);
 }
 
 .carousel {
@@ -231,7 +229,6 @@ details.queue ::marker {
 .header h1 p {
 	margin: 0;
 }
-
 
 /* SIZE DEPENDENT */
 

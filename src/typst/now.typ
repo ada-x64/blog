@@ -2,25 +2,25 @@
 #show: conf
 
 #let info(current: none, queue: none, recent: none) = [
-    #if current != none [
-      #html.details(open: true)[
-        #html.summary[Current]
-        #current
-      ]
-     ]
-    #if recent != none [
-      #html.details(open: true)[
-        #html.summary[Recent]
-        #recent
-      ]
+  #if current != none [
+    #html.details(open: true)[
+      #html.summary[Current]
+      #current
     ]
-    #if queue != none [
-      #html.details[
-        #html.summary[Queue]
-        #queue
-      ]
+  ]
+  #if recent != none [
+    #html.details(open: true)[
+      #html.summary[Recent]
+      #recent
     ]
- ]
+  ]
+  #if queue != none [
+    #html.details[
+      #html.summary[Queue]
+      #queue
+    ]
+  ]
+]
 
 = /now
 
@@ -50,7 +50,7 @@
     - James S. Hans, _The Play of the World_ (1981)
     - Tim McNamara, _Rust In Action_ (2021)
     - Alva Noë, _The Entanglement_ (2023)
-  ]
+  ],
 )
 
 #html.hr()
@@ -73,7 +73,7 @@
   recent: [
     - Black Tabby Games, _Slay the Princess_ (2023)
     - snek et al., _#link("https://snekofspice.itch.io/loner-dog")[LONER_DOG:\/\/Snuff Puppy Carnage Society]_ (2025)
-  ]
+  ],
 )
 
 #html.hr()
@@ -108,5 +108,5 @@
   ],
   queue: [
     - Hwang Dong-hyuk, _Squid Game_ (2021)
-  ]
+  ],
 )
