@@ -35,7 +35,7 @@ body {
 	max-width: 720px;
 	margin: auto;
 	padding: 1em 1em;
-	font-family: "Libertinus Sans", serif;
+	font-family: "Libertinus Serif", serif;
 }
 
 footer {
@@ -54,6 +54,10 @@ figcaption {
 	font-style: italic;
 }
 
+math {
+    font-family: "Libertinus Math", math;
+}
+
 h1,
 h2,
 h3,
@@ -63,9 +67,14 @@ h6 {
 	display: flex;
 	gap: 0.5em;
 	align-items: center;
+	font-family: "Libertinus Serif Display", "Libertinus Serif", serif;
+	/* Display only ships a regular weight; avoid faux bold. */
+	font-weight: normal;
 }
 
 code {
+    font-family: "CommitMono", monospace;
+    font-size: 0.8em;
 	background-color: var(--code-bg);
 	border-radius: 0.25em;
 	padding: 0.125em 0.5em;
@@ -102,6 +111,12 @@ a {
 
 math[display="block"] {
 	margin: 1.5em;
+}
+
+aside.callout {
+    background-color: color-mix(var(--madoromi-nijimi0), #0000);
+    padding: 1em;
+    border-radius: 1em;
 }
 
 /* CLASSES */

@@ -354,12 +354,3 @@ atproto-sync:
     mkdir -p ./out/
     command -v bun;
     bun run ./scripts/atproto-sync.mts
-
-# Convert the TTFs referenced by fonts.css to WOFF2 (needs `woff2_compress`).
-fonts:
-    #!/usr/bin/env bash
-    set -Eeuo pipefail
-    just check_deps woff2_compress
-    grep -oE '/fonts/[^"]+\.woff2' ./src/public/styles/fonts.css | while read -r f; do
-        woff2_compress "./src/public${f%.woff2}.ttf" > /dev/null 2>&1
-    done
