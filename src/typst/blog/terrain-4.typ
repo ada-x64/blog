@@ -2,15 +2,15 @@
 #show: post.with(
   title: "Hex-Based Terrain and Assisted Theory Crafting",
   description: "notes on terrain gen math and meta discussion",
-  date: datetime(year: 2026, month: 10, day: 19),
+  date: datetime(year: 2026, month: 10, day: 20),
   tags: ("devlog", "qproj", "ai", "math"),
   aliases: none,
-  draft: true,
+  draft: false,
   cover: "/media/terrain-4/2d/12-gallery.png",
 )
 
 #media(
-  "/media/terrain-4/demo.mp4",
+  "/media/terrain-4/demo.webm",
   caption: "Demo of the terrain and path gen tool",
 )
 
@@ -122,7 +122,7 @@ RON serialization.
 
     ### Develop
 
-    Being building out a specified design, one step at a time. After the initial
+    Begin building out a specified design, one step at a time. After the initial
     pass, stop for manual review. Summarize your work with a story, similar to crit
     story mode. (See the crit skill -- but do not open a crit server.) Once that is
     approved, stage your changes and proceed to an automated subagent review
@@ -190,14 +190,14 @@ and link between them using a slightly noisy A\* algorithm.
   media("/media/terrain-4/2d/01-heightmap.png", caption: "Terrain"),
   media("/media/terrain-4/2d/02-cost.png", caption: "Path cost"),
   media("/media/terrain-4/2d/03-node-sites.png", caption: "Node placement"),
-  media(
+  [#media(
     "/media/terrain-4/2d/05-graph.png",
     caption: "Connected node network, ranked by cost",
-  ),
+  ) <fig-graph>],
   media("/media/terrain-4/2d/06-trails.png", caption: "Path placement"),
 )
 
-We limit paths by a budget over edge weights. In Figure 14 above, note that
+We limit paths by a budget over edge weights. In @fig-graph above, note that
 nodes 0 and 2 do not even have a candidate connection as the cost between them
 would be too high. Paths are chosen based on a greedy graph spanner, weighted by
 various factors such as hiking cost, whether they make a loop between nodes, and
@@ -215,13 +215,13 @@ if the gory details aren't of interest to you.
 === Points of Interest
 
 Let's define the board $B$ as the set of all playable tiles. Note that this is a
-window over a larger hex grid which I'll call the world grid. $B subset G$. The size
+window over a larger hex grid which I'll call the world grid, $B subset W$. The size
 of the world grid is parameterized by the column and row layout plus a padding radius which
 I'll denote here as $p$.
 
 $
-  B =& { T(x, y) : x in [0, "cols"], y in [0, "rows"] }\
-  W =& { T(x,y) : x in [-p, "cols"+p], y in [-p, "rows" + p] }
+  B = & { T(x, y) : x in [0, "cols"], y in [0, "rows"] } \
+  W = & { T(x,y) : x in [-p, "cols"+p], y in [-p, "rows" + p] }
 $
 
 Let $h(v)$ denote the height of a vertex $v$, and let $V_T$ be the set of six
@@ -229,7 +229,7 @@ corner vertices of a hex tile $T$. Let $tilde(T)$ be T's neighborhood tiles. Our
 board is a window over a larger hex grid, so all tiles are interior. Note that
 $V_T subset.eq V_tilde(T)$. The height range over that neighborhood is
 
-$ r(T) = max_(v in V(tilde(T))) h(v) - min_(v in V(tilde(T))) h(v) $
+$ r(T) = max_(v in V_tilde(T)) h(v) - min_(v in V_tilde(T)) h(v) $
 
 Let $m$ be the median range over the board,
 $m = "median" { r(T) : T in B }$. Then we define the suitability score $s(T)$ as
@@ -348,23 +348,22 @@ $
 
 The $min$ caps each tile's contribution at 1, so each tile's score is
 normalized. This makes $"relief"(T) : B -> [ 0, |S(T)| \/ |R(T)| ]$, which maximizes to
-a range of $[0,1]$
+a range of $[0,1]$.
 
 Note that we divide by $|R(T)|$, not $|S(T)|$. We want to measure the proportion
 of high-relief tiles that are visible within a certain radius, so we sum over
 those visible tiles and divide over the total. This way a spot that sees only a
 sliver of a big drop scores less than one that sees the whole valley.
 
-So we have our two bench scores, quiet and relief. But their ranges are not
-guaranteed to be equal; $"quiet"$ is always normalized, while $"relief"$ is not.
-So we normalize them. For a score $f : B -> [0,1]$,
+So we have our two bench scores, quiet and relief. But their distributions
+aren't normalized. So let's normalize them. For a score $f : B -> [0,1]$,
 
 $ "rank"_f (T) = (|{ U in B : f(U) < f(T) }|) / (|B| - 1) $
 
-so that $r_"quiet"$ and $r_"relief"$ are both $: B -> [0, 1]$. Once we've them
-normalized into proper ranks, we can sort them. Ranks only care about order, so
-a board with a few dramatic cliffs and a board with gentle hills both get their
-best spots ranked at the top.
+so that $r_"quiet"$ and $r_"relief"$ are both $: B -> [0, 1]$. Once we've
+normalized them into proper ranks, we can sort them. Ranks only care about
+order, so a board with a few dramatic cliffs and a board with gentle hills both
+get their best spots ranked at the top.
 
 But let's suppose there are few good spots. We should introduce a sharpness
 parameter to reduce the likelihood that a boring location is picked. Let $k
@@ -406,8 +405,9 @@ goes a long way :)
 === Cost
 
 Now that we've placed the nodes, we need to join them. Our terrain is a large
-hexagonal lattice, but here we'll need to represent it as a graph. I use a caligraphic font here to make the relationship
-between the hex sets $B, W$ and the graphs $cal(B), cal(W)$ apparent.
+hexagonal lattice, but here we'll need to represent it as a graph. I use a
+calligraphic font here to make the relationship between the hex sets $B, W$ and
+the graphs $cal(B), cal(W)$ apparent.
 
 Let's write the edges of a graph $G$ as $E_G$, sim. for vertices, so that
 $cal(W) = (V_cal(W), E_cal(W))$. The playable board is a window over this larger
@@ -441,7 +441,8 @@ Pi$.
 We obviously don't want paths to lead straight into a creek or off the board, so
 we denote this by setting the cost to infinity.
 
-$e^(alpha |h'(u) - h'(v)|)$ is our symmetric Tobler approximation; the original is $e^(-3.5|"slope" + 0.05|)$.
+$e^(alpha |h'(u) - h'(v)|)$ is our symmetric Tobler approximation; the original
+gives a walking speed in km/h: $W = 6e^(-3.5|(delta h)/(delta x) + 0.05|)$.
 
 Let's denote the paths from nodes $N$ to $M$ as $Pi_( N,M )$.
 For any edge weighting $w$ and nodes $N, M in cal(N)$, let's write $d_(N,M)$ to denote the least expensive path from $N$ to $M$ given some weighting $w$.
@@ -455,21 +456,22 @@ The most efficient method of selecting a trail path would be to select the least
 expensive route. But efficiency isn't fun, so that's not what we do. We'll
 define exactly how we differ from the optimum below.
 
-As we lay trails, let $L subset.eq E$ be the set of laid edges. We want to know
-how far the walk is if we stick to the trails. The cost $n$ of walking across an
+As we lay trails, let $L subset.eq E_cal(B)$ be the set of laid edges. We want to know
+how far the walk is if we stick to the trails. The cost $c_L$ of walking across an
 edge $epsilon in L$ is defined below. Note that we let paths cross nodes for free.
 
 $
   c_L(epsilon) = cases(
     0 & epsilon in E_N "for some" N in cal(N),
-    c(epsilon) & epsilon in L,
+    c_pi(epsilon) & epsilon in L,
     infinity & "otherwise",
   )
 $
 
-We can use this to measure how far off the ideal geometric path we are. Because
-the cost is always nonzero, we almost never take the ideal path. We can use the
-ratio $d(c_L) \/ d(c_P)$ to measure how far off the preferred path we are.
+We can use this to measure how far off the ideal geometric path we are. By the
+path cost function above, the cost is always nonzero except across nodes, so we
+almost never take the ideal path. We can use the ratio $d(c_L) \/ d(c_pi)$ to
+measure how far off the preferred path we are.
 
 === The spanner
 
@@ -489,7 +491,7 @@ walking straight there. We additionally use a final pass to ensure that every
 node can be reached from spawn.
 
 New trails should merge into old ones rather than run beside them, so routes
-are planned with two adjustments to the cost: a discount $mu < 1$ for reusing
+are planned with two adjustments to the cost: a discount $zeta < 1$ for reusing
 trail, and a penalty $gamma > 1$ for walking alongside a trail without joining
 it. "Alongside" means a band of edges just off the trail:
 
@@ -518,7 +520,7 @@ fn span(nodes: &[Node], trail: &mut Trail) {
             continue; // already a reasonable walk
         }
         let beside = alongside(trail, 1);
-        let reuse = |e| if trail.contains(e) { MU } else { 1.0 };
+        let reuse = |e| if trail.contains(e) { ZETA } else { 1.0 };
         let weight = |e| cost(e) * reuse(e) * beside(e);
         trail.lay_guarded(&[cheapest_route(weight, a, b)]);
     }
@@ -579,7 +581,12 @@ the network back to $n$.
 
 === Teases
 
-#media("/media/terrain-4/arms-seed-7.png", linked: true, title: "Click to open.", caption: "Late 2D experiment. Shows teases, creeks with crossings, and experiments with restricted visibility due to forest density.")
+#media(
+  "/media/terrain-4/arms-seed-7.png",
+  linked: true,
+  title: "Click to open.",
+  caption: "Late 2D experiment. Shows teases, creeks with crossings, and experiments with restricted visibility due to forest density.",
+)
 
 A tease is a view of something you can't easily reach: you see a point of
 interest from a viewpoint, but the trail makes you take the long way round.
@@ -660,8 +667,6 @@ fn build(seed: u64, teases: &[(Node, Node)]) -> Layout {
 }
 ```
 
-// #media("/media/terrain-4/trails3d.png", title: "Trails by pass", caption: "Spanner in brown, loops in blue, second-chance loops in purple, forced connections in red, broken teases in magenta.", linked: true)
-
 == Reflections on Method
 
 #youtube("https://www.youtube.com/embed/LKrwhjOI8Nc")
@@ -685,7 +690,7 @@ culture from one of number-crunching to one of theory crafting.
   and just understand how does this fit into a bigger narrative. What are the
   elements of simplicity among all of the proofs that I'm looking at? And how can
   I weave this together into a fabric of a new kind of theory[?]
- ]
+]
 
 To me, this is an incredibly exciting development. AI has made me orders of
 magnitude more productive, and has enabled me to do the very theory-crafting

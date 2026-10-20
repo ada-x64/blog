@@ -128,10 +128,15 @@
 
 #let media(url, caption: none, linked: false, alt: "", title: "") = {
   let img
-  if url.ends-with(regex("png|jpg|jpeg|gif")) {
+  if url.ends-with(regex("png|jpg|jpeg|gif|webp")) {
     img = html.elem("img", attrs: (src: url, alt: alt, title: title))
-  } else if url.ends-with(regex("mp4|webp")) {
-    img = html.elem("video", attrs: (controls: "true", src: url, alt: alt, title: title))
+  } else if url.ends-with(regex("mp4|webm")) {
+    img = html.elem("video", attrs: (
+      controls: "true",
+      src: url,
+      alt: alt,
+      title: title,
+    ))
   }
   if linked {
     img = link(url)[#img]
