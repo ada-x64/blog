@@ -38,13 +38,6 @@ This is a write-up of how I worked on Nanvix: one kernel, one build system, one 
 // The blog compiles as one bundle, so an unscoped outline would list every
 // post's headings. Bound it to this post with the markers below.
 #metadata(none) <crater-for-a-kernel-start>
-#outline(
-  title: [contents],
-  target: heading
-    .where(level: 2)
-    .after(<crater-for-a-kernel-start>)
-    .before(<crater-for-a-kernel-end>),
-)
 
 == how this started
 I came onto #link("https://github.com/nanvix/nanvix")[Nanvix] as a contractor for Microsoft Research. Nanvix is a microkernel written in Rust, built for sandboxed execution. The job, as scoped, was two things: a build system for the libraries being ported onto the kernel (#link("https://github.com/nanvix/zutils")[`zutils`]) and a package ecosystem on top of GitHub Actions to build, test, and ship them (#link("https://github.com/nanvix/workflows")[`workflows`]).
