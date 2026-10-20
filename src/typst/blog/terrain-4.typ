@@ -9,7 +9,10 @@
   cover: "/media/terrain-4/2d/12-gallery.png",
 )
 
-#media("/media/terrain-4/demo.mp4", caption: "Demo of the terrain and path gen tool")
+#media(
+  "/media/terrain-4/demo.mp4",
+  caption: "Demo of the terrain and path gen tool",
+)
 
 #link("/blog/general-introduction")[as you may know] i have been working on a
 game (#link("https://github.com/cubething-qproj/quell")[github]). it's a
