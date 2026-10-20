@@ -9,7 +9,7 @@
   cover: "TODO", // should be one of the hex grid outputs
 )
 
-// PICTURE: finalized output
+#media("/media/terrain-4/demo.mp4", caption: "Demo of the terrain and path gen tool")
 
 #link("/blog/general-introduction")[as you may know] i have been working on a
 game (#link("https://github.com/cubething-qproj/quell")[github]). it's a
@@ -23,14 +23,33 @@ half i don't care
 
 == The design
 
-As always, the design developed as I went along. The initial idea was to create a simple path-based hiking simulation over a terrain. This evolved as
+As always, the design developed as I went along. The initial idea was to create
+a simple path-based hiking simulation over a terrain. Quell is meant to be about
+getting lost in the woods, atoning for something you did a long time ago. Nobody
+is apt to forgive you. And you have your own demons to deal with. It's also
+about digital technology and the way its changed our lives.
 
-== Initial experiments
+The game has multiple loops. This initial loop, which is the game loop proper,
+is the hiking loop. Within that loop are several sub-games: discovering
+artifacts, reading and writing notes, using those notes and artifacts to talk to
+NPCs, and lore dumps which help the player proceed from hiking loop to hiking
+loop. Once certain conditions are met, the hiking loop starts over, regenerates
+the world, and the subgames are played again.
 
-I've written on terrain generation in the past (#link("/blog/terrain-1")[1],
-#link("/blog/terrain-2")[2], #link("/blog/terrain-3")[3]). This isn't the
-same algorithm but I'm glad I had those initial experiments, because it made
-figuring out how to do this a lot easier.
+I wanted the player to come across several
+key locations, which I'll call nodes. The spawn point is included in this set.
+Key locations include hollowed out old buildings, which the player will explore
+to find real philosophical texts. They'll use these texts to talk with NPCs, who
+get their own nodes, to help them solve their problems. (The exact manner of
+this is to be decided.) And finally, there are flashback events. I'm torn
+between these happening randomly throughout the woods, triggered by certain
+conditions, or if they should be their own node type. Currently I'm working with
+the node type, since that's just easier to implement. At these places, the player
+comes across scenarios from their past. In terms of the hiking loop, this scrambles
+the paths but leaves the nodes intact.
+
+
+=== Initial experiments
 
 #media(
   "/media/terrain-4/physical.jpg",
@@ -64,6 +83,7 @@ surrounding the nodes. Plus it was cool and fun to have physical artifacts.
   media("/media/terrain-4/7-oct-26a.jpg", linked: true),
   media("/media/terrain-4/7-oct-26b.jpg", linked: true),
 )
+
 
 Next up was software. I scanned my sketches for the design and ensured the LLM
 understood what I had shown it. Then we discussed and came up with a design
@@ -160,7 +180,7 @@ and creeks cutting into the loam, oak and hickory dense around the water.
 In order to make a path, we need to rank how easy it is to hike around. So we
 used a symmetric approximation of the
 #link("https://en.wikipedia.org/wiki/Tobler's_hiking_function")[Tobler hiking
-function] to rank edges. From there, we place the nodes according to suitability
+  function] to rank edges. From there, we place the nodes according to suitability
 and link between them using a slightly noisy A\* algorithm.
 
 #carousel(
@@ -169,7 +189,8 @@ and link between them using a slightly noisy A\* algorithm.
   media("/media/terrain-4/2d/03-node-sites.png", caption: "Node placement"),
   media(
     "/media/terrain-4/2d/05-graph.png",
-    caption: "Connected node network, ranked by cost"),
+    caption: "Connected node network, ranked by cost",
+  ),
   media("/media/terrain-4/2d/06-trails.png", caption: "Path placement"),
 )
 
@@ -527,7 +548,7 @@ the network back to $n$.
 A tease is a view of something you can't easily reach: you see a point of
 interest from a viewpoint, but the trail makes you take the long way round.
 
-Let $eta(N,M)$ be the number of trail edges between two nodes, and $d_0(N) =
+Let $eta(N, M)$ be the number of trail edges between two nodes, and $d_0(N) =
 eta(N_0, N)$ how far a node is from spawn. Consider a viewpoint node $N_v$ and a
 target node $N_t$. $(N_v, N_t)$ can be a tease if $N_t$ is a POI (not a bench),
 it's within sight at $N_v$, and $d_0(N_v) < d_0(N_t)$. This way a tease always
@@ -604,6 +625,9 @@ fn build(seed: u64, teases: &[(Node, Node)]) -> Layout {
 ```
 
 // #media("/media/terrain-4/trails3d.png", title: "Trails by pass", caption: "Spanner in brown, loops in blue, second-chance loops in purple, forced connections in red, broken teases in magenta.", linked: true)
+
+== Results
+
 
 == Reflections on Method
 
