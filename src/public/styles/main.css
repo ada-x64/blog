@@ -3,12 +3,12 @@
 html {
 	--accent: var(--madoromi-sora);
 	--visited: var(--madoromi-fuji);
-	--background: linear-gradient(#fff, var(--madoromi-kami) 50%);
+	--background: linear-gradient(in oklab, #fff, var(--madoromi-kami) 100%);
 	--text: #000;
 	--code-bg: #132227ee; /* natsu-yoru --madoromi-kami: #132227; */
 }
 html.dark {
-	--background: linear-gradient(#000, var(--madoromi-kami) 50%);
+	--background: linear-gradient(in oklab, #000, var(--madoromi-kami) 100%);
 	--text: #fff;
 	--code-bg: #fff1;
 }
@@ -54,9 +54,6 @@ figcaption {
 	font-style: italic;
 }
 
-math {
-	font-family: "Libertinus Math", math;
-}
 
 h1,
 h2,
@@ -108,12 +105,16 @@ a {
 	color: var(--accent);
 }
 
+math {
+	font-family: "Libertinus Math", math;
+}
 math[display="block"] {
 	margin: 1.5em;
+	font-size: 1.125em;
 }
 
 aside.callout {
-	background-color: color-mix(var(--madoromi-nijimi0), #0000);
+	background-color: color-mix(in oklab, var(--madoromi-nijimi0), #0000);
 	padding: 1em;
 	border-radius: 1em;
 }

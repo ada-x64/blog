@@ -131,7 +131,7 @@
   if url.ends-with(regex("png|jpg|jpeg|gif")) {
     img = html.elem("img", attrs: (src: url, alt: alt, title: title))
   } else if url.ends-with(regex("mp4|webp")) {
-    img = html.elem("video", attrs: ( src: url, alt: alt, title: title))
+    img = html.elem("video", attrs: (controls: "true", src: url, alt: alt, title: title))
   }
   if linked {
     img = link(url)[#img]

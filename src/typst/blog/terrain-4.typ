@@ -1,12 +1,12 @@
 #import "_template.typ": *
 #show: post.with(
-  title: "getting all hexed up",
-  description: "notes on hex based terrain + in praise of llms",
-  date: datetime(year: 2026, month: 10, day: 16),
-  tags: ("devlog", "qproj", "ai"),
+  title: "Hex-Based Terrain and Assisted Theory Crafting",
+  description: "notes on terrain gen math and meta discussion",
+  date: datetime(year: 2026, month: 10, day: 19),
+  tags: ("devlog", "qproj", "ai", "math"),
   aliases: none,
   draft: true,
-  cover: "TODO", // should be one of the hex grid outputs
+  cover: "/media/terrain-4/2d/12-gallery.png",
 )
 
 #media("/media/terrain-4/demo.mp4", caption: "Demo of the terrain and path gen tool")
@@ -27,7 +27,7 @@ As always, the design developed as I went along. The initial idea was to create
 a simple path-based hiking simulation over a terrain. Quell is meant to be about
 getting lost in the woods, atoning for something you did a long time ago. Nobody
 is apt to forgive you. And you have your own demons to deal with. It's also
-about digital technology and the way its changed our lives.
+about digital technology and the way it's changed our lives.
 
 The game has multiple loops. This initial loop, which is the game loop proper,
 is the hiking loop. Within that loop are several sub-games: discovering
@@ -70,9 +70,9 @@ with dice rolls on a hex grid; each node placement was determined by a dice roll
 (mod board size - which I now realize was probably the reason my nodes kept
 skewing to one side) for the x and y coordinates. The player would begin in the
 center of the board (or wherever else I wanted the spawn tile to go), and
-attempt to get to all the key points of interest. As the player proceed, they
+attempt to get to all the key points of interest. As the player proceeded, they
 would draw from the path deck and place down their tile, one at a time. This
-simulated path visiblity, albeit somewhat crudely. While this wasn't really how
+simulated path visibility, albeit somewhat crudely. While this wasn't really how
 the end-result would be on the computer, it helped me think through the
 constraints I wanted for the paths and the various gameplay mechanics
 surrounding the nodes. Plus it was cool and fun to have physical artifacts.
@@ -169,8 +169,8 @@ factor of the algorithm. Here are some of the visuals we got out of it.
   media("/media/terrain-4/2d/character.png", linked: true),
 )
 
-We didn't begin moving back to rust for a bit, the python code was faster to
-iterate with, and we can still visualize everything in 2d using SVG-based
+We didn't begin moving back to rust for a bit as the python code was faster to
+iterate with and we could still visualize everything in 2d using SVG-based
 visualizations for a heightmap, color-coded for height like a typical
 geographical survey. We began with a typical perlin noise based terrain
 algorithm. From there we added tweaks. I'm basing this game off of hikes I've
@@ -204,22 +204,34 @@ the constraint score.
 
 == Formalizing the generation method
 
+This is the part where it gets mathy. I decided to write out the ontological bits
+in mathematical notation because it's easier to express objects that way, while
+procedural bits are written in a rusty pseudocode. Feel free to skim this section
+if the gory details aren't of interest to you.
+
 === Points of Interest
 
-Let $h(v)$ denote the height of a vertex $v$, and let $V(T)$ be the set of six
-corner vertices of a hex tile $T$. Let $A(T)$ be the nodes adjacent to $T$. Our
+Let's define the board $B$ as the set of all playable tiles. Note that this is a
+window over a larger hex grid which I'll call the world grid. $B subset G$. The size
+of the world grid is parameterized by the column and row layout plus a padding radius which
+I'll denote here as $p$.
+
+$
+  B =& { T(x, y) : x in [0, "cols"], y in [0, "rows"] }\
+  W =& { T(x,y) : x in [-p, "cols"+p], y in [-p, "rows" + p] }
+$
+
+Let $h(v)$ denote the height of a vertex $v$, and let $V_T$ be the set of six
+corner vertices of a hex tile $T$. Let $tilde(T)$ be T's neighborhood tiles. Our
 board is a window over a larger hex grid, so all tiles are interior. Note that
-$V(T) subset.eq V(A(T))$. The height range over that neighborhood is
+$V_T subset.eq V_tilde(T)$. The height range over that neighborhood is
 
-$ hat(r)(T) = max_(v in V(A(T))) h(v) - min_(v in V(A(T))) h(v) $
-
-Let the board be the playable tiles,
-$B = { T(x, y) : 0 <= x < "cols", 0 <= y < "rows" }$.
+$ r(T) = max_(v in V(tilde(T))) h(v) - min_(v in V(tilde(T))) h(v) $
 
 Let $m$ be the median range over the board,
-$m = "median" { r(U) : U in B }$. Then we define the suitability score $s(T)$ as
+$m = "median" { r(T) : T in B }$. Then we define the suitability score $s(T)$ as
 
-$ s(T) = exp(- r(T) / m) $
+$ s(T) = e^(-r(T) \/ m) $
 
 Perfectly flat ground scores 1, and a tile exactly as bumpy as the median tile
 scores $e^(-1) approx 0.37$. Because the range is divided by the median,
@@ -234,10 +246,10 @@ gather towards it.
 
 People naturally build structures towards water, so let's define a constant
 $beta$ to track this. The larger $beta$ is, the more POIs favor ground near
-water. Let $C$ be the set of creek tiles, and let $delta(T, C)$ be the distance from
+water. Let $C$ be the set of creek tiles, and let $||arrow(T C)||$ be the distance from
 $T$ to the nearest creek tile, measured in hexes. The water pull factor is
 
-$ omega(T) = 1 + beta e^(-delta(T, C) \/ 2) $
+$ omega(T) = 1 + beta e^(-||arrow(T C)|| \/ 2) $
 
 so a tile right beside a creek gets up to $1 + beta$ times the weight, fading
 over a couple of hexes. Nothing but a crossing may sit on a creek, so the final
@@ -290,18 +302,20 @@ mountain-top, or those tucked away in a dense patch of green. Both are
 questions about what you can see from a tile, so let's put a viewer on every
 tile and look around.
 
-Let $x(T)$ be the center of tile $T$, and let $h(p)$ be the ground height at
-any point $p$ on the terrain. We'll write $h(T)$ for $h(x(T))$. Our viewer's
-eye sits a height $g$ above the ground, and they look at every other tile
-within a radius of $rho$ hexes:
+Let $dot(T)$ be the center of tile $T$, and let $h(p)$ be the ground height at
+any point $p$ on the terrain - on or off the lattice. Our viewer's eye sits a
+height $g$ above the ground, and they look at every other tile within a radius
+of $rho$ hexes. We'll define the set of tiles within that radius as follows:
 
-$ R(T) = { U : U != T, ||x(U) - x(T)|| <= sqrt(3) rho } $
+$ R(T) = { U : U != T, ||dot(U) - dot(T)|| <= sqrt(3) rho } $
 
-(The $sqrt(3)$ converts hexes to edge lengths, since neighboring tile centers
-are $sqrt(3)$ edges apart.) Let $S(T) subset.eq R(T)$ be the tiles we can see:
-those where a ray from the viewer's eye to the ground at $x(U)$ isn't blocked
-by the terrain. We check this with a simple ray march, sampling $n = 16$
-points along the way.
+The $sqrt(3)$ converts hexes to edge lengths, since neighboring tile centers
+are $sqrt(3)$ edges apart.
+
+Let $S(T) subset.eq R(T)$ be the tiles we can see -- namely, those where a ray
+from the viewer's eye at $h(dot(T)) + g$ to the ground at $dot(U)$ isn't blocked
+by the terrain. We check this with a simple ray march, sampling $n = 16$ points
+along the way.
 
 We can get two measures from this. The first is openness: the ratio of visible
 tiles over the given radius.
@@ -313,47 +327,58 @@ just take the complement:
 
 $ "quiet"(T) = 1 - "open"(T) $
 
-Our second score is for dramatic views. Let $D$ be the height difference at
-which a view counts in full; anything bigger is capped. With a small $D$,
-almost any visible height difference counts fully, so we're mostly counting
-_how many_ tiles differ from us. With a large $D$, few differences reach the
-cap, so dramatic cliffs and deep gullies win.
+Our second score is for dramatic views. Let the parameter $D$ denote a height
+saturation point. Anything bigger is capped. With a small $D$, almost any
+visible height difference counts fully, so we're mostly counting _how many_
+tiles differ from us. With a large $D$, few differences reach the cap, so
+dramatic cliffs and deep gullies win.
 
-Let $Delta(T, U) = h(T) - h(U)$, positive when $U$ is below us. With
-$theta in [0, 1]$ weighting upward views against downward ones,
+Set $Delta = h(T) - h(U)$, positive when $U$ is below us. Define $theta in
+[0, 1]$ as a parameter weighing upward views against downward ones. We can then
+define a tweakable measure for finding high-relief (dramatic) bench placement
+scores.
 
 $
   "relief"(T) = 1 / (|R(T)|) sum_(U in S(T))
   min(1, ((1 - theta) max(Delta, 0) + theta max(-Delta, 0)) / D)
 $
 
-The $min$ caps each tile's contribution at 1, so relief stays in $[0, 1]$.
-Note that we divide by $|R(T)|$, not $|S(T)|$: hidden tiles count as zero, so
-a spot that sees only a sliver of a big drop scores less than one that sees
-the whole valley.
+The $min$ caps each tile's contribution at 1, so each tile's score is
+normalized. This makes $"relief"(T) : B -> [ 0, |S(T)| \/ |R(T)| ]$, which maximizes to
+a range of $[0,1]$
 
-So we have our two scores, but they live on different scales, and blending
-them directly would let whichever varies more dominate. So we rank them. For a
-score $f : B -> [0,1]$, let $"rank"(f) : (B -> [0,1]) -> (B -> [0, 1])$ be
+Note that we divide by $|R(T)|$, not $|S(T)|$. We want to measure the proportion
+of high-relief tiles that are visible within a certain radius, so we sum over
+those visible tiles and divide over the total. This way a spot that sees only a
+sliver of a big drop scores less than one that sees the whole valley.
 
-$ "rank"(f)(T) = (|{ U in B : f(U) < f(T) }|) / (|B| - 1) $
+So we have our two bench scores, quiet and relief. But their ranges are not
+guaranteed to be equal; $"quiet"$ is always normalized, while $"relief"$ is not.
+So we normalize them. For a score $f : B -> [0,1]$,
 
-so that $r_q : B -> RR = "rank"("quiet")$ and $r_r : B -> RR = "rank"("relief")$
-are both functions from tiles to $[0, 1]$. Ranks only care about order, so a
-board with a few dramatic cliffs and a board with gentle hills both get their
+$ "rank"_f (T) = (|{ U in B : f(U) < f(T) }|) / (|B| - 1) $
+
+so that $r_"quiet"$ and $r_"relief"$ are both $: B -> [0, 1]$. Once we've them
+normalized into proper ranks, we can sort them. Ranks only care about order, so
+a board with a few dramatic cliffs and a board with gentle hills both get their
 best spots ranked at the top.
 
-Introduce $k gt.eq 1$, our sharpness parameter. Raising a rank to the power $k$
-crushes everything except the very top, so only the most enclosed spots and the
-best views score well. Ground that's middling at both doesn't win. Finally, $nu$
-is our view preference, from 0 (quiet benches) to 1 (view benches):
+But let's suppose there are few good spots. We should introduce a sharpness
+parameter to reduce the likelihood that a boring location is picked. Let $k
+gt.eq 1$ be that parameter. Raising a rank to the power $k$ crushes everything
+except the very top, so only the most enclosed spots and the best views score
+well. Ground that's middling at both doesn't win.
+
+We also want to control whether benches get placed in quiet spots or at dramatic
+overhangs. Set $mu$ as our view preference, from 0 (quiet benches) to 1 (dramatic
+benches). Now we can define our final bench weight function:
 
 #definition(
-  $ w_b (T) = (1 - nu) r_q (T)^k + nu r_r (T)^k $,
+  $ w_b (T) = (1 - mu) r_"quiet" (T)^k + mu r_"relief" (T)^k $,
   caption: "Bench weight",
 )
 
-Benches are placed the same way as POIs, using $b$ instead of $w$. Like POIs,
+Benches are placed the same way as POIs, using $w_b$ instead of $w_p$. Like POIs,
 they stay off creeks, and they try to keep a minimum distance from one another.
 
 #carousel(
@@ -378,10 +403,16 @@ goes a long way :)
 === Cost
 
 Now that we've placed the nodes, we need to join them. Our terrain is a large
-hexagonal lattice, which we'll represent as a graph $G = (V, E)$. The playable
-board is a window over this larger terrain, so let's define that as $cal(B) subset
-G$. Denote the edges of a graph $G$ as $E_G$, sim. for vertices. Now, let's call
-$E_cal(C) subset E_cal(B)$ the set of edges which a creek crosses.
+hexagonal lattice, but here we'll need to represent it as a graph. I use a caligraphic font here to make the relationship
+between the hex sets $B, W$ and the graphs $cal(B), cal(W)$ apparent.
+
+Let's write the edges of a graph $G$ as $E_G$, sim. for vertices, so that
+$cal(W) = (V_cal(W), E_cal(W))$. The playable board is a window over this larger
+terrain, so let's define that as $cal(B) subset cal(W)$. Now, let's call
+$E_cal(C) subset E_cal(B)$ the set of edges which a creek crosses. Note that
+while the correspondence between $B$ and $cal(B)$ is a direct translation from
+set to graph, $E_cal(C)$ does _not_ relate to any particular graph, but only
+to a subset of the edges defined in $C$ above.
 
 Let $cal(N)$ denote all nodes. The subset $cal(P) subset cal(N)$ contains all
 POIs. Each node $N in cal(N)$ sits on flattened out ground. Its tile is leveled
@@ -545,6 +576,8 @@ the network back to $n$.
 
 === Teases
 
+#media("/media/terrain-4/arms-seed-7.png", linked: true, title: "Click to open.", caption: "Late 2D experiment. Shows teases, creeks with crossings, and experiments with restricted visibility due to forest density.")
+
 A tease is a view of something you can't easily reach: you see a point of
 interest from a viewpoint, but the trail makes you take the long way round.
 
@@ -626,12 +659,35 @@ fn build(seed: u64, teases: &[(Node, Node)]) -> Layout {
 
 // #media("/media/terrain-4/trails3d.png", title: "Trails by pass", caption: "Spanner in brown, loops in blue, second-chance loops in purple, forced connections in red, broken teases in magenta.", linked: true)
 
-== Results
-
-
 == Reflections on Method
 
-AI has made me orders of magnitude more productive.
+#youtube("https://www.youtube.com/embed/LKrwhjOI8Nc")
+
+Grant Sanderson of 3Blue1Brown recently put out a video on the recent advances of
+AI models in mathematics. In it, he proposes writing proofs, asking questions,
+theory building, and applying theory as the key aspects of mathematics. For me,
+this is quite similar to what happens in philosophy. Around 20:00, he discusses
+the impact it would have in the world of mathematics if AI becomes better than
+humans at proving theorems. And essentially, he claims it has no impact on the
+overall structure and institution of mathematics, but it would change the
+culture from one of number-crunching to one of theory crafting.
+
+#quote(block: true)[
+  What does the practice of doing math actually look like if the machines are
+  better at the proof generation? Well, if we take that optimist's perspective,
+  the one who's exhilarated by it, it basically looks like leaning into the theory
+  building. You are no longer rate limited by how quickly you can solve certain
+  problems along the way. You can ask all of the questions that you want. You can
+  much more quickly see what the solutions to them are. You can try to parse that
+  and just understand how does this fit into a bigger narrative. What are the
+  elements of simplicity among all of the proofs that I'm looking at? And how can
+  I weave this together into a fabric of a new kind of theory[?]
+ ]
+
+To me, this is an incredibly exciting development. AI has made me orders of
+magnitude more productive, and has enabled me to do the very theory-crafting
+he proposes. Except, in my case, the theory is not about numerical systems but
+about game design and the engineering that goes into it.
 
 I can focus more on design in all aspects. Instead of spending a month
 struggling to find resources on game development e.g. how rasterization over a
@@ -654,12 +710,12 @@ An algorithm is like a ball bearing. It can be a beautiful thing! But most of
 the time you don't care about how it works, just _that_ it works, and in what
 situations it is useful.
 
-Having these tools ready at my fingertips makes spiking is incredibly easy. The
+Having these tools ready at my fingertips makes spiking incredibly easy. The
 hex terrain was initially tested in a python lab for quick compilation and
 turnaround. we did statistical analysis over 1000 seeds per run, generated
-SVG-based visualzations for the terrain, and several graphs tracking things like
+SVG-based visualizations for the terrain, and several graphs tracking things like
 path loop count, bench locations, creek depth, and time to cross all paths based
-on the Tobler hiking algorithm. It would have taken me a month or longer of full
+on the Tobler hiking function. It would have taken me a month or longer of full
 time work and research to do this on my own. I spent 3 days on it.
 
 The primary lesson I want to put out here though is that one needs to be
