@@ -96,6 +96,29 @@ dev:
     just check_deps bun
     bun run vite
 
+# Run the dev server and expose it to the tailnet for development over SSH.
+# Vite stays bound to localhost; `tailscale serve` proxies it for the life of
+# this recipe.
+dev-remote port="10030" vite_port="3040":
+    #!/usr/bin/env bash
+    set -Eeuo pipefail
+    just check_deps bun tailscale jq
+
+    cleanup() {
+        tailscale serve --http={{port}} off >/dev/null 2>&1 || true
+    }
+    trap cleanup EXIT INT TERM
+
+    if ! tailscale serve --bg --http={{port}} http://localhost:{{vite_port}} >/dev/null; then
+        echo "tailscale serve failed. Run 'sudo tailscale set --operator=\$USER' once to allow it without sudo." >&2
+        exit 1
+    fi
+
+    host=$(tailscale status --self --json | jq -r '.Self.DNSName | rtrimstr(".")')
+    echo "Serving on http://$host:{{port}}"
+
+    VITE_OPEN=false VITE_PORT={{vite_port}} bun run vite
+
 check:
     #!/usr/bin/env bash
     set -Eeuo pipefail

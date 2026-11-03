@@ -144,4 +144,4 @@ In the end, the ability to truly disappear from public view is fading. Queers in
 
   Some times, rarely, I get confronted with an (often hypothetical) scenario that is alien to me: Being in an actually comfortable place where I feel loved and understood. A place where I feel like I can love people to my utmost degree and express who I am with no fear and no rejection. Those scenarios break me. They remind me that despite everything I go through, I am still such a vulnerable person. Yet, they also reveal that despite everything I've endured, I can still love people and feel like I belong somewhere.]
 
-#bibliography
+#bib

@@ -667,6 +667,7 @@ fn build(seed: u64, teases: &[(Node, Node)]) -> Layout {
 }
 ```
 
+#anchor("reflections-on-method")
 == Reflections on Method
 
 #youtube("https://www.youtube.com/embed/LKrwhjOI8Nc")

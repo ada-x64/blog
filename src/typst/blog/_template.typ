@@ -106,7 +106,7 @@
   ]
 }
 
-#let bibliography = bibliography(
+#let bib = bibliography(
   "../assets/lib.bib",
   style: "chicago-author-date",
 )
@@ -126,9 +126,28 @@
   html.elem("div", attrs: (class: "index"))[#entries]
 }
 
+/// A linkable point in a post, e.g. `/blog/post#id`. Typst only emits ids for
+/// labels that are linked within the same document, so this sets one directly.
+#let anchor(id) = html.elem("div", attrs: (id: id))
+
+#let youtube(url, title: "YouTube video player") = {
+  html.elem("iframe", attrs: (
+    class: "youtube",
+    src: url,
+    title: title,
+    frameborder: "0",
+    allow: "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share",
+    referrerpolicy: "strict-origin-when-cross-origin",
+    allowfullscreen: "true",
+  ))
+}
+
 #let media(url, caption: none, linked: false, alt: "", title: "") = {
   let img
-  if url.ends-with(regex("png|jpg|jpeg|gif|webp")) {
+  if url.starts-with(regex("^.*youtube|^.*youtu.be")) {
+      img = youtube(url, title: title)
+  }
+  else if url.ends-with(regex("png|jpg|jpeg|gif|webp")) {
     img = html.elem("img", attrs: (src: url, alt: alt, title: title))
   } else if url.ends-with(regex("mp4|webm")) {
     img = html.elem("video", attrs: (
@@ -138,8 +157,10 @@
       title: title,
     ))
   }
-  if linked {
+  if type(linked) == bool and linked {
     img = link(url)[#img]
+  } else if type(linked) == str {
+    img = link(linked)[#img]
   }
   figure(img, caption: caption)
 }
@@ -168,18 +189,6 @@
     ],
     caption: caption,
   )
-}
-
-#let youtube(url, title: "YouTube video player") = {
-  html.elem("iframe", attrs: (
-    class: "youtube",
-    src: url,
-    title: title,
-    frameborder: "0",
-    allow: "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share",
-    referrerpolicy: "strict-origin-when-cross-origin",
-    allowfullscreen: "true",
-  ))
 }
 
 #let callout(kind: "note", title: none, content) = {

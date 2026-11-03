@@ -330,8 +330,12 @@ export default defineConfig({
 	plugins: [typstDevelopmentPlugin()],
 	server: {
 		host: "localhost",
-		open: true,
-		port: 3030,
+		// `just dev-remote` proxies through `tailscale serve`, which forwards the
+		// tailnet hostname. There's no local browser to open on the far end.
+		allowedHosts: [".ts.net"],
+		open: process.env.VITE_OPEN !== "false",
+		port: Number(process.env.VITE_PORT ?? 3040),
+		strictPort: true,
 		watch: {
 			// Generated HTML is written as a transaction. The plugin sends one reload
 			// only after every affected output has compiled successfully.

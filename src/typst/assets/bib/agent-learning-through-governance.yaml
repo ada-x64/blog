@@ -1,0 +1,38 @@
+davisCheapCodeCostly2026:
+  type: report
+  title: 'Cheap Code, Costly Judgment: A Case Study on Governable Agentic Software Engineering'
+  language: en
+  url:
+    value: http://arxiv.org/abs/2607.01087
+    date: 2026-10-31
+  parent:
+    title: arXiv.org
+  date: 2026-07-04
+  serial-number:
+    doi: 10.48550/arXiv.2607.01087
+  author:
+    - Davis, James C.
+    - Amusuo, Paschal C.
+    - Singla, Tanmay
+    - Çakar, Berk
+    - Davis, Kirsten A.
+hintonEvaluatingReasoningNatural2022:
+  type: article
+  title: 'Evaluating Reasoning in Natural Arguments: A Procedural Approach'
+  language: en
+  volume: 36
+  issue: 1
+  page-range: 61-84
+  url:
+    value: https://link.springer.com/10.1007/s10503-021-09555-1
+    date: 2026-11-02
+  parent:
+    type: periodical
+    title: Argumentation
+  date: 2022-03
+  serial-number:
+    doi: 10.1007/s10503-021-09555-1
+    issn: 0920-427X, 1572-8374
+  author:
+    - Hinton, Martin
+    - Wagemans, Jean H. M.

@@ -75,6 +75,12 @@ code {
 	padding: 0.125em 0.5em;
 	color: #fff;
 }
+p:has(code) code {
+    background-color: transparent;
+	color: var(--text);
+	padding: 0;
+}
+
 pre code {
 	padding: 1em;
 	max-width: 100%;
@@ -95,6 +101,10 @@ section[role="doc-endnotes"] ol {
 
 section[role="doc-endnotes"] sup {
 	padding-right: 1em;
+}
+
+section[role="doc-bibliography"] li {
+    margin-bottom: 1em;
 }
 
 a:visited {

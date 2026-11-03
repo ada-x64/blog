@@ -59,6 +59,7 @@ Unfortunately the 'copilot' metaphor is actually really prescient. The skill shi
 
 #html.elem("center")[\*]
 
+#anchor("taylorism-fordism")
 Smaller and smaller agents, dedicated to more specific tasks. Taylorism-Fordism for the LLM. Is it unethical? Not nearly as much as the original: an automated facsimile of human gab can be tailored (Taylored) without guilt. Truly we _are_ the petite bourgeois of the engineers.
 
 #html.elem("center")[\*]
