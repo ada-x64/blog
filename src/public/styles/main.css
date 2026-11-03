@@ -76,7 +76,7 @@ code {
 	color: #fff;
 }
 p:has(code) code {
-    background-color: transparent;
+	background-color: transparent;
 	color: var(--text);
 	padding: 0;
 }
@@ -104,7 +104,7 @@ section[role="doc-endnotes"] sup {
 }
 
 section[role="doc-bibliography"] li {
-    margin-bottom: 1em;
+	margin-bottom: 1em;
 }
 
 a:visited {

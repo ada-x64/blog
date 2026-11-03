@@ -145,9 +145,8 @@
 #let media(url, caption: none, linked: false, alt: "", title: "") = {
   let img
   if url.starts-with(regex("^.*youtube|^.*youtu.be")) {
-      img = youtube(url, title: title)
-  }
-  else if url.ends-with(regex("png|jpg|jpeg|gif|webp")) {
+    img = youtube(url, title: title)
+  } else if url.ends-with(regex("png|jpg|jpeg|gif|webp")) {
     img = html.elem("img", attrs: (src: url, alt: alt, title: title))
   } else if url.ends-with(regex("mp4|webm")) {
     img = html.elem("video", attrs: (

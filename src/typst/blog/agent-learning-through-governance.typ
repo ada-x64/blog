@@ -5,7 +5,7 @@
   date: datetime(year: 2026, month: 11, day: 2),
   tags: ("ai", "quell", "d3r"),
   aliases: none,
-  draft: true,
+  draft: false,
   cover: none,
 )
 
@@ -501,4 +501,8 @@ spiking new ideas, require a fair bit more human oversight than Davis' SAAS app,
 while my game dev projects, which take existing ideas and implement them, can
 rely more on automation since the domain space is more well-defined.
 
-#bibliography("../assets/bib/agent-learning-through-governance.yaml", full: true, style: "chicago-author-date")
+#bibliography(
+  "../assets/bib/agent-learning-through-governance.yaml",
+  full: true,
+  style: "chicago-author-date",
+)
