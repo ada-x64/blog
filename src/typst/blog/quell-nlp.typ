@@ -85,3 +85,9 @@ NLP later if desired -- if its not fun, or doesn't meet the expected outcome
 Mechanically, texts are tagged with concepts and stances about those concepts.
 Presenting them to NPCs yields new paths, like free text but far more
 constrained.
+
+--
+
+If you're interested in Quell and it's development, check out
+#link("https://qproj-wiki.netlify.app")[the wiki] and the
+#link("https://github.com/cubething-qproj")[github org.]
